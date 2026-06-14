@@ -167,7 +167,7 @@
         <div class="p-1.5 bg-emerald-600 rounded text-white">
           <i data-lucide="shield-alert" class="w-4.5 h-4.5"></i>
         </div>
-        <h1 class="text-sm font-bold text-white tracking-tight">GPH ITSM ITM v3.1</h1>
+        <h1 class="text-sm font-bold text-white tracking-tight">GPH ITSM ITM v3.2</h1>
       </div>
       <button onclick="toggleSidebar()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors focus:outline-none">
         <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
@@ -194,7 +194,7 @@
           <!-- Metrik otomatis diinjeksikan oleh engine Javascript -->
         </div>
 
-        <!-- Core Operational Grid -->
+        <!-- Core Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           <!-- Live SLA Monitor Feed (SLA Management) -->
@@ -562,30 +562,39 @@
         </div>
       </section>
 
-      <!-- ================= MODUL 11: PREVENTIVE MAINTENANCE ================= -->
+      <!-- ================= MODUL 11: PREVENTIVE MAINTENANCE (Checklist + CRUD + Upload Evidence) ================= -->
       <section id="tab-checklist" class="space-y-6 hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-xl font-bold text-white">Preventive Maintenance Schedule</h2>
-            <p class="text-xs text-slate-400">Verifikasi berkala fungsionalitas IT sistem untuk memastikan 0% operational downtime</p>
+            <h2 class="text-xl font-bold text-white">Preventive Maintenance Schedule & Evidence Audit</h2>
+            <p class="text-xs text-slate-400 font-medium">Verifikasi berkala fungsionalitas IT sistem hotel. Dilengkapi modul CRUD tugas pemeliharaan dan upload dokumen/bukti foto.</p>
           </div>
-          <div class="flex bg-slate-900 border border-slate-800 p-1 rounded-lg self-start">
-            <button onclick="setChecklistPeriod('daily')" id="chk-btn-daily" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white transition-all">Harian</button>
-            <button onclick="setChecklistPeriod('weekly')" id="chk-btn-weekly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Mingguan</button>
-            <button onclick="setChecklistPeriod('monthly')" id="chk-btn-monthly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Bulanan</button>
-            <button onclick="setChecklistPeriod('yearly')" id="chk-btn-yearly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Tahunan</button>
+          <div class="flex flex-wrap gap-2 items-center">
+            <div class="flex bg-slate-900 border border-slate-800 p-1 rounded-lg">
+              <button onclick="setChecklistPeriod('daily')" id="chk-btn-daily" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white transition-all">Harian</button>
+              <button onclick="setChecklistPeriod('weekly')" id="chk-btn-weekly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Mingguan</button>
+              <button onclick="setChecklistPeriod('monthly')" id="chk-btn-monthly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Bulanan</button>
+              <button onclick="setChecklistPeriod('yearly')" id="chk-btn-yearly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Tahunan</button>
+            </div>
+            <button onclick="openModal('new-pm-task-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all shadow">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Tambah Tugas PM Baru
+            </button>
           </div>
         </div>
 
         <!-- Checklist Task Area -->
         <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-          <div class="p-4 bg-slate-850 border-b border-slate-800 flex items-center justify-between">
+          <div class="p-4 bg-slate-850 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <span class="text-xs font-bold uppercase tracking-wide px-2 py-1 rounded bg-slate-800" id="checklist-period-title">Harian (Daily Shift Log)</span>
-            <span class="text-xs font-medium text-emerald-400" id="checklist-header-status">0 dari 0 tugas selesai</span>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20" id="checklist-header-status">0 dari 0 tugas selesai</span>
+              <span class="text-[10px] text-slate-400">Maksimal file bukti: 1.5MB</span>
+            </div>
           </div>
 
+          <!-- Dynamic Tasks Render List -->
           <div class="divide-y divide-slate-850" id="checklist-task-list">
-            <!-- Inject tasks dynamically -->
+            <!-- Inject tasks dynamically via JS -->
           </div>
 
           <div class="p-4 bg-slate-850 border-t border-slate-800 flex justify-end gap-3">
@@ -922,7 +931,7 @@
 
   <!-- ================= DIALOG / MODAL POPUPS ================= -->
   
-  <!-- Modal: Buat Tiket Baru -->
+  <!-- Modal: Buat Tiket Gangguan Baru -->
   <div id="new-incident-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
@@ -1233,10 +1242,104 @@
     </div>
   </div>
 
+  <!-- Modal: TAMBAH TUGAS PM BARU (Modul 11 CRUD) -->
+  <div id="new-pm-task-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i> Buat Tugas PM Baru
+        </h4>
+        <button onclick="closeModal('new-pm-task-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-pm-task" onsubmit="submitNewPmTask(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Periode Pemeliharaan</label>
+          <select id="pm-new-period" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+            <option value="daily">Harian (Daily)</option>
+            <option value="weekly">Mingguan (Weekly)</option>
+            <option value="monthly">Bulanan (Monthly)</option>
+            <option value="yearly">Tahunan (Yearly)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Tugas Pemeliharaan</label>
+          <textarea id="pm-new-task" required placeholder="Contoh: Kalibrasi sensor suhu ruangan server rack A..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none"></textarea>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Penanggung Jawab (Assignee)</label>
+          <input type="text" id="pm-new-assigned" required placeholder="IT Administrator / Shift Pagi" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
 
-  <!-- ================= SCRIPT ENGINE UTAMA ================= -->
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-pm-task-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg">Tambahkan Tugas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: EDIT TUGAS PM (Modul 11 CRUD) -->
+  <div id="edit-pm-task-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="edit-3" class="w-4 h-4 text-emerald-400"></i> Edit Rincian Tugas PM
+        </h4>
+        <button onclick="closeModal('edit-pm-task-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-edit-pm-task" onsubmit="submitEditPmTask(event)" class="p-4 space-y-4 text-xs">
+        <input type="hidden" id="pm-edit-period">
+        <input type="hidden" id="pm-edit-index">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Pemeliharaan</label>
+          <textarea id="pm-edit-task" required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Penanggung Jawab</label>
+            <input type="text" id="pm-edit-assigned" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Status Tugas</label>
+            <select id="pm-edit-status" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="false">Belum Selesai (Pending)</option>
+              <option value="true">Selesai (Completed)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Catatan Hasil Audit PM</label>
+          <input type="text" id="pm-edit-note" placeholder="Hasil parameter, suhu, log, dll..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('edit-pm-task-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: AUDIT PREVIEW BUKTI PM (LIGHTBOX MODAL) -->
+  <div id="preview-evidence-modal" class="fixed inset-0 bg-black/95 flex items-center justify-center p-4 z-50 hidden" onclick="closeModal('preview-evidence-modal')">
+    <div class="relative max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
+      <button onclick="closeModal('preview-evidence-modal')" class="absolute -top-10 right-0 text-slate-400 hover:text-white text-sm flex items-center gap-1 bg-slate-900/60 px-3 py-1 rounded-full border border-slate-800">
+        <i data-lucide="x" class="w-4 h-4"></i> Tutup
+      </button>
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl p-2 w-full flex justify-center">
+        <!-- Dynamic Large Image Source -->
+        <img id="evidence-large-view" src="" alt="[Bukti Foto Pemeliharaan IT]" class="max-h-[70vh] rounded-lg object-contain bg-slate-950">
+      </div>
+      <p id="evidence-caption-lbl" class="text-xs text-slate-300 font-medium bg-slate-900 px-4 py-2 rounded-full border border-slate-800"></p>
+    </div>
+  </div>
+
+
+  <!-- ================= MASTER SYSTEM ENGINE SCRIPT ================= -->
   <script>
-    // Data Persistensi Lokal & Silsilah Data default
+    // Data Default untuk In-Memory Engine & LocalStorage Persistence
     const defaultTickets = [
       {
         id: "INC-2026-0001",
@@ -1357,23 +1460,24 @@
       { name: "Patch Cable RJ45 2M Cat6", min: 30, cur: 8, rack: "Rak Kabel - Box 4" }
     ];
 
+    // Tugas Preventive Maintenance Default
     const defaultChecklists = {
       daily: [
-        { id: "d1", task: "Verifikasi backup database Opera PMS ke local NAS & Cloud Storage", done: false, assigned: "IT Shift Pagi", note: "" },
-        { id: "d2", task: "Check kapasitas penyimpanan disk PMS Server & Mail Server (<80%)", done: false, assigned: "IT Shift Pagi", note: "" },
-        { id: "d3", task: "Pemeriksaan fisik suhu ruangan AC Server Room (Target: 18-21°C)", done: false, assigned: "IT Shift Sore", note: "" }
+        { id: "d1", task: "Verifikasi backup database Opera PMS ke local NAS & Cloud Storage", done: false, assigned: "IT Shift Pagi", note: "", evidence: "" },
+        { id: "d2", task: "Check kapasitas penyimpanan disk PMS Server & Mail Server (<80%)", done: false, assigned: "IT Shift Pagi", note: "", evidence: "" },
+        { id: "d3", task: "Pemeriksaan fisik suhu ruangan AC Server Room (Target: 18-21°C)", done: false, assigned: "IT Shift Sore", note: "", evidence: "" }
       ],
       weekly: [
-        { id: "w1", task: "Uji coba fungsionalitas backup baterai & load-test UPS", done: false, assigned: "IT Manager", note: "" },
-        { id: "w2", task: "Penarikan & review laporan log anomali Fortigate Firewall", done: false, assigned: "IT Administrator", note: "" }
+        { id: "w1", task: "Uji coba fungsionalitas backup baterai & load-test UPS", done: false, assigned: "IT Manager", note: "", evidence: "" },
+        { id: "w2", task: "Penarikan & review laporan log anomali Fortigate Firewall", done: false, assigned: "IT Administrator", note: "", evidence: "" }
       ],
       monthly: [
-        { id: "m1", task: "Audit hak akses user aktif di Opera PMS & POS Terminal", done: false, assigned: "IT Manager", note: "" },
-        { id: "m2", task: "Pembaruan firmware keamanan Access Point area publik tamu", done: false, assigned: "IT Administrator", note: "" }
+        { id: "m1", task: "Audit hak akses user aktif di Opera PMS & POS Terminal", done: false, assigned: "IT Manager", note: "", evidence: "" },
+        { id: "m2", task: "Pembaruan firmware keamanan Access Point area publik tamu", done: false, assigned: "IT Administrator", note: "", evidence: "" }
       ],
       yearly: [
-        { id: "y1", task: "Simulasi Disaster Recovery Plan (DRP) & Skenario Failover", done: false, assigned: "IT Manager", note: "" },
-        { id: "y2", task: "Review lisensi perangkat lunak sistem hotel", done: false, assigned: "IT Manager", note: "" }
+        { id: "y1", task: "Simulasi Disaster Recovery Plan (DRP) & Skenario Failover", done: false, assigned: "IT Manager", note: "", evidence: "" },
+        { id: "y2", task: "Review lisensi perangkat lunak sistem hotel", done: false, assigned: "IT Manager", note: "", evidence: "" }
       ]
     };
 
@@ -1444,7 +1548,7 @@
       }
     ];
 
-    // Inisialisasi Engine State Data
+    // Sinkronisasi data ke LocalStorage
     let tickets = JSON.parse(localStorage.getItem('gph_itsm_tickets')) || defaultTickets;
     let guestTechs = JSON.parse(localStorage.getItem('gph_itsm_guest_techs')) || defaultGuestTechs;
     let assets = JSON.parse(localStorage.getItem('gph_itsm_assets')) || defaultAssets;
@@ -1462,7 +1566,7 @@
     let currentChecklistPeriod = 'daily';
     let sidebarOpen = false;
 
-    // War Room Darurat Global State
+    // Skenario War Room Mayor
     let isWarRoomActive = true;
     let warRoomSeconds = 934;
     let warRoomLogs = [
@@ -1471,7 +1575,7 @@
       "18:20 - VM dialihkan ke read-only snapshot backup untuk penyelidikan log."
     ];
 
-    // Modul skrip Apps Script
+    // Modul Apps Script
     const gasSourceCodes = {
       config: `// File: Config.gs
 const FIREBASE_CONFIG = {
@@ -1511,7 +1615,7 @@ function createTicketWithLock(ticketData) {
 }`
     };
 
-    // Saat aplikasi selesai termuat
+    // Load System
     window.onload = function() {
       switchTab('dashboard');
       refreshAllViews();
@@ -1537,7 +1641,6 @@ function createTicketWithLock(ticketData) {
       renderDrpPlaybook();
       renderMobileTechnicianView();
 
-      // Memperbarui indikator status di menu navigasi
       const activeTicketsCount = tickets.filter(t => t.status !== 'RESOLVED').length;
       document.getElementById('badge-incident-count').textContent = activeTicketsCount;
       document.getElementById('lbl-active-tickets').textContent = activeTicketsCount;
@@ -1546,7 +1649,7 @@ function createTicketWithLock(ticketData) {
       document.getElementById('badge-stock-warning').textContent = `${lowStockCount} Low`;
     }
 
-    // Toggle menu navigasi mobile drawer
+    // Toggle Mobile Sidebar
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
@@ -1566,12 +1669,11 @@ function createTicketWithLock(ticketData) {
       lucide.createIcons();
     }
 
-    // Alih Tab Navigasi
+    // Alih Tab
     function switchTab(tabId) {
       document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
       document.getElementById('tab-' + tabId).classList.remove('hidden');
 
-      // Mengubah visual tombol tab terpilih
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-slate-800', 'text-emerald-400', 'border-emerald-500/30');
         btn.classList.add('bg-slate-900', 'text-slate-400');
@@ -1583,13 +1685,12 @@ function createTicketWithLock(ticketData) {
         activeBtn.classList.add('bg-slate-800', 'text-emerald-400', 'border', 'border-emerald-500/30');
       }
 
-      // Auto collapse menu saat diakses lewat mobile device
       if (sidebarOpen && window.innerWidth < 1024) {
         toggleSidebar();
       }
     }
 
-    // Kalkulasi batas eskalasi SLA
+    // Hitung SLA
     function calculateSlaLimit(createdAt, priority) {
       const createdDate = new Date(createdAt);
       let limitMinutes = 24 * 60; 
@@ -1617,7 +1718,7 @@ function createTicketWithLock(ticketData) {
       }
     }
 
-    // Interval ticking real-time feed
+    // Realtime update clock
     function updateRealtimeTimers() {
       const openIncidents = tickets.filter(t => t.status !== 'RESOLVED');
       const feedContainer = document.getElementById('live-incident-feed');
@@ -1660,7 +1761,6 @@ function createTicketWithLock(ticketData) {
         `;
       }).join('');
 
-      // War Room Timer
       if (isWarRoomActive) {
         warRoomSeconds++;
         const hours = String(Math.floor(warRoomSeconds / 3600)).padStart(2, '0');
@@ -1670,7 +1770,7 @@ function createTicketWithLock(ticketData) {
       }
     }
 
-    // ================= RENDERING EXCLUSIVE IT MANAGER DASHBOARD METRICS =================
+    // Render Dashboard ITM
     function renderDashboardMetrics() {
       const container = document.getElementById('dashboard-metrics-container');
       if (!container) return;
@@ -1682,9 +1782,7 @@ function createTicketWithLock(ticketData) {
       const pmsSensor = monitoringSensors.find(s => s.sensor === "Opera PMS Database Link");
       const pmsStatusText = pmsSensor ? pmsSensor.status : "ONLINE";
 
-      // Metrik Dashboard ITM Ter-optimasi
       container.innerHTML = `
-        <!-- Card 1: Antrean Aktif Helpdesk -->
         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
           <div>
             <p class="text-[10px] uppercase font-bold text-slate-500">Antrean Aktif Helpdesk</p>
@@ -1695,7 +1793,6 @@ function createTicketWithLock(ticketData) {
           </p>
         </div>
         
-        <!-- Card 2: Kepatuhan SLA Operasional -->
         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
           <div>
             <p class="text-[10px] uppercase font-bold text-slate-500">Kepatuhan SLA Bulan Ini</p>
@@ -1704,7 +1801,6 @@ function createTicketWithLock(ticketData) {
           <p class="text-[10px] text-slate-400 mt-auto">Target korporasi: 95.0% SLA</p>
         </div>
         
-        <!-- Card 3: Suku Cadang Logistik Kritis -->
         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
           <div>
             <p class="text-[10px] uppercase font-bold text-slate-500">Logistik Suku Cadang Kritis</p>
@@ -1713,7 +1809,6 @@ function createTicketWithLock(ticketData) {
           <p class="text-[10px] text-slate-400 mt-auto">Butuh proses reorder cepat</p>
         </div>
         
-        <!-- Card 4: Status Link Opera PMS -->
         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
           <div>
             <p class="text-[10px] uppercase font-bold text-slate-500">Opera PMS Telemetry</p>
@@ -1725,7 +1820,7 @@ function createTicketWithLock(ticketData) {
       lucide.createIcons();
     }
 
-    // ================= MODUL 2 & 3: ENGINE LOGISTIK TIKET =================
+    // Incident Module Logic
     function renderIncidentList() {
       const container = document.getElementById('incident-cards-container');
       if (!container) return;
@@ -1753,7 +1848,7 @@ function createTicketWithLock(ticketData) {
         container.innerHTML = `
           <div class="col-span-full bg-slate-900 border border-slate-800 p-8 text-center rounded-xl text-slate-500">
             <i data-lucide="help-circle" class="w-10 h-10 mx-auto text-slate-700 mb-2"></i>
-            <p class="text-xs">Tidak ada tiket ganggguan yang cocok.</p>
+            <p class="text-xs">Tidak ada tiket gangguan yang cocok.</p>
           </div>
         `;
         lucide.createIcons();
@@ -1764,9 +1859,6 @@ function createTicketWithLock(ticketData) {
         const sla = calculateSlaLimit(t.createdAt, t.priority);
         const statusClass = t.status === 'RESOLVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
                             t.status === 'IN PROGRESS' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
-
-        const priorityClass = t.priority === 'P1' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 
-                              t.priority === 'P2' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-800 text-slate-400';
 
         return `
           <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between h-[210px] transition-all hover:border-slate-700 relative overflow-hidden">
@@ -1814,16 +1906,7 @@ function createTicketWithLock(ticketData) {
 
       const newId = `INC-2026-${String(tickets.length + 1).padStart(4, '0')}`;
       const newT = {
-        id: newId,
-        category: cat,
-        location: location,
-        priority: priority,
-        reporter: reporter,
-        desc: desc,
-        status: "OPEN",
-        createdAt: new Date().toISOString(),
-        assignedTo: "Unassigned",
-        type: "INCIDENT"
+        id: newId, category: cat, location: location, priority: priority, reporter: reporter, desc: desc, status: "OPEN", createdAt: new Date().toISOString(), assignedTo: "Unassigned", type: "INCIDENT"
       };
 
       tickets.push(newT);
@@ -1833,22 +1916,7 @@ function createTicketWithLock(ticketData) {
       document.getElementById('form-new-incident').reset();
     }
 
-    function updateTicketStatus(id, status) {
-      const idx = tickets.findIndex(t => t.id === id);
-      if (idx !== -1) {
-        tickets[idx].status = status;
-        saveStateToLocalStorage();
-        showToast(`Tiket ${id} berhasil diperbarui ke status: ${status}.`, 'info');
-      }
-    }
-
-    function deleteTicket(id) {
-      tickets = tickets.filter(t => t.id !== id);
-      saveStateToLocalStorage();
-      showToast(`Tiket ${id} dihapus.`, 'info');
-    }
-
-    // ================= MODUL 16: GUEST TECH SUPPORT =================
+    // Guest Tech Support Module
     function renderGuestTechList() {
       const container = document.getElementById('guest-tech-list');
       if (!container) return;
@@ -1857,7 +1925,7 @@ function createTicketWithLock(ticketData) {
         const priorityColor = gt.priority === 'P1' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
                               gt.priority === 'P2' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-slate-800 text-slate-400';
         return `
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-855 flex items-center justify-between gap-4">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-center justify-between gap-4">
             <div>
               <div class="flex items-center gap-2 mb-1">
                 <span class="font-bold text-white text-xs">${gt.room}</span>
@@ -1895,13 +1963,7 @@ function createTicketWithLock(ticketData) {
       else if (occupied) priority = 'P2';
 
       guestTechs.push({
-        room: room,
-        guestName: guest,
-        vipStatus: vip,
-        occupied: occupied,
-        desc: desc,
-        priority: priority,
-        status: "OPEN"
+        room: room, guestName: guest, vipStatus: vip, occupied: occupied, desc: desc, priority: priority, status: "OPEN"
       });
 
       saveStateToLocalStorage();
@@ -1910,21 +1972,8 @@ function createTicketWithLock(ticketData) {
       document.getElementById('form-new-guest-tech').reset();
     }
 
-    function resolveGuestTech(idx) {
-      guestTechs[idx].status = 'RESOLVED';
-      saveStateToLocalStorage();
-      showToast(`Isu Guest-Tech kamar diselesaikan.`, 'success');
-    }
-
-    function deleteGuestTech(idx) {
-      guestTechs.splice(idx, 1);
-      saveStateToLocalStorage();
-      showToast(`Kasus kamar dihapus dari arsip log.`, 'info');
-    }
-
-    // ================= MODUL 1: SERVICE CATALOG =================
+    // Service Catalog Module
     let activeCatalogDept = 'fo';
-    
     function renderCatalogMenu() {
       const navContainer = document.getElementById('catalog-dept-nav');
       if (!navContainer) return;
@@ -1972,22 +2021,13 @@ function createTicketWithLock(ticketData) {
     function orderServiceCatalog(title) {
       const newId = `SR-2026-${String(tickets.length + 1).padStart(4, '0')}`;
       tickets.push({
-        id: newId,
-        category: "Service Request",
-        location: "Department Office",
-        priority: "P4",
-        reporter: "Department PIC (Auto)",
-        desc: `Order Layanan Rutin dari Katalog: ${title}`,
-        status: "OPEN",
-        createdAt: new Date().toISOString(),
-        assignedTo: "Unassigned",
-        type: "REQUEST"
+        id: newId, category: "Service Request", location: "Department Office", priority: "P4", reporter: "Department PIC (Auto)", desc: `Order Layanan Rutin dari Katalog: ${title}`, status: "OPEN", createdAt: new Date().toISOString(), assignedTo: "Unassigned", type: "REQUEST"
       });
       saveStateToLocalStorage();
       showToast(`Request ${newId} berhasil dikirim ke antrean IT Service.`, 'success');
     }
 
-    // ================= MODUL 17: MAJOR EMERGENCY OUTAGE SIMULATOR =================
+    // Major Incident War Room
     function triggerEmergencySimulator() {
       isWarRoomActive = true;
       warRoomSeconds = 0;
@@ -2044,7 +2084,7 @@ function createTicketWithLock(ticketData) {
       }
     }
 
-    // ================= MODUL 4: ASSETS =================
+    // Asset Management Module
     function renderAssetUI() {
       const tbody = document.getElementById('asset-table-body');
       if (!tbody) return;
@@ -2128,7 +2168,7 @@ function createTicketWithLock(ticketData) {
       showToast(`Aset ${tag} dihapus.`, 'info');
     }
 
-    // ================= MODUL 5: CMDB CONFIGURATION MAP =================
+    // CMDB Map Logic
     function clickCmdbNode(nodeId) {
       const container = document.getElementById('cmdb-impact-output');
       if (!container) return;
@@ -2194,7 +2234,7 @@ function createTicketWithLock(ticketData) {
       container.innerHTML = analysisHtml;
     }
 
-    // ================= MODUL 19: SPARE PARTS =================
+    // Parts Inventory Logic
     function renderInventoryUI() {
       const tbody = document.getElementById('inventory-table-body');
       if (!tbody) return;
@@ -2250,7 +2290,7 @@ function createTicketWithLock(ticketData) {
       showToast("Arsip suku cadang dihapus.", "info");
     }
 
-    // ================= MODUL 11: PREVENTIVE MAINTENANCE =================
+    // ================= MODUL 11: PREVENTIVE MAINTENANCE CHECKLIST (CRUD + UPLOAD EVIDENCE) =================
     function setChecklistPeriod(period) {
       currentChecklistPeriod = period;
       ['daily', 'weekly', 'monthly', 'yearly'].forEach(p => {
@@ -2278,48 +2318,205 @@ function createTicketWithLock(ticketData) {
       const container = document.getElementById('checklist-task-list');
       if (!container) return;
 
-      const tasks = checklists[currentChecklistPeriod];
+      const tasks = checklists[currentChecklistPeriod] || [];
       const completed = tasks.filter(t => t.done).length;
       document.getElementById('checklist-header-status').textContent = `${completed} dari ${tasks.length} tugas diselesaikan`;
 
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 text-xs">
+            <i data-lucide="check-square" class="w-8 h-8 mx-auto text-slate-700 mb-2"></i>
+            <p>Belum ada tugas PM yang dikonfigurasi untuk periode ini.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
       container.innerHTML = tasks.map((t, idx) => {
+        // Evidence rendering
+        const hasEvidence = t.evidence && t.evidence !== "";
+        const evidencePreview = hasEvidence ? 
+          `<div class="relative w-14 h-14 rounded-lg overflow-hidden border border-slate-700 cursor-pointer shadow hover:border-emerald-500 group transition-all" onclick="openEvidenceLightbox('${currentChecklistPeriod}', ${idx})">
+             <img src="${t.evidence}" class="w-full h-full object-cover">
+             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+               <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-white"></i>
+             </div>
+           </div>` : 
+          `<div class="w-14 h-14 rounded-lg border-2 border-dashed border-slate-800 flex flex-col items-center justify-center text-slate-600 hover:text-slate-400 hover:border-slate-700 transition-all relative">
+             <i data-lucide="image" class="w-4 h-4"></i>
+             <span class="text-[8px] mt-1 font-bold">Upload</span>
+             <input type="file" accept="image/*" onchange="handleEvidenceUpload(event, '${currentChecklistPeriod}', ${idx})" class="absolute inset-0 opacity-0 cursor-pointer">
+           </div>`;
+
         return `
-          <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/40 hover:bg-slate-900/80 transition-all ${t.done ? 'opacity-70' : ''} text-xs">
-            <div class="flex items-start gap-3">
-              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleChecklistTask(${idx})" class="mt-1 w-4 h-4 rounded text-emerald-600 bg-slate-950 border-slate-800">
-              <div>
-                <span class="text-[9px] text-slate-500 font-bold font-mono">TASK-${t.id.toUpperCase()}</span>
-                <p class="text-sm font-medium ${t.done ? 'line-through text-slate-400' : 'text-slate-200'}">${t.task}</p>
+          <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/40 hover:bg-slate-900/80 transition-all ${t.done ? 'bg-slate-900/10' : ''} text-xs">
+            <div class="flex items-start gap-3 flex-grow">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleChecklistTask(${idx})" class="mt-1 w-4.5 h-4.5 rounded text-emerald-600 bg-slate-950 border-slate-800 focus:ring-0 focus:ring-offset-0">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-[9px] text-slate-500 font-bold font-mono">TASK-${t.id.toUpperCase()}</span>
+                  <span class="text-[9px] px-1.5 py-0.2 bg-slate-800 text-slate-400 border border-slate-700 rounded font-semibold">${t.assigned}</span>
+                </div>
+                <p class="text-sm font-medium ${t.done ? 'line-through text-slate-400' : 'text-slate-200'} leading-snug">${t.task}</p>
+                ${t.note ? `<p class="text-[10px] text-emerald-400 italic">Catatan teknis: ${t.note}</p>` : ''}
               </div>
             </div>
             
-            <div class="flex items-center gap-2">
-              <span class="text-[9px] font-bold uppercase px-2 py-1 bg-slate-855 text-slate-400 rounded border border-slate-800">${t.assigned}</span>
-              <input type="text" value="${t.note || ''}" placeholder="Suhu AC / Catatan..." onchange="updateChecklistNote(${idx}, this.value)" class="bg-slate-950 border border-slate-800 text-xs px-3 py-1.5 rounded-lg text-slate-300 focus:outline-none focus:border-emerald-500 w-full sm:w-48">
+            <!-- Evidence Slot, Notes & Actions CRUD -->
+            <div class="flex items-center gap-4 shrink-0">
+              <!-- Visual Evidence Simulator Slot -->
+              <div class="flex flex-col items-center gap-1">
+                <span class="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Bukti Foto</span>
+                ${evidencePreview}
+              </div>
+
+              <!-- Action buttons (Edit & Hapus) -->
+              <div class="flex flex-col gap-1.5 border-l border-slate-800 pl-3">
+                <button onclick="openEditPmTaskModal('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 rounded-lg text-slate-400 hover:text-emerald-400 flex items-center justify-center transition-all" title="Edit Tugas">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="deletePmTask('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-rose-900 rounded-lg text-slate-400 hover:text-rose-400 flex items-center justify-center transition-all" title="Hapus Tugas">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
+      lucide.createIcons();
+    }
+
+    // Action: Tambah Tugas PM Baru (C di CRUD)
+    function submitNewPmTask(e) {
+      e.preventDefault();
+      const period = document.getElementById('pm-new-period').value;
+      const taskText = document.getElementById('pm-new-task').value;
+      const assigned = document.getElementById('pm-new-assigned').value;
+
+      const currentList = checklists[period] || [];
+      const prefixMap = { daily: 'd', weekly: 'w', monthly: 'm', yearly: 'y' };
+      const newId = `${prefixMap[period]}${currentList.length + 1}`;
+
+      checklists[period].push({
+        id: newId,
+        task: taskText,
+        done: false,
+        assigned: assigned,
+        note: "",
+        evidence: ""
+      });
+
+      saveStateToLocalStorage();
+      closeModal('new-pm-task-modal');
+      document.getElementById('form-new-pm-task').reset();
+      showToast(`Tugas PM ${newId.toUpperCase()} berhasil ditambahkan!`, 'success');
+      
+      // Auto pivot ke period baru jika berbeda
+      if (currentChecklistPeriod !== period) {
+        setChecklistPeriod(period);
+      } else {
+        renderChecklistUI();
+      }
+    }
+
+    // Action: Membuka Editor PM (U di CRUD)
+    function openEditPmTaskModal(period, index) {
+      const task = checklists[period][index];
+      if (!task) return;
+
+      document.getElementById('pm-edit-period').value = period;
+      document.getElementById('pm-edit-index').value = index;
+      document.getElementById('pm-edit-task').value = task.task;
+      document.getElementById('pm-edit-assigned').value = task.assigned;
+      document.getElementById('pm-edit-status').value = task.done.toString();
+      document.getElementById('pm-edit-note').value = task.note || "";
+
+      openModal('edit-pm-task-modal');
+    }
+
+    // Action: Submit Edit PM (U di CRUD)
+    function submitEditPmTask(e) {
+      e.preventDefault();
+      const period = document.getElementById('pm-edit-period').value;
+      const idx = parseInt(document.getElementById('pm-edit-index').value, 10);
+      const taskText = document.getElementById('pm-edit-task').value;
+      const assigned = document.getElementById('pm-edit-assigned').value;
+      const isDone = document.getElementById('pm-edit-status').value === "true";
+      const noteText = document.getElementById('pm-edit-note').value;
+
+      if (checklists[period] && checklists[period][idx]) {
+        checklists[period][idx].task = taskText;
+        checklists[period][idx].assigned = assigned;
+        checklists[period][idx].done = isDone;
+        checklists[period][idx].note = noteText;
+
+        saveStateToLocalStorage();
+        closeModal('edit-pm-task-modal');
+        showToast("Perubahan tugas PM berhasil disimpan.", "success");
+      }
+    }
+
+    // Action: Hapus Tugas PM (D di CRUD)
+    function deletePmTask(period, idx) {
+      if (confirm("Apakah Anda yakin ingin menghapus tugas PM ini dari jadwal audit?")) {
+        const taskId = checklists[period][idx].id;
+        checklists[period].splice(idx, 1);
+        saveStateToLocalStorage();
+        showToast(`Tugas PM ${taskId.toUpperCase()} berhasil dihapus.`, "info");
+      }
+    }
+
+    // Action: Menangani Unggahan Bukti Visual (Upload Evidence)
+    function handleEvidenceUpload(event, period, idx) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Restriksi ukuran file pelindung local storage browser (~1.5MB max)
+      if (file.size > 1.5 * 1024 * 1024) {
+        showToast("Ukuran file terlalu besar! Silakan kompres foto di bawah 1.5MB.", "error");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        checklists[period][idx].evidence = e.target.result; // payload base64
+        saveStateToLocalStorage();
+        showToast(`Bukti foto untuk TASK-${checklists[period][idx].id.toUpperCase()} berhasil diunggah!`, 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Action: Membuka Lightbox Preview Bukti Foto
+    function openEvidenceLightbox(period, idx) {
+      const task = checklists[period][idx];
+      if (task && task.evidence) {
+        const img = document.getElementById('evidence-large-view');
+        const cap = document.getElementById('evidence-caption-lbl');
+        img.src = task.evidence;
+        cap.textContent = `Bukti Audit: ${task.task} (${task.assigned})`;
+        openModal('preview-evidence-modal');
+      }
     }
 
     function toggleChecklistTask(idx) {
       checklists[currentChecklistPeriod][idx].done = !checklists[currentChecklistPeriod][idx].done;
       saveStateToLocalStorage();
     }
-    function updateChecklistNote(idx, note) {
-      checklists[currentChecklistPeriod][idx].note = note;
-      saveStateToLocalStorage();
-    }
     function resetChecklist() {
-      checklists[currentChecklistPeriod].forEach(t => { t.done = false; t.note = ""; });
+      checklists[currentChecklistPeriod].forEach(t => { 
+        t.done = false; 
+        t.note = ""; 
+        t.evidence = ""; // Bersihkan bukti foto saat reset
+      });
       saveStateToLocalStorage();
-      showToast("Checklist PM di-reset.", "info");
+      showToast("Checklist PM dan bukti foto di-reset.", "info");
     }
     function saveChecklist() {
-      showToast(`Berita Acara PM ${currentChecklistPeriod.toUpperCase()} berhasil dikirim ke Google Sheets via Batch Write!`, "success");
+      showToast(`Berita Acara PM ${currentChecklistPeriod.toUpperCase()} berhasil disimpan dan disinkronisasikan!`, "success");
     }
 
-    // ================= MODUL 6: CHANGE MANAGEMENT =================
+    // ================= MODUL LAIN-LAIN =================
     function renderChangeUI() {
       const tbody = document.getElementById('change-table-body');
       if (!tbody) return;
@@ -2349,13 +2546,10 @@ function createTicketWithLock(ticketData) {
       e.preventDefault();
       const type = document.getElementById('rfc-type').value;
       const desc = document.getElementById('rfc-desc').value;
-      const impact = document.getElementById('rfc-impact').value;
-
       const newId = `RFC-2026-${String(changes.length + 1).padStart(3, '0')}`;
       changes.push({
         code: newId, type: type, desc: desc, execution: "Scheduled Window (TBD)", status: "PENDING CAB"
       });
-
       saveStateToLocalStorage();
       closeModal('new-change-modal');
       showToast(`Permintaan Perubahan ${newId} dikirim ke Board CAB.`, 'success');
@@ -2374,7 +2568,6 @@ function createTicketWithLock(ticketData) {
       showToast("RFC dihapus.", "info");
     }
 
-    // ================= MODUL 7: PROBLEM MANAGEMENT =================
     function renderProblemUI() {
       const container = document.getElementById('problem-list-container');
       if (!container) return;
@@ -2404,14 +2597,9 @@ function createTicketWithLock(ticketData) {
                 <p class="mt-1 font-medium text-emerald-400">${p.permanent}</p>
               </div>
             </div>
-
-            <div class="flex justify-end gap-2">
-              <button onclick="deleteProblem(${idx})" class="p-1 text-slate-600 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-            </div>
           </div>
         `;
       }).join('');
-      lucide.createIcons();
     }
 
     function submitNewProblem(e) {
@@ -2420,19 +2608,16 @@ function createTicketWithLock(ticketData) {
       const root = document.getElementById('prob-root').value;
       const known = document.getElementById('prob-known').value;
       const perm = document.getElementById('prob-permanent').value;
-
       const newId = `PRB-2026-${String(problems.length + 1).padStart(3, '0')}`;
       problems.push({
         id: newId, incident: inc, root: root, known: known, permanent: perm, status: "KNOWN ERROR"
       });
-
       saveStateToLocalStorage();
       closeModal('new-problem-modal');
       showToast(`Arsip RCA baru ${newId} berhasil disimpan.`, 'success');
       document.getElementById('form-new-problem').reset();
     }
 
-    // ================= MODUL 13: USER LIFECYCLE =================
     function renderUserLifecycleUI() {
       const container = document.getElementById('user-lifecycle-list');
       if (!container) return;
@@ -2451,12 +2636,10 @@ function createTicketWithLock(ticketData) {
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[9px] bg-slate-900 border border-slate-800 text-slate-500 p-1.5 rounded font-bold uppercase">${u.status}</span>
-              <button onclick="deleteLifecycle(${idx})" class="text-slate-600 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
         `;
       }).join('');
-      lucide.createIcons();
     }
 
     function submitUserLifecycle(e) {
@@ -2464,36 +2647,20 @@ function createTicketWithLock(ticketData) {
       const name = document.getElementById('lifecycle-name').value;
       const dept = document.getElementById('lifecycle-dept').value;
       const type = document.getElementById('lifecycle-type').value;
-
       const dateStr = new Date().toISOString().split('T')[0];
-      const statusMap = {
-        JOINER: 'AD & EMAIL CREATED',
-        MOVER: 'ACCESS PERMISSIONS SYNCED',
-        LEAVER: 'ACCESS REVOKED'
-      };
-
-      lifecycles.push({
-        name: name, dept: dept, type: type, date: dateStr, status: statusMap[type]
-      });
-
+      const statusMap = { JOINER: 'AD & EMAIL CREATED', MOVER: 'ACCESS PERMISSIONS SYNCED', LEAVER: 'ACCESS REVOKED' };
+      lifecycles.push({ name: name, dept: dept, type: type, date: dateStr, status: statusMap[type] });
       saveStateToLocalStorage();
       showToast(`Formulir HR untuk ${name} diproses.`, 'success');
       document.getElementById('form-user-lifecycle').reset();
     }
 
-    function deleteLifecycle(idx) {
-      lifecycles.splice(idx, 1);
-      saveStateToLocalStorage();
-      showToast("Arsip log akses dihapus.", "info");
-    }
-
-    // ================= MODUL 12: TELEMETRI MONITORING SENSOR =================
     function renderMonitoringUI() {
       const container = document.getElementById('monitoring-sensor-grid');
       const dashContainer = document.getElementById('dash-monitoring-status');
       if (!container) return;
 
-      const contentHtml = monitoringSensors.map((s, idx) => {
+      container.innerHTML = monitoringSensors.map((s, idx) => {
         const isOnline = s.status === 'ONLINE';
         const statusBadge = isOnline ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20';
         return `
@@ -2507,8 +2674,6 @@ function createTicketWithLock(ticketData) {
           </div>
         `;
       }).join('');
-
-      container.innerHTML = contentHtml;
 
       if (dashContainer) {
         dashContainer.innerHTML = monitoringSensors.map(s => {
@@ -2540,78 +2705,65 @@ function createTicketWithLock(ticketData) {
       showToast(`Status sensor pemantau diperbarui.`, 'info');
     }
 
-    // ================= MODUL 10: VENDORS =================
     function renderVendorUI() {
       const container = document.getElementById('vendor-grid');
       if (!container) return;
-
-      container.innerHTML = vendors.map(v => {
-        return `
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-3">
-            <div class="border-b border-slate-855 pb-2 flex justify-between items-center">
-              <h4 class="font-bold text-white text-sm">${v.name}</h4>
-              <span class="bg-emerald-500/10 text-emerald-400 text-[9px] px-2 rounded-full border border-emerald-500/20">Active Partner</span>
-            </div>
-            <div class="space-y-1 text-slate-400">
-              <p><strong>PIC:</strong> ${v.pic}</p>
-              <p><strong>Kontak Support:</strong> ${v.contact}</p>
-              <p><strong>Masa Berlaku:</strong> ${v.activeSupport}</p>
-              <p class="text-slate-300 font-semibold flex items-center gap-1 mt-2">
-                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-blue-400"></i> SLA Vendor: ${v.sSupport}
-              </p>
-            </div>
+      container.innerHTML = vendors.map(v => `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-3">
+          <div class="border-b border-slate-855 pb-2 flex justify-between items-center">
+            <h4 class="font-bold text-white text-sm">${v.name}</h4>
+            <span class="bg-emerald-500/10 text-emerald-400 text-[9px] px-2 rounded-full border border-emerald-500/20">Active Partner</span>
           </div>
-        `;
-      }).join('');
+          <div class="space-y-1 text-slate-400">
+            <p><strong>PIC:</strong> ${v.pic}</p>
+            <p><strong>Kontak Support:</strong> ${v.contact}</p>
+            <p><strong>Masa Berlaku:</strong> ${v.activeSupport}</p>
+            <p class="text-slate-300 font-semibold flex items-center gap-1 mt-2">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-blue-400"></i> SLA Vendor: ${v.sSupport}
+            </p>
+          </div>
+        </div>
+      `).join('');
       lucide.createIcons();
     }
 
-    // ================= MODUL 14: PROJECTS =================
     function renderProjectsUI() {
       const container = document.getElementById('projects-container');
       if (!container) return;
-
-      container.innerHTML = projects.map(p => {
-        return `
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-4">
-            <div class="border-b border-slate-855 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-2">
-              <h3 class="text-sm font-bold text-white">${p.name}</h3>
-              <div class="flex gap-2">
-                <span class="bg-emerald-500/10 text-emerald-400 px-2 rounded font-bold">Budget: ${p.budget}</span>
-                <span class="bg-blue-500/10 text-blue-400 px-2 rounded">Jadwal: ${p.timeline}</span>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-3 bg-slate-950 rounded border border-slate-855">
-                <p class="text-[9px] text-slate-500 uppercase font-bold">Milestones & Kemajuan Fisik</p>
-                <p class="mt-1 text-slate-300 font-medium">${p.milestone}</p>
-              </div>
-              <div class="p-3 bg-rose-950/20 rounded border border-rose-500/20">
-                <p class="text-[9px] text-rose-400 uppercase font-bold">Risk Register & Hambatan</p>
-                <p class="mt-1 text-slate-300 font-medium">${p.risk}</p>
-              </div>
+      container.innerHTML = projects.map(p => `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-4">
+          <div class="border-b border-slate-855 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <h3 class="text-sm font-bold text-white">${p.name}</h3>
+            <div class="flex gap-2">
+              <span class="bg-emerald-500/10 text-emerald-400 px-2 rounded font-bold">Budget: ${p.budget}</span>
+              <span class="bg-blue-500/10 text-blue-400 px-2 rounded">Jadwal: ${p.timeline}</span>
             </div>
           </div>
-        `;
-      }).join('');
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3 bg-slate-950 rounded border border-slate-855">
+              <p class="text-[9px] text-slate-500 uppercase font-bold">Milestones & Kemajuan Fisik</p>
+              <p class="mt-1 text-slate-300 font-medium">${p.milestone}</p>
+            </div>
+            <div class="p-3 bg-rose-950/20 rounded border border-rose-500/20">
+              <p class="text-[9px] text-rose-400 uppercase font-bold">Risk Register & Hambatan</p>
+              <p class="mt-1 text-slate-300 font-medium">${p.risk}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    // ================= MODUL 8: KNOWLEDGE BASE =================
-    let activeKbIdx = 0;
     function renderKbUI() {
       const catContainer = document.getElementById('kb-categories-container');
       const contentBox = document.getElementById('kb-content-box');
       if (!catContainer || !contentBox) return;
 
-      catContainer.innerHTML = kbs.map((kb, idx) => {
-        const isActive = idx === activeKbIdx;
-        return `
-          <button onclick="selectKbArticle(${idx})" class="w-full text-left p-3 text-xs font-semibold rounded-lg flex flex-col transition-all ${isActive ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white'}">
-            <span class="text-[9px] uppercase tracking-wider block opacity-75">${kb.category}</span>
-            <span class="mt-0.5 line-clamp-1">${kb.title}</span>
-          </button>
-        `;
-      }).join('');
+      catContainer.innerHTML = kbs.map((kb, idx) => `
+        <button onclick="selectKbArticle(${idx})" class="w-full text-left p-3 text-xs font-semibold rounded-lg flex flex-col transition-all ${idx === activeKbIdx ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white'}">
+          <span class="text-[9px] uppercase tracking-wider block opacity-75">${kb.category}</span>
+          <span class="mt-0.5 line-clamp-1">${kb.title}</span>
+        </button>
+      `).join('');
 
       const activeArt = kbs[activeKbIdx];
       if (activeArt) {
@@ -2619,9 +2771,7 @@ function createTicketWithLock(ticketData) {
           <div class="space-y-4">
             <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded font-bold border border-emerald-500/20 uppercase tracking-wider">${activeArt.category}</span>
             <h3 class="text-base font-bold text-white tracking-tight">${activeArt.title}</h3>
-            <pre class="bg-slate-950 p-4 rounded-lg text-slate-300 text-xs overflow-x-auto font-mono whitespace-pre-wrap leading-relaxed border border-slate-855">
-              ${activeArt.content}
-            </pre>
+            <pre class="bg-slate-950 p-4 rounded-lg text-slate-300 text-xs overflow-x-auto font-mono whitespace-pre-wrap leading-relaxed border border-slate-855">${activeArt.content}</pre>
           </div>
         `;
       }
@@ -2632,40 +2782,13 @@ function createTicketWithLock(ticketData) {
       renderKbUI();
     }
 
-    // ================= MODUL 18: DISASTER RECOVERY PROTOCOL =================
-    function renderDrpPlaybook() {
-      const container = document.getElementById('drp-steps-container');
-      if (!container) return;
-
-      const steps = [
-        { title: "Deteksi Kegagalan Opera PMS", desc: "Jika server database gagal merespons pings dalam 5 menit berturut-turut, picu sistem failover lokal dan buka gateway replikasi NAS." },
-        { title: "Prosedur Failover Sinkronisasi", desc: "Pindahkan port server virtualisasi ke VM backup sekunder (IP 192.168.10.11). Hubungi PIC VingCard untuk memastikan integrasi kunci tidak terganggu." },
-        { title: "Verifikasi Integritas Transaksional (RPO)", desc: "Restore snapshot database yang ditarik 15 menit sebelum kejadian crash. Bandingkan log offline Front Office." }
-      ];
-
-      container.innerHTML = steps.map((s, idx) => `
-        <div class="p-3 bg-slate-950 rounded-lg border border-slate-855 flex gap-3">
-          <span class="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-mono font-bold text-emerald-400 text-xs shrink-0">${idx+1}</span>
-          <div>
-            <h4 class="font-bold text-white text-xs">${s.title}</h4>
-            <p class="text-slate-400 mt-0.5">${s.desc}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // ================= MODUL 20: MOBILE TECH SIMULATION =================
     function renderMobileTechnicianView() {
       const container = document.getElementById('phone-incident-container');
       if (!container) return;
 
       const openIncs = tickets.filter(t => t.status !== 'RESOLVED');
       if (openIncs.length === 0) {
-        container.innerHTML = `
-          <div class="text-center text-slate-500 py-6 text-[10px]">
-            Selesai! Tidak ada tugas antrean di lapangan.
-          </div>
-        `;
+        container.innerHTML = `<div class="text-center text-slate-500 py-6 text-[10px]">Selesai! Tidak ada tugas antrean di lapangan.</div>`;
         return;
       }
 
@@ -2702,7 +2825,6 @@ function createTicketWithLock(ticketData) {
       document.getElementById('phone-scanner-view').classList.add('hidden');
     }
 
-    // ================= LAIN-LAIN / EXPORTER UTILITIES =================
     function setGasFile(file) {
       selectedGasFile = file;
       ['config', 'serializer', 'core'].forEach(f => {
