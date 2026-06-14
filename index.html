@@ -1,0 +1,2779 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPH Hotel ITSM - ITM Control Center</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-row overflow-x-hidden">
+
+  <!-- ================= SISTEM SIDEBAR UTAMA ================= -->
+  <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full lg:translate-x-0 bg-slate-900 border-r border-slate-800 flex flex-col justify-between">
+    <!-- Header Informasi Brand -->
+    <div class="p-4 border-b border-slate-800 bg-slate-950/40">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="p-2 bg-emerald-600 rounded-lg text-white shadow-lg shadow-emerald-900/30 flex items-center justify-center">
+          <i data-lucide="shield-alert" class="w-5 h-5 animate-pulse"></i>
+        </div>
+        <div>
+          <h1 class="text-xs font-bold tracking-tight text-white leading-tight">GRAND PALACE</h1>
+          <span class="bg-emerald-500/10 text-emerald-400 text-[9px] px-2 py-0.5 rounded-full border border-emerald-500/20 font-semibold inline-block">ITSM ITM-Exclusive</span>
+        </div>
+      </div>
+      <p class="text-[10px] text-slate-400">Integrated Hotel Technology & Service Operation Desk</p>
+    </div>
+    
+    <!-- Navigasi Menu Grup -->
+    <nav class="flex-grow p-3 space-y-4 overflow-y-auto custom-scrollbar">
+      <!-- Grup 1: Operasional Core -->
+      <div>
+        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Operasional Core</p>
+        <div class="space-y-1">
+          <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard ITM</span>
+          </button>
+          <button onclick="switchTab('incidents')" id="btn-incidents" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="ticket" class="w-4 h-4"></i> Incident & Request</span>
+            <span id="badge-incident-count" class="bg-rose-500/20 text-rose-400 px-1.5 py-0.2 text-[10px] rounded font-bold">0</span>
+          </button>
+          <button onclick="switchTab('guest-tech')" id="btn-guest-tech" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="tv-2" class="w-4 h-4"></i> Guest Tech Support</span>
+            <span id="badge-vip-guest" class="bg-amber-500/20 text-amber-400 px-1.5 py-0.2 text-[10px] rounded font-bold">VIP</span>
+          </button>
+          <button onclick="switchTab('catalog')" id="btn-catalog" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4"></i> Service Catalog</span>
+          </button>
+          <button onclick="switchTab('warroom')" id="btn-warroom" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4"></i> Major Incident Log</span>
+            <span id="badge-warroom" class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grup 2: Aset & Arsitektur -->
+      <div>
+        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Aset & Arsitektur</p>
+        <div class="space-y-1">
+          <button onclick="switchTab('assets')" id="btn-assets" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="server" class="w-4 h-4"></i> IT Asset Registry
+          </button>
+          <button onclick="switchTab('cmdb')" id="btn-cmdb" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="git-branch" class="w-4 h-4"></i> CMDB Dependency Map
+          </button>
+          <button onclick="switchTab('inventory')" id="btn-inventory" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> Spare Parts Stock</span>
+            <span id="badge-stock-warning" class="bg-amber-500/10 text-amber-400 text-[10px] px-1.5 rounded font-bold">0 Low</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grup 3: Prosedur & Kontrol -->
+      <div>
+        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Kontrol & Maintenance</p>
+        <div class="space-y-1">
+          <button onclick="switchTab('checklist')" id="btn-checklist" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="check-square" class="w-4 h-4"></i> Preventive Maintenance
+          </button>
+          <button onclick="switchTab('change-mgmt')" id="btn-change-mgmt" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="git-commit" class="w-4 h-4"></i> Change Management (RFC)
+          </button>
+          <button onclick="switchTab('problem-mgmt')" id="btn-problem-mgmt" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="wrench" class="w-4 h-4"></i> Problem Management (RCA)
+          </button>
+          <button onclick="switchTab('user-mgmt')" id="btn-user-mgmt" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="user-cog" class="w-4 h-4"></i> User Joiner / Leaver
+          </button>
+        </div>
+      </div>
+
+      <!-- Grup 4: Sistem Pemantauan & Integrasi -->
+      <div>
+        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Sistem Monitoring & Support</p>
+        <div class="space-y-1">
+          <button onclick="switchTab('monitoring')" id="btn-monitoring" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
+            <span class="flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> PRTG/Zabbix Feeds</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </button>
+          <button onclick="switchTab('vendors')" id="btn-vendors" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="users" class="w-4 h-4"></i> Vendor SLA Directory
+          </button>
+          <button onclick="switchTab('projects')" id="btn-projects" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="milestone" class="w-4 h-4"></i> Projects & Milestones
+          </button>
+          <button onclick="switchTab('kb')" id="btn-kb" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="database" class="w-4 h-4"></i> SOP Knowledge Base
+          </button>
+          <button onclick="switchTab('drp')" id="btn-drp" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Disaster Recovery (DRP)
+          </button>
+          <button onclick="switchTab('technician-app')" id="btn-technician-app" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-amber-500 hover:bg-slate-800 flex items-center gap-2 transition-all">
+            <i data-lucide="smartphone" class="w-4 h-4"></i> Mobile Technician App
+          </button>
+          <button onclick="switchTab('gas-export')" id="btn-gas-export" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-blue-400 hover:bg-slate-850 flex items-center gap-2 transition-all">
+            <i data-lucide="code-2" class="w-4 h-4"></i> GAS Integration Node
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sidebar Profile Staf -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40 text-xs">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-emerald-400">IT</div>
+        <div>
+          <p class="font-semibold text-white">Duty Staf Shift</p>
+          <p class="text-[10px] text-slate-500 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Cloud Link Active
+          </p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Layer backdrop gelap untuk mobile navigation drawer -->
+  <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <!-- Wrapper Panel Utama -->
+  <div class="flex-grow min-h-screen flex flex-col lg:pl-64">
+    
+    <!-- Mobile Header Bar -->
+    <header class="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-3.5 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-2.5">
+        <div class="p-1.5 bg-emerald-600 rounded text-white">
+          <i data-lucide="shield-alert" class="w-4.5 h-4.5"></i>
+        </div>
+        <h1 class="text-sm font-bold text-white tracking-tight">GPH ITSM ITM v3.1</h1>
+      </div>
+      <button onclick="toggleSidebar()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors focus:outline-none">
+        <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
+      </button>
+    </header>
+
+    <main class="flex-grow p-4 md:p-6 space-y-6">
+
+      <!-- ================= MODUL 15: EXCLUSIVE IT MANAGER DASHBOARD ================= -->
+      <section id="tab-dashboard" class="space-y-6">
+        <!-- Dashboard Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white tracking-tight">IT Manager Control Tower</h2>
+            <p class="text-xs text-slate-400">Konsol visual real-time eksklusif untuk pengelolaan operasional, kepatuhan SLA, dan telemetri server room</p>
+          </div>
+          <div class="bg-slate-900/40 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-emerald-400 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> IT Manager Mode
+          </div>
+        </div>
+
+        <!-- Metric Cards Dashboard -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboard-metrics-container">
+          <!-- Metrik otomatis diinjeksikan oleh engine Javascript -->
+        </div>
+
+        <!-- Core Operational Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Live SLA Monitor Feed (SLA Management) -->
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[400px]">
+            <div class="flex justify-between items-center mb-4">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping"></span> Live SLA Monitoring Feed
+              </h4>
+              <span class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400">Total Tiket Aktif: <strong id="lbl-active-tickets">0</strong></span>
+            </div>
+            <div class="flex-grow overflow-y-auto custom-scrollbar space-y-3" id="live-incident-feed">
+              <!-- Diinjeksikan otomatis -->
+            </div>
+          </div>
+
+          <!-- Critical System Link Status (Monitoring Module) -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[400px]">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-1.5">
+              <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> Critical System Link Status (PRTG)
+            </h4>
+            <div class="space-y-3 flex-grow overflow-y-auto custom-scrollbar" id="dash-monitoring-status">
+              <!-- Diinjeksikan otomatis -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= MODUL 2: INCIDENT MANAGEMENT & MODUL 3: SERVICE REQUEST ================= -->
+      <section id="tab-incidents" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Incident & Service Request Management</h2>
+            <p class="text-xs text-slate-400">Penanganan gangguan operasional (P1 - P4) dan penanganan request standar rutin</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openModal('new-incident-modal')" class="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i> Laporkan Gangguan (Incident)
+            </button>
+            <button onclick="switchTab('catalog')" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Request Layanan (SR)
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap gap-3 items-center justify-between">
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="text" id="inc-search" oninput="renderIncidentList()" placeholder="Cari ID tiket, deskripsi, pelapor..." class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-full sm:w-64">
+            <select id="inc-filter-priority" onchange="renderIncidentList()" class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-300 focus:outline-none">
+              <option value="all">Semua Dampak</option>
+              <option value="P1">P1 - Hotel Down (30m)</option>
+              <option value="P2">P2 - Area Tamu Terganggu (2j)</option>
+              <option value="P3">P3 - Departemen Terganggu (4j)</option>
+              <option value="P4">P4 - Permintaan Minor (1d)</option>
+            </select>
+            <select id="inc-filter-status" onchange="renderIncidentList()" class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-300 focus:outline-none">
+              <option value="all">Semua Status</option>
+              <option value="OPEN">OPEN</option>
+              <option value="IN PROGRESS">IN PROGRESS</option>
+              <option value="RESOLVED">RESOLVED</option>
+            </select>
+          </div>
+          <span class="text-xs text-slate-400 font-medium" id="inc-counter-lbl">Showing 0 Tickets</span>
+        </div>
+
+        <!-- Incident Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="incident-cards-container">
+          <!-- Dynamic cards injected by JS -->
+        </div>
+      </section>
+
+      <!-- ================= MODUL 16: GUEST TECHNOLOGY SUPPORT ================= -->
+      <section id="tab-guest-tech" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Guest Technology Support</h2>
+            <p class="text-xs text-slate-400">Modul penanganan instan teknologi di kamar tamu (VIP Priority Automation Engine)</p>
+          </div>
+          <button onclick="openModal('new-guest-tech-modal')" class="px-4 py-2 text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white rounded-lg flex items-center gap-1.5 transition-all">
+            <i data-lucide="user-check" class="w-4 h-4"></i> Log Kamar Tamu Baru
+          </button>
+        </div>
+
+        <!-- Guest Technology Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Aturan SLA Guest-Tech Otomatis</h4>
+              <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                Sistem menghitung matriks prioritas insiden tamu berdasarkan profil kamar:
+              </p>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center bg-rose-500/10 p-2.5 rounded border border-rose-500/20">
+                  <span class="font-semibold text-rose-400">VIP Guest Status</span>
+                  <span class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">P1 - 30 Menit</span>
+                </div>
+                <div class="flex justify-between items-center bg-amber-500/10 p-2.5 rounded border border-amber-500/20">
+                  <span class="font-semibold text-amber-400">Occupied Room</span>
+                  <span class="bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.5 rounded font-bold">P2 - 2 Jam</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-850 p-2.5 rounded border border-slate-800">
+                  <span class="font-semibold text-slate-300">Vacant Room</span>
+                  <span class="bg-slate-700 text-slate-300 text-[10px] px-1.5 py-0.5 rounded font-bold">P3 - 4 Jam</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse"></span> Daftar Antrean Penanganan Kamar Tamu
+            </h4>
+            <div class="space-y-3" id="guest-tech-list">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 1: SERVICE CATALOG ================= -->
+      <section id="tab-catalog" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Service Catalog & Provisioning</h2>
+          <p class="text-xs text-slate-400">Daftar seluruh menu layanan IT hotel yang tersedia untuk seluruh departemen operasional</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <!-- Department Selector -->
+          <div class="md:col-span-1 space-y-1" id="catalog-dept-nav">
+            <!-- Dynamic button injection -->
+          </div>
+
+          <!-- Catalog Items Area -->
+          <div class="md:col-span-3 bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider border-b border-slate-800 pb-2 flex items-center gap-2" id="catalog-header-title">
+              <i data-lucide="book-open" class="w-4 h-4 text-emerald-400"></i> Daftar Item Layanan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="catalog-items-grid">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 17: MAJOR INCIDENT MANAGEMENT ================= -->
+      <section id="tab-warroom" class="space-y-6 hidden">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Major Incident Management & War Room</h2>
+            <p class="text-xs text-slate-400">Pusat komando penanganan gangguan berskala besar (Ransomware, PMS Server Down, Blackout)</p>
+          </div>
+          <button onclick="triggerEmergencySimulator()" class="px-3 py-1.5 text-xs bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg animate-bounce">
+            Simulasikan Emergency Outage!
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-4">
+            <!-- Active Incident War Room Card -->
+            <div class="bg-rose-950/20 border border-rose-500/30 rounded-xl p-5">
+              <div class="flex justify-between items-start gap-4">
+                <div>
+                  <span class="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">Active Major War Room</span>
+                  <h3 class="text-lg font-bold text-white mt-1.5" id="warroom-title">Core PMS Database System Failure</h3>
+                  <p class="text-xs text-slate-300 mt-1" id="warroom-desc">Sinkronisasi database Opera PMS terputus di seluruh terminal. Transaksi kasir Front Office tidak bisa terposting.</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-[10px] text-slate-400 uppercase">Durasi Downtime</p>
+                  <p class="text-lg font-bold text-rose-500 font-mono" id="warroom-timer">00:15:34</p>
+                </div>
+              </div>
+
+              <!-- Live Timeline Log -->
+              <div class="mt-6 border-t border-slate-800/80 pt-4">
+                <h4 class="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center gap-1.5">
+                  <i data-lucide="clock" class="w-4 h-4 text-rose-400"></i> Broadcast & Timeline Activity
+                </h4>
+                <div class="space-y-3 max-h-[180px] overflow-y-auto custom-scrollbar text-xs pr-2" id="warroom-timeline">
+                  <!-- Log entries go here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-1 space-y-4">
+            <!-- War room communications & Broadcast actions -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Broadcast Emergency Panel</h4>
+              <div class="space-y-2">
+                <button onclick="broadcastWarRoomMessage('🚨 [UPDATE IT] Mengisolasi server Opera VM. Membuka jalur cold-standby backup database.')" class="w-full text-left p-2.5 bg-slate-950 hover:bg-slate-850 rounded border border-slate-800 text-xs transition-colors text-slate-300">
+                  Update VM Isolation Status
+                </button>
+                <button onclick="broadcastWarRoomMessage('📢 [BROADCAST] Rekan Front Office dipersilakan menggunakan slip manual reservasi.')" class="w-full text-left p-2.5 bg-slate-950 hover:bg-slate-850 rounded border border-slate-800 text-xs transition-colors text-slate-300">
+                  Broadcast manual slip protocol
+                </button>
+                <button onclick="closeActiveWarRoom()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded transition-colors">
+                  Resolve Major Incident (Close War Room)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 4: IT ASSET MANAGEMENT ================= -->
+      <section id="tab-assets" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">IT Asset Management & Registry</h2>
+            <p class="text-xs text-slate-400">Database komprehensif aset IT hotel lengkap dengan vendor, garansi, depresiasi nilai, dan umur ekonomis</p>
+          </div>
+          <button onclick="openModal('new-asset-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Registrasi Aset Baru
+          </button>
+        </div>
+
+        <!-- Inventory List -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+          <div class="p-4 border-b border-slate-800 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-850/50">
+            <input type="text" id="asset-search" oninput="renderAssetUI()" placeholder="Cari barcode tag, serial number, vendor..." class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-full sm:w-72">
+            <select id="asset-filter-type" onchange="renderAssetUI()" class="bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-300 focus:outline-none w-full sm:w-auto">
+              <option value="all">Semua Kategori</option>
+              <option value="Infrastruktur">Infrastruktur (Network)</option>
+              <option value="End User Device">End User Device (EUD)</option>
+              <option value="Hotel System Equipment">Hotel System Equipment</option>
+              <option value="Guest Equipment">Guest Equipment</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                  <th class="p-4">Asset Tag / SN</th>
+                  <th class="p-4">Nama Perangkat & Kategori</th>
+                  <th class="p-4">Area / Departemen</th>
+                  <th class="p-4">Vendor & Garansi</th>
+                  <th class="p-4">Nilai & Umur Ekonomis</th>
+                  <th class="p-4">Kondisi</th>
+                  <th class="p-4 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="asset-table-body" class="divide-y divide-slate-850">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 5: CMDB CONFIGURATION MAP ================= -->
+      <section id="tab-cmdb" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Configuration Management Database (CMDB)</h2>
+          <p class="text-xs text-slate-400">Analisis ketergantungan sistem hotel (*Dependency & Impact Analysis*). Klik modul untuk melihat jalur kegagalan.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Interactive CMDB Node Flowchart -->
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 relative">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-6 flex items-center gap-1.5">
+              <i data-lucide="git-commit" class="w-4 h-4 text-blue-400"></i> Grand Palace Hotel Core Logical Map
+            </h3>
+
+            <!-- Connection SVG layer -->
+            <div class="flex flex-col gap-8 relative z-10">
+              <!-- Channel 1: Booking Flow -->
+              <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-500 mb-2 block">Pencatatan Reservasi & POS Integration</span>
+                <div class="flex flex-wrap items-center justify-around gap-4 text-center">
+                  <div onclick="clickCmdbNode('booking-engine')" id="cmdb-booking-engine" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-32 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">Booking Engine</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('channel-manager')" id="cmdb-channel-manager" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-32 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">Channel Manager</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('pms')" id="cmdb-pms" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-32 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">PMS (Opera)</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('pos')" id="cmdb-pos" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-32 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">POS System</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('erp')" id="cmdb-erp" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-32 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">ERP Finance</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Channel 2: Guest Room Access Flow -->
+              <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                <span class="text-[10px] uppercase font-bold text-slate-500 mb-2 block">Sistem Door Lock Kamar</span>
+                <div class="flex flex-wrap items-center justify-around gap-4 text-center">
+                  <div onclick="clickCmdbNode('door-lock-server')" id="cmdb-door-lock-server" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-44 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">Door Lock Server</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('encoder')" id="cmdb-encoder" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-44 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">Encoder FO Terminal</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 hidden md:block"></i>
+                  <div onclick="clickCmdbNode('guest-room-locks')" id="cmdb-guest-room-locks" class="cmdb-node p-3 bg-slate-900 hover:bg-slate-850 rounded-lg border border-slate-800 w-44 cursor-pointer transition-all">
+                    <p class="text-[10px] font-bold text-blue-400">Room Door Locks (Physical)</p>
+                    <span class="text-[9px] text-emerald-400">Online</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Impact Analysis Board -->
+          <div class="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-1.5">
+              <i data-lucide="search" class="w-4 h-4 text-emerald-400"></i> Impact Analyzer
+            </h3>
+            <div id="cmdb-impact-output" class="text-xs space-y-3">
+              <div class="bg-slate-950 p-4 rounded-lg border border-slate-850 text-slate-400 text-center">
+                Silakan ketuk salah satu node silsilah CMDB di sebelah kiri untuk menganalisis dampak gangguan yang ditimbulkan.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 19: SPARE PARTS INVENTORY ================= -->
+      <section id="tab-inventory" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Inventory & Spare Parts Support</h2>
+            <p class="text-xs text-slate-400">Manajemen suku cadang operasional dengan sistem deteksi ambang batas minimum stok (*reorder alert*)</p>
+          </div>
+          <button onclick="openModal('new-sparepart-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Registrasi Suku Cadang Baru
+          </button>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                  <th class="p-4">Item Suku Cadang</th>
+                  <th class="p-4">Minimum Stock</th>
+                  <th class="p-4">Current Stock</th>
+                  <th class="p-4">Reorder Status</th>
+                  <th class="p-4">Lokasi Rak</th>
+                  <th class="p-4 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body" class="divide-y divide-slate-850">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 11: PREVENTIVE MAINTENANCE ================= -->
+      <section id="tab-checklist" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Preventive Maintenance Schedule</h2>
+            <p class="text-xs text-slate-400">Verifikasi berkala fungsionalitas IT sistem untuk memastikan 0% operational downtime</p>
+          </div>
+          <div class="flex bg-slate-900 border border-slate-800 p-1 rounded-lg self-start">
+            <button onclick="setChecklistPeriod('daily')" id="chk-btn-daily" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white transition-all">Harian</button>
+            <button onclick="setChecklistPeriod('weekly')" id="chk-btn-weekly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Mingguan</button>
+            <button onclick="setChecklistPeriod('monthly')" id="chk-btn-monthly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Bulanan</button>
+            <button onclick="setChecklistPeriod('yearly')" id="chk-btn-yearly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Tahunan</button>
+          </div>
+        </div>
+
+        <!-- Checklist Task Area -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+          <div class="p-4 bg-slate-850 border-b border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wide px-2 py-1 rounded bg-slate-800" id="checklist-period-title">Harian (Daily Shift Log)</span>
+            <span class="text-xs font-medium text-emerald-400" id="checklist-header-status">0 dari 0 tugas selesai</span>
+          </div>
+
+          <div class="divide-y divide-slate-850" id="checklist-task-list">
+            <!-- Inject tasks dynamically -->
+          </div>
+
+          <div class="p-4 bg-slate-850 border-t border-slate-800 flex justify-end gap-3">
+            <button onclick="resetChecklist()" class="px-3 py-1.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all border border-rose-500/20">Reset Progress</button>
+            <button onclick="saveChecklist()" class="px-4 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white transition-all shadow-md">Simpan Berita Acara Checklist</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 6: CHANGE MANAGEMENT ================= -->
+      <section id="tab-change-mgmt" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Change Management (Request for Change)</h2>
+            <p class="text-xs text-slate-400">Persetujuan & audit perubahan sistem IT guna menghindari gangguan operasional (CAB Workflow)</p>
+          </div>
+          <button onclick="openModal('new-change-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Ajukan Perubahan (RFC)
+          </button>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <th class="p-4">RFC Code</th>
+                <th class="p-4">Jenis Perubahan</th>
+                <th class="p-4">Deskripsi Perubahan</th>
+                <th class="p-4">Rencana Eksekusi</th>
+                <th class="p-4">CAB Status</th>
+                <th class="p-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="change-table-body" class="divide-y divide-slate-850">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 7: PROBLEM MANAGEMENT ================= -->
+      <section id="tab-problem-mgmt" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Problem Management & RCA Registry</h2>
+            <p class="text-xs text-slate-400">Registrasi investigasi akar masalah (*Root Cause Analysis*) untuk gangguan berulang di hotel</p>
+          </div>
+          <button onclick="openModal('new-problem-modal')" class="px-4 py-2 text-xs font-bold bg-amber-600 hover:bg-amber-500 rounded-lg text-white flex items-center gap-1.5 transition-all">
+            <i data-lucide="wrench" class="w-4 h-4"></i> Log Masalah Baru (RCA)
+          </button>
+        </div>
+
+        <div class="space-y-4" id="problem-list-container">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= MODUL 13: USER & ACCESS MANAGEMENT ================= -->
+      <section id="tab-user-mgmt" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">User Access Lifecycle (Joiner, Mover, Leaver)</h2>
+          <p class="text-xs text-slate-400">Kontrol hak akses terintegrasi untuk karyawan baru (Joiner), rotasi divisi (Mover), atau karyawan resign (Leaver)</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">Mulai Workflow Karyawan</h3>
+              <form id="form-user-lifecycle" onsubmit="submitUserLifecycle(event)" class="space-y-4 text-xs">
+                <div>
+                  <label class="block text-slate-400 mb-1">Nama Lengkap Karyawan</label>
+                  <input type="text" id="lifecycle-name" required placeholder="Andi Wijaya" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-white">
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Departemen & Jabatan</label>
+                  <input type="text" id="lifecycle-dept" required placeholder="F&B - Cashier Captain" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-white">
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Kategori Workflow</label>
+                  <select id="lifecycle-type" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-white">
+                    <option value="JOINER">JOINER (Akun Baru)</option>
+                    <option value="MOVER">MOVER (Mutasi Akses)</option>
+                    <option value="LEAVER">LEAVER (Nonaktifkan Akses)</option>
+                  </select>
+                </div>
+                <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Proses Formulir HR</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Daftar Audit Log Akses Karyawan
+            </h3>
+            <div class="space-y-3" id="user-lifecycle-list">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 12: MONITORING SYSTEM (PRTG / ZABBIX) ================= -->
+      <section id="tab-monitoring" class="space-y-6 hidden">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-xl font-bold text-white">PRTG & Zabbix Integrated Dashboard</h2>
+            <p class="text-xs text-slate-400">Status kelayakan (health-check) server, switch, database, dan internet provider hotel</p>
+          </div>
+          <span class="text-xs flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sistem Terhubung (Telemetry Live)
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="monitoring-sensor-grid">
+          <!-- Injected dynamically with click function to toggle status -->
+        </div>
+      </section>
+
+      <!-- ================= MODUL 10: VENDOR MANAGEMENT ================= -->
+      <section id="tab-vendors" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Third-Party Vendor SLA & Contacts</h2>
+          <p class="text-xs text-slate-400">Data kontrak vendor pendukung operasional teknologi hotel bintang lima</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="vendor-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= MODUL 14: PROJECT MANAGEMENT ================= -->
+      <section id="tab-projects" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Active IT Projects & Milestones</h2>
+          <p class="text-xs text-slate-400">Rencana migrasi, pengadaan perangkat baru, dan integrasi sistem hotel (*Risk Register Included*)</p>
+        </div>
+
+        <div class="space-y-6" id="projects-container">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= MODUL 8: KNOWLEDGE MANAGEMENT ================= -->
+      <section id="tab-kb" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">IT Standard Operating Procedure (SOP) Knowledge Base</h2>
+          <p class="text-xs text-slate-400">Pedoman pemulihan sistem mandiri untuk IT, Front Office, dan Engineering</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-2" id="kb-categories-container">
+            <!-- Dynamic Category button links -->
+          </div>
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl" id="kb-content-box">
+            <!-- Dynamic article contents injection -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 18: DISASTER RECOVERY (DRP) ================= -->
+      <section id="tab-drp" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Disaster Recovery Protocol (DRP)</h2>
+          <p class="text-xs text-slate-400">Rencana kelangsungan bisnis hotel dengan indikator parameter target RTO (Recovery Time Objective) dan RPO (Recovery Point Objective)</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-center space-y-1">
+            <p class="text-[10px] text-slate-400 uppercase">PMS Backup Target</p>
+            <h3 class="text-2xl font-bold text-emerald-400 font-mono">15 Menit</h3>
+            <p class="text-[10px] text-slate-500">Maksimal kehilangan data (RPO)</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-center space-y-1">
+            <p class="text-[10px] text-slate-400 uppercase">SLA Pemulihan PMS</p>
+            <h3 class="text-2xl font-bold text-emerald-400 font-mono">2 Jam</h3>
+            <p class="text-[10px] text-slate-500">Rencana target pemulihan sistem (RTO)</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-center space-y-1">
+            <p class="text-[10px] text-slate-400 uppercase">Prosedur Audit Failover</p>
+            <h3 class="text-lg font-bold text-slate-200">Replikasi NAS & Cloud</h3>
+            <p class="text-[10px] text-slate-500">Metodologi sinkronisasi berkala</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider">Langkah Eksekusi Bencana (Disaster Playbook)</h3>
+          <div class="space-y-3 text-xs" id="drp-steps-container">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 20: MOBILE TECHNICIAN MOCKUP ================= -->
+      <section id="tab-technician-app" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Mobile Technician Terminal Simulator</h2>
+          <p class="text-xs text-slate-400">Simulasi antarmuka lapangan di perangkat smartphone staf IT hotel. Fitur pemindai barcode/QR Aset diimplementasikan.</p>
+        </div>
+
+        <div class="flex justify-center">
+          <!-- Smartphone Container Mockup -->
+          <div class="w-80 h-[560px] bg-slate-900 border-[8px] border-slate-850 rounded-[32px] overflow-hidden shadow-2xl relative flex flex-col justify-between">
+            <!-- Camera / Notch -->
+            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-4 bg-slate-850 rounded-full z-20 flex items-center justify-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-950"></span>
+            </div>
+
+            <!-- Phone Header -->
+            <div class="p-4 pt-6 bg-slate-950 border-b border-slate-850 text-center relative z-10">
+              <p class="text-[10px] font-bold tracking-tight text-white">GPH IT MOBILE DECK</p>
+              <p class="text-[8px] text-emerald-400 font-medium flex items-center justify-center gap-1 mt-0.5">
+                <span class="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span> Live Dispatch Active
+              </p>
+            </div>
+
+            <!-- Phone Screen Content -->
+            <div class="flex-grow p-4 overflow-y-auto custom-scrollbar space-y-3 relative z-10 bg-slate-950/80">
+              <div id="phone-home-view" class="space-y-3">
+                <h4 class="text-[10px] uppercase font-bold text-slate-500">Tiket Dispatch Lapangan</h4>
+                <div class="space-y-2" id="phone-incident-container">
+                  <!-- Dynamic simple mobile task injected here -->
+                </div>
+
+                <div class="border-t border-slate-900 pt-3">
+                  <h4 class="text-[10px] uppercase font-bold text-slate-500 mb-2">Perkakas QR-Scan Aset</h4>
+                  <button onclick="startSimulatedQrScan()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-2">
+                    <i data-lucide="qr-code" class="w-4 h-4"></i> Pindai Kode QR Aset
+                  </button>
+                </div>
+              </div>
+
+              <!-- Scanner simulation view -->
+              <div id="phone-scanner-view" class="hidden h-full flex flex-col items-center justify-center text-center space-y-3 bg-black rounded-lg p-4 relative border border-slate-800">
+                <div class="w-36 h-36 border-2 border-dashed border-emerald-400 relative rounded-lg flex items-center justify-center overflow-hidden">
+                  <!-- Simulation red bar laser -->
+                  <div class="absolute w-full h-0.5 bg-rose-500 top-1/2 left-0 animate-bounce"></div>
+                  <i data-lucide="scan" class="w-12 h-12 text-slate-600"></i>
+                </div>
+                <p class="text-[10px] text-slate-400 animate-pulse">Menghadapkan kamera ke kode QR tag fisik aset...</p>
+                <button onclick="cancelSimulatedQrScan()" class="px-3 py-1 bg-slate-900 text-[10px] text-slate-400 rounded">Batal</button>
+              </div>
+            </div>
+
+            <!-- Home indicator bar -->
+            <div class="p-2 bg-slate-950 text-center">
+              <div class="w-20 h-1 bg-slate-800 rounded-full mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 20b: GOOGLE APPS SCRIPT EXPORTER ================= -->
+      <section id="tab-gas-export" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-xl font-bold text-white">Google Apps Script & Firebase Exporter</h2>
+          <p class="text-xs text-slate-400">Arsitektur backend production-ready menggunakan Google Sheet + LockService + REST Firestore</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Arsitektur Kunci</h4>
+              <ul class="space-y-3 text-xs text-slate-400">
+                <li class="flex items-start gap-2">
+                  <span class="p-1 bg-emerald-500/10 text-emerald-400 rounded mt-0.5 flex items-center justify-center"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>
+                  <div>
+                    <strong class="text-slate-200">Firebase REST Client:</strong> Terintegrasi via UrlFetchApp tanpa library pihak ketiga, meningkatkan efisiensi startup execution time di bawah 1 detik.
+                  </div>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="p-1 bg-emerald-500/10 text-emerald-400 rounded mt-0.5 flex items-center justify-center"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>
+                  <div>
+                    <strong class="text-slate-200">Anti Race Condition:</strong> LockService (ScriptLock) diaktifkan otomatis di server untuk mencegah duplikasi No. Tiket saat pergantian shift.
+                  </div>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="p-1 bg-emerald-500/10 text-emerald-400 rounded mt-0.5 flex items-center justify-center"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>
+                  <div>
+                    <strong class="text-slate-200">Batch I/O Processor:</strong> Tulis massal otomatis data checklist harian ke baris Spreadsheet menggunakan array memori `getValues()` dan `setValues()`.
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="bg-emerald-950/20 border border-emerald-500/30 p-5 rounded-xl">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-emerald-400 mb-2">Langkah Pemasangan di Hotel</h4>
+              <ol class="list-decimal list-inside space-y-2 text-xs text-slate-300">
+                <li>Buat Google Spreadsheet baru.</li>
+                <li>Klik <strong class="text-white">Ekstensi > Apps Script</strong>.</li>
+                <li>Hapus semua kode default, salin modul kode di samping ke editor.</li>
+                <li>Atur variabel kredensial di file <strong class="text-emerald-300">Config.gs</strong> sesuai database Anda.</li>
+                <li>Deploy sebagai Web App dengan opsi akses <strong class="text-white">"Anyone, even anonymous"</strong>.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 space-y-4">
+            <!-- File selection tabs -->
+            <div class="flex border-b border-slate-800 bg-slate-900 rounded-t-xl p-1">
+              <button onclick="setGasFile('config')" id="gas-btn-config" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white">Config.gs</button>
+              <button onclick="setGasFile('serializer')" id="gas-btn-serializer" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">FirebaseClient.gs</button>
+              <button onclick="setGasFile('core')" id="gas-btn-core" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white">ITSM_Core.gs</button>
+            </div>
+            
+            <!-- Code Display Panel -->
+            <div class="relative">
+              <pre class="bg-slate-900 border-x border-b border-slate-800 p-4 rounded-b-xl text-slate-300 text-[11px] overflow-x-auto custom-scrollbar font-mono leading-relaxed h-[420px]" id="gas-code-box">
+                <!-- Code loaded via script -->
+              </pre>
+              <button onclick="copyGasCode()" class="absolute top-4 right-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2 rounded-lg text-xs flex items-center gap-1.5 border border-slate-700">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Kode
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Notifikasi Toast Banner -->
+    <div id="toast-banner" class="fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-emerald-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <i data-lucide="info" class="w-5 h-5 text-emerald-400" id="toast-icon"></i>
+        <span id="toast-message" class="text-slate-200"></span>
+      </div>
+      <button onclick="dismissToast()" class="text-slate-400 hover:text-slate-200 focus:outline-none"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+
+    <footer class="bg-slate-900 border-t border-slate-850 px-4 py-4 mt-12 text-center text-xs text-slate-500">
+      <p>© 2026 Grand Palace Hotel IT Systems. Semua hak cipta dilindungi. Modul helpdesk & checklist terintegrasi dengan Google App Engine REST API.</p>
+    </footer>
+
+  </div>
+
+  <!-- ================= DIALOG / MODAL POPUPS ================= -->
+  
+  <!-- Modal: Buat Tiket Baru -->
+  <div id="new-incident-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-500"></i> Buat Tiket Gangguan IT
+        </h4>
+        <button onclick="closeModal('new-incident-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-incident" onsubmit="submitNewIncident(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Kategori Masalah (Infrastruktur / Sistem)</label>
+          <select id="inc-cat" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none focus:border-emerald-500 text-white">
+            <option value="PMS">Opera PMS - Kegagalan Login / Folio</option>
+            <option value="POS">POS Terminal - Kegagalan Transaksi / Printer Offline</option>
+            <option value="Network">Network - Wi-Fi Lambat / Switch Core Down</option>
+            <option value="Guest Technology">Guest Tech - IPTV Error / Telepon Mati</option>
+            <option value="Door Lock System">Door Lock - Encoder Error / Keycard Error</option>
+            <option value="Office Automation">Office Automation - Komputer Lambat / Printer Rusak</option>
+          </select>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Lokasi Kejadian</label>
+            <input type="text" id="inc-location" required placeholder="Room 402, Lobby FO Desk" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Dampak (Tingkat Prioritas)</label>
+            <select id="inc-priority" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="P4">P4 - Permintaan Minor (1 Hari)</option>
+              <option value="P3">P3 - Departemen Terganggu (4 Jam)</option>
+              <option value="P2">P2 - Area Tamu Terganggu (2 Jam)</option>
+              <option value="P1">P1 - Operasional Hotel Berhenti (30 Menit)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama Pelapor & Departemen</label>
+          <input type="text" id="inc-reporter" required placeholder="Siska (Front Office Desk)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi & Langkah Pertama yang Diambil</label>
+          <textarea id="inc-desc" required placeholder="Detail gangguan teknis..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-incident-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-rose-600 hover:bg-rose-500 text-white rounded-lg">Publish Tiket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Registrasi Guest Tech Baru -->
+  <div id="new-guest-tech-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="tv-2" class="w-4 h-4 text-amber-500"></i> Catat Kasus Kamar Tamu Baru
+        </h4>
+        <button onclick="closeModal('new-guest-tech-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-guest-tech" onsubmit="submitNewGuestTech(event)" class="p-4 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Nomor Kamar</label>
+            <input type="text" id="gt-room" required placeholder="Room 412" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Nama Tamu</label>
+            <input type="text" id="gt-guest" required placeholder="Mr. John Doe" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Status Tamu</label>
+            <select id="gt-vip" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="false">Regular Guest</option>
+              <option value="true">VIP Guest (Prioritas P1)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Ketersediaan Kamar</label>
+            <select id="gt-occupied" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="true">Occupied Room</option>
+              <option value="false">Vacant Room</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Isu Kamar</label>
+          <select id="gt-desc" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+            <option value="Smart TV error tidak memuat kanal IPTV">Smart TV error tidak memuat kanal IPTV</option>
+            <option value="Koneksi internet Wi-Fi lambat di bawah 2Mbps">Koneksi internet Wi-Fi lambat di bawah 2Mbps</option>
+            <option value="Telepon kamar mati total, tidak keluar nada dial">Telepon kamar mati total, tidak keluar nada dial</option>
+            <option value="Casting device gagal dipasangkan ke HP">Casting device gagal dipasangkan ke HP</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-guest-tech-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-amber-600 hover:bg-amber-500 text-white rounded-lg">Kirim ke Lapangan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Registrasi Aset Baru -->
+  <div id="new-asset-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Registrasi Aset IT Baru
+        </h4>
+        <button onclick="closeModal('new-asset-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-asset" onsubmit="submitNewAsset(event)" class="p-4 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Asset Tag</label>
+            <input type="text" id="ast-tag" required placeholder="GPH-IT-SRV-02" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Serial Number</label>
+            <input type="text" id="ast-sn" required placeholder="SN-DELL-987654" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Nama Perangkat</label>
+            <input type="text" id="ast-name" required placeholder="Backup Database Server" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Kategori</label>
+            <select id="ast-cat" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="Infrastruktur">Infrastruktur (Network)</option>
+              <option value="End User Device">End User Device</option>
+              <option value="Hotel System Equipment">Hotel System Equipment</option>
+              <option value="Guest Equipment">Guest Equipment</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Area / Penempatan</label>
+            <input type="text" id="ast-location" required placeholder="Server Room" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Departemen</label>
+            <input type="text" id="ast-dept" required placeholder="IT" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Vendor</label>
+            <input type="text" id="ast-vendor" required placeholder="Dell Indonesia" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Masa Garansi</label>
+            <input type="text" id="ast-warranty" required placeholder="2028-12" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Nilai Aset (Rp)</label>
+            <input type="number" id="ast-val" required placeholder="25000000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Umur Ekonomis (Thn)</label>
+            <input type="number" id="ast-life" required placeholder="5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Status Fisik</label>
+            <select id="ast-status" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+              <option value="NORMAL">NORMAL & OPTIMAL</option>
+              <option value="WARNING">WARNING</option>
+              <option value="DOWN">DOWN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-asset-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg">Daftarkan Aset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Registrasi Sparepart Baru -->
+  <div id="new-sparepart-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Daftarkan Suku Cadang Baru
+        </h4>
+        <button onclick="closeModal('new-sparepart-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-sparepart" onsubmit="submitNewSparepart(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama Suku Cadang</label>
+          <input type="text" id="sp-name" required placeholder="Baterai CR2032 Doorlock" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Minimum Stock</label>
+            <input type="number" id="sp-min" required placeholder="20" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Current Stock</label>
+            <input type="number" id="sp-cur" required placeholder="15" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Lokasi Penyimpanan Rak</label>
+          <input type="text" id="sp-rack" required placeholder="Rak IT Lantai 2 / Kotak C" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-sparepart-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg">Tambahkan Stok</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Registrasi RFC Baru -->
+  <div id="new-change-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Buat Pengajuan Perubahan (RFC)
+        </h4>
+        <button onclick="closeModal('new-change-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-change" onsubmit="submitNewChange(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Tipe RFC</label>
+          <select id="rfc-type" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 focus:outline-none text-white">
+            <option value="Standard Change">Standard Change (Resiko Rendah, Prosedur Rutin)</option>
+            <option value="Normal Change">Normal Change (Memerlukan Kajian CAB)</option>
+            <option value="Emergency Change">Emergency Change (Mengatasi Isu Kritis Langsung)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Rencana Perubahan & Tujuan</label>
+          <input type="text" id="rfc-desc" required placeholder="Upgrade firmware core switch lantai 3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Analisis Dampak (Impact Analysis)</label>
+          <textarea id="rfc-impact" required placeholder="Downtime koneksi Wi-Fi area koridor lt 3 selama 10 menit..." rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-change-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-lg">Ajukan RFC</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Registrasi Problem Baru -->
+  <div id="new-problem-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="wrench" class="w-4 h-4 text-emerald-400"></i> Daftarkan Isu Masalah Berulang (RCA)
+        </h4>
+        <button onclick="closeModal('new-problem-modal')" class="text-slate-400 hover:text-slate-100 focus:outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <form id="form-new-problem" onsubmit="submitNewProblem(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Identifikasi Isu Gangguan Berulang</label>
+          <input type="text" id="prob-incident" required placeholder="Koneksi Wi-Fi Ballroom sering drop saat event" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Akar Masalah (RCA Problem)</label>
+          <input type="text" id="prob-root" required placeholder="Beban puncak pendaftar DHCP habis di router" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Known Error & Solusi Sementara</label>
+          <input type="text" id="prob-known" required placeholder="Reboot router DHCP pool di sela break event" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Solusi Permanen yang Direkomendasikan</label>
+          <input type="text" id="prob-permanent" required placeholder="Upgrade subnet DHCP /22 untuk area Ballroom" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 focus:outline-none">
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-problem-modal')" class="px-3 py-1.5 text-slate-400 hover:text-white">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-amber-600 hover:bg-amber-500 text-white rounded-lg">Simpan RCA</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ================= SCRIPT ENGINE UTAMA ================= -->
+  <script>
+    // Data Persistensi Lokal & Silsilah Data default
+    const defaultTickets = [
+      {
+        id: "INC-2026-0001",
+        category: "PMS",
+        location: "Front Office Desk",
+        priority: "P1",
+        reporter: "Anita (Reception Lead)",
+        desc: "Opera PMS tidak bisa posting pembayaran checkout tamu. Seluruh terminal FO hang.",
+        status: "IN PROGRESS",
+        createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+        assignedTo: "Shift Leader (Bayu)",
+        type: "INCIDENT"
+      },
+      {
+        id: "SR-2026-0002",
+        category: "Access Request",
+        location: "Executive Office",
+        priority: "P4",
+        reporter: "Pak Dedy (GM Office)",
+        desc: "Setup akun email hotel baru untuk Sekretaris Eksekutif yang baru join.",
+        status: "OPEN",
+        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+        assignedTo: "Unassigned",
+        type: "REQUEST"
+      }
+    ];
+
+    const defaultGuestTechs = [
+      {
+        room: "Room 412",
+        guestName: "Mr. Arthur Pendragon",
+        vipStatus: true,
+        occupied: true,
+        desc: "Smart TV error tidak memuat kanal IPTV",
+        priority: "P1",
+        status: "OPEN"
+      },
+      {
+        room: "Room 105",
+        guestName: "Mrs. Sarah Connor",
+        vipStatus: false,
+        occupied: true,
+        desc: "Koneksi internet Wi-Fi lambat di bawah 2Mbps",
+        priority: "P2",
+        status: "RESOLVED"
+      }
+    ];
+
+    const defaultCatalogDepts = [
+      {
+        id: "fo",
+        name: "Front Office",
+        icon: "key",
+        items: [
+          { title: "Pembuatan User PMS Opera", sla: "1 Hari Kerja", desc: "Registrasi akun operator PMS front office baru." },
+          { title: "Reset Password PMS Opera", sla: "4 Jam", desc: "Membuka gembok akun PMS terblokir." },
+          { title: "Setup Printer Reg-Card", sla: "2 Jam", desc: "Sinkronisasi printer registrasi formulir tamu." },
+          { title: "Konfigurasi Key Card Encoder", sla: "2 Jam", desc: "Penyelarasan perangkat keras perekam kartu akses pintu." }
+        ]
+      },
+      {
+        id: "hk",
+        name: "Housekeeping",
+        icon: "home",
+        items: [
+          { title: "Setup Mobile Housekeeping Device", sla: "1 Hari Kerja", desc: "Konfigurasi HP Android operasional pemantau status kamar." },
+          { title: "Akses Housekeeping App", sla: "4 Jam", desc: "Pembuatan akun staf ke sistem pencatatan inventaris sprei/handuk." }
+        ]
+      },
+      {
+        id: "fb",
+        name: "Food & Beverage",
+        icon: "coffee",
+        items: [
+          { title: "Setup Terminal Kasir POS", sla: "4 Jam", desc: "Konfigurasi terminal kasir baru outlet restoran." },
+          { title: "Setup Printer Kitchen", sla: "2 Jam", desc: "Sinkronisasi printer order menu ke area dapur." },
+          { title: "Update Database Menu POS", sla: "4 Jam", desc: "Perubahan struktur harga / input menu musiman baru." }
+        ]
+      },
+      {
+        id: "finance",
+        name: "Finance",
+        icon: "wallet",
+        items: [
+          { title: "Akses Sistem ERP", sla: "1 Hari Kerja", desc: "Registrasi modul purchasing/GL." },
+          { title: "Setup ERP Approval Workflow", sla: "1 Hari Kerja", desc: "Konfigurasi jalur tanda tangan digital approval purchasing." }
+        ]
+      },
+      {
+        id: "sm",
+        name: "Sales & Marketing",
+        icon: "mail",
+        items: [
+          { title: "Akses Sistem CRM", sla: "1 Hari Kerja", desc: "Registrasi modul sales pipeline." },
+          { title: "Setup Email Marketing Campaign", sla: "1 Hari Kerja", desc: "Konfigurasi mailing list server terverifikasi." }
+        ]
+      },
+      {
+        id: "hr",
+        name: "Human Resources",
+        icon: "users",
+        items: [
+          { title: "Pembuatan Akun Karyawan Baru", sla: "1 Hari Kerja", desc: "Setup email, AD login, dan portal absensi." },
+          { title: "Penutupan Akun Karyawan Resign", sla: "4 Jam", desc: "Penutupan akses sistem menyeluruh pasca leaver keluar." }
+        ]
+      }
+    ];
+
+    const defaultAssets = [
+      { tag: "GPH-IT-SRV-01", sn: "SN-DELL-8827X", name: "Dell PowerEdge R740 PMS Server", cat: "Hotel System Equipment", location: "Server Room Utama", dept: "IT", vendor: "Dell Corp", warranty: "2028-06", val: 85000000, life: 5, status: "NORMAL" },
+      { tag: "GPH-IT-FW-01", sn: "SN-FTNT-2292F", name: "Fortigate 100F Next-Gen Firewall", cat: "Infrastruktur", location: "Server Room Utama", dept: "IT", vendor: "Fortinet PIC", warranty: "2027-12", val: 45000000, life: 4, status: "NORMAL" },
+      { tag: "GPH-IT-AP-05", sn: "SN-RCKS-9938L", name: "Ruckus ZoneFlex AP R610", cat: "Infrastruktur", location: "Ballroom Lobby", dept: "IT", vendor: "Ruckus ID", warranty: "2027-01", val: 12000000, life: 3, status: "WARNING" }
+    ];
+
+    const defaultInventory = [
+      { name: "Baterai CR2032 Doorlock", min: 50, cur: 18, rack: "Rak Logistik IT - Lemari B" },
+      { name: "Kertas Thermal Printer POS", min: 100, cur: 120, rack: "Rak Logistik IT - Lantai Dasar" },
+      { name: "Patch Cable RJ45 2M Cat6", min: 30, cur: 8, rack: "Rak Kabel - Box 4" }
+    ];
+
+    const defaultChecklists = {
+      daily: [
+        { id: "d1", task: "Verifikasi backup database Opera PMS ke local NAS & Cloud Storage", done: false, assigned: "IT Shift Pagi", note: "" },
+        { id: "d2", task: "Check kapasitas penyimpanan disk PMS Server & Mail Server (<80%)", done: false, assigned: "IT Shift Pagi", note: "" },
+        { id: "d3", task: "Pemeriksaan fisik suhu ruangan AC Server Room (Target: 18-21°C)", done: false, assigned: "IT Shift Sore", note: "" }
+      ],
+      weekly: [
+        { id: "w1", task: "Uji coba fungsionalitas backup baterai & load-test UPS", done: false, assigned: "IT Manager", note: "" },
+        { id: "w2", task: "Penarikan & review laporan log anomali Fortigate Firewall", done: false, assigned: "IT Administrator", note: "" }
+      ],
+      monthly: [
+        { id: "m1", task: "Audit hak akses user aktif di Opera PMS & POS Terminal", done: false, assigned: "IT Manager", note: "" },
+        { id: "m2", task: "Pembaruan firmware keamanan Access Point area publik tamu", done: false, assigned: "IT Administrator", note: "" }
+      ],
+      yearly: [
+        { id: "y1", task: "Simulasi Disaster Recovery Plan (DRP) & Skenario Failover", done: false, assigned: "IT Manager", note: "" },
+        { id: "y2", task: "Review lisensi perangkat lunak sistem hotel", done: false, assigned: "IT Manager", note: "" }
+      ]
+    };
+
+    const defaultChanges = [
+      { code: "RFC-2026-001", type: "Normal Change", desc: "Upgrade sistem memori virtual VM Opera Database PMS", execution: "2026-06-25 02:00 (Midnight Window)", status: "PENDING CAB" },
+      { code: "RFC-2026-002", type: "Standard Change", desc: "Pembaruan antivirus engine di seluruh PC Front Office", execution: "Setiap Hari Jumat 16:00", status: "APPROVED" }
+    ];
+
+    const defaultProblems = [
+      {
+        id: "PRB-2026-001",
+        incident: "Konektivitas Wi-Fi Ballroom sering terputus/drop",
+        root: "Kapasitas AP lawas tidak mencukupi melayani event >500 pax bersamaan",
+        known: "Tambahkan Access Point portabel cadangan saat event berlangsung",
+        permanent: "Upgrade controller Wi-Fi & migrasi ke WiFi-6 AP khusus Ballroom",
+        status: "OPEN INVESTIGATION"
+      }
+    ];
+
+    const defaultLifecycles = [
+      { name: "Andi Hermawan", dept: "Front Office - Receptionist", type: "JOINER", date: "2026-06-12", status: "ACTIVE LOGGED" },
+      { name: "Dewi Lestari", dept: "Sales & Marketing - Executive", type: "LEAVER", date: "2026-06-13", status: "ACCESS REVOKED" }
+    ];
+
+    const defaultMonitoring = [
+      { sensor: "Opera PMS Database Link", status: "ONLINE", value: "9ms response time", type: "Database" },
+      { sensor: "ISP 1 Primary Fiber Link", status: "ONLINE", value: "980 Mbps / 1 Gbps", type: "Network" },
+      { sensor: "Server Room AC Rack Temperature", status: "WARNING", value: "24.5°C (Threshold 22°C)", type: "Environment" },
+      { sensor: "Core Switch Cisco Catalyst 3850", status: "ONLINE", value: "0% Packet Loss", type: "Network" }
+    ];
+
+    const defaultVendors = [
+      { name: "Oracle Opera Support", pic: "Andrianto Wijaya", contact: "+62 811-9273-001", activeSupport: "Sampai Des 2027", sSupport: "P1: 30 Menit, P2: 2 Jam" },
+      { name: "Biznet ISP Enterprise", pic: "Call Center Biznet", contact: "1500988", activeSupport: "Kontrak Tahunan", sSupport: "Downtime Recovery: 4 Jam Max" },
+      { name: "VingCard Doorlock ID", pic: "Herman Santoso", contact: "+62 812-3456-789", activeSupport: "Masa Garansi Sparepart", sSupport: "Panggil Teknisi: 2 Jam" }
+    ];
+
+    const defaultProjects = [
+      {
+        name: "Implementasi Sistem IPTV & Casting Device Kamar Tamu",
+        budget: "Rp 150.000.000",
+        timeline: "Q3 2026 (Juli - September)",
+        milestone: "Fase 1: Pemasangan Server IPTV (Selesai). Fase 2: Distribusi Casting Device Kamar (Sedang Berjalan).",
+        risk: "Keterlambatan supply adapter casting HDMI dari vendor utama."
+      }
+    ];
+
+    const defaultKbs = [
+      {
+        category: "PMS Opera SOP",
+        title: "Prosedur Manual Night Audit PMS Saat Terjadi Gangguan Database",
+        content: `
+          1. JANGAN mematikan server database jika proses posting terputus.
+          2. Cetak laporan log 'Manager Report' terakhir yang berhasil terekam dari folder NAS.
+          3. Aktifkan slip reservasi manual untuk seluruh tamu walk-in / check-in baru.
+          4. Hubungi Oracle Support (+62 811-9273-001) untuk memandu proses recovery transaksional log.
+        `
+      },
+      {
+        category: "F&B POS SOP",
+        title: "Panduan Penanganan Printer Kitchen POS Offline di Outlet Restoran",
+        content: `
+          1. Periksa kabel LAN RJ45 di bagian belakang printer thermal.
+          2. Lakukan test run cetak mandiri (tahan tombol feed + nyalakan tombol power).
+          3. Jika IP Address tidak tercetak, periksa switch pembagi jaringan terdekat.
+          4. Update port registrasi IP Printer di komputer terminal kasir POS utama.
+        `
+      }
+    ];
+
+    // Inisialisasi Engine State Data
+    let tickets = JSON.parse(localStorage.getItem('gph_itsm_tickets')) || defaultTickets;
+    let guestTechs = JSON.parse(localStorage.getItem('gph_itsm_guest_techs')) || defaultGuestTechs;
+    let assets = JSON.parse(localStorage.getItem('gph_itsm_assets')) || defaultAssets;
+    let inventory = JSON.parse(localStorage.getItem('gph_itsm_inventory')) || defaultInventory;
+    let checklists = JSON.parse(localStorage.getItem('gph_itsm_checklists')) || defaultChecklists;
+    let changes = JSON.parse(localStorage.getItem('gph_itsm_changes')) || defaultChanges;
+    let problems = JSON.parse(localStorage.getItem('gph_itsm_problems')) || defaultProblems;
+    let lifecycles = JSON.parse(localStorage.getItem('gph_itsm_lifecycles')) || defaultLifecycles;
+    let monitoringSensors = JSON.parse(localStorage.getItem('gph_itsm_monitoring')) || defaultMonitoring;
+    let vendors = JSON.parse(localStorage.getItem('gph_itsm_vendors')) || defaultVendors;
+    let projects = JSON.parse(localStorage.getItem('gph_itsm_projects')) || defaultProjects;
+    let kbs = JSON.parse(localStorage.getItem('gph_itsm_kb')) || defaultKbs;
+
+    let selectedGasFile = 'config';
+    let currentChecklistPeriod = 'daily';
+    let sidebarOpen = false;
+
+    // War Room Darurat Global State
+    let isWarRoomActive = true;
+    let warRoomSeconds = 934;
+    let warRoomLogs = [
+      "18:10 - Database Opera PMS crash. CPU usage VM Utama 100%.",
+      "18:15 - IT Manager mengaktifkan War Room darurat.",
+      "18:20 - VM dialihkan ke read-only snapshot backup untuk penyelidikan log."
+    ];
+
+    // Modul skrip Apps Script
+    const gasSourceCodes = {
+      config: `// File: Config.gs
+const FIREBASE_CONFIG = {
+  projectId: "grand-palace-itsm-production",
+  apiKey: "AIzaSyCxYourProductionApiKeyPlaceholder_v26",
+  databaseURL: "https://grand-palace-itsm-production-default-rtdb.firebaseio.com"
+};
+const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`,
+      serializer: `// File: FirebaseClient.gs
+class FirebaseClient {
+  static toFirestorePayload(obj) {
+    const fields = {};
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined) continue;
+      const val = obj[key];
+      if (typeof val === 'string') fields[key] = { stringValue: val };
+      else if (typeof val === 'number') fields[key] = Number.isInteger(val) ? { integerValue: val.toString() } : { doubleValue: val };
+      else if (typeof val === 'boolean') fields[key] = { booleanValue: val };
+    }
+    return { fields: fields };
+  }
+}`,
+      core: `// File: ITSM_Core.gs
+function createTicketWithLock(ticketData) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Tickets");
+    const lastRow = sheet.getLastRow();
+    const ticketId = "INC-2026-" + (lastRow + 1).toString().padStart(4, '0');
+    
+    sheet.appendRow([ticketId, ticketData.category, ticketData.location, ticketData.priority, ticketData.reporter, ticketData.desc, "OPEN", new Date().toISOString()]);
+    return { success: true, id: ticketId };
+  } finally {
+    lock.releaseLock();
+  }
+}`
+    };
+
+    // Saat aplikasi selesai termuat
+    window.onload = function() {
+      switchTab('dashboard');
+      refreshAllViews();
+      setInterval(updateRealtimeTimers, 1000);
+      lucide.createIcons();
+    };
+
+    function refreshAllViews() {
+      renderDashboardMetrics();
+      renderIncidentList();
+      renderGuestTechList();
+      renderCatalogMenu();
+      renderAssetUI();
+      renderInventoryUI();
+      renderChecklistUI();
+      renderChangeUI();
+      renderProblemUI();
+      renderUserLifecycleUI();
+      renderMonitoringUI();
+      renderVendorUI();
+      renderProjectsUI();
+      renderKbUI();
+      renderDrpPlaybook();
+      renderMobileTechnicianView();
+
+      // Memperbarui indikator status di menu navigasi
+      const activeTicketsCount = tickets.filter(t => t.status !== 'RESOLVED').length;
+      document.getElementById('badge-incident-count').textContent = activeTicketsCount;
+      document.getElementById('lbl-active-tickets').textContent = activeTicketsCount;
+
+      const lowStockCount = inventory.filter(i => i.cur <= i.min).length;
+      document.getElementById('badge-stock-warning').textContent = `${lowStockCount} Low`;
+    }
+
+    // Toggle menu navigasi mobile drawer
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const hamburger = document.getElementById('hamburger-icon');
+
+      sidebarOpen = !sidebarOpen;
+
+      if (sidebarOpen) {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        hamburger.setAttribute('data-lucide', 'x');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+        hamburger.setAttribute('data-lucide', 'menu');
+      }
+      lucide.createIcons();
+    }
+
+    // Alih Tab Navigasi
+    function switchTab(tabId) {
+      document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      // Mengubah visual tombol tab terpilih
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-800', 'text-emerald-400', 'border-emerald-500/30');
+        btn.classList.add('bg-slate-900', 'text-slate-400');
+      });
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-900', 'text-slate-400');
+        activeBtn.classList.add('bg-slate-800', 'text-emerald-400', 'border', 'border-emerald-500/30');
+      }
+
+      // Auto collapse menu saat diakses lewat mobile device
+      if (sidebarOpen && window.innerWidth < 1024) {
+        toggleSidebar();
+      }
+    }
+
+    // Kalkulasi batas eskalasi SLA
+    function calculateSlaLimit(createdAt, priority) {
+      const createdDate = new Date(createdAt);
+      let limitMinutes = 24 * 60; 
+      if (priority === 'P1') limitMinutes = 30;
+      if (priority === 'P2') limitMinutes = 120;
+      if (priority === 'P3') limitMinutes = 240;
+
+      const targetTime = createdDate.getTime() + limitMinutes * 60 * 1000;
+      const timeLeft = targetTime - Date.now();
+      return {
+        timeLeft: timeLeft,
+        isBreached: timeLeft < 0,
+        formatted: formatTimeLeft(timeLeft)
+      };
+    }
+
+    function formatTimeLeft(ms) {
+      const absMs = Math.abs(ms);
+      const mins = Math.floor(absMs / 60000);
+      const hours = Math.floor(mins / 60);
+      if (ms < 0) {
+        return hours > 0 ? `Lewat ${hours}j ${mins % 60}m` : `Lewat ${mins}m`;
+      } else {
+        return hours > 0 ? `${hours}j ${mins % 60}m sisa` : `${mins}m sisa`;
+      }
+    }
+
+    // Interval ticking real-time feed
+    function updateRealtimeTimers() {
+      const openIncidents = tickets.filter(t => t.status !== 'RESOLVED');
+      const feedContainer = document.getElementById('live-incident-feed');
+      
+      if (openIncidents.length === 0) {
+        feedContainer.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-slate-500 py-12">
+            <i data-lucide="shield-check" class="w-12 h-12 text-slate-700 mb-2"></i>
+            <p class="text-xs">Antrean aman! 0% downtime tiket aktif saat ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      feedContainer.innerHTML = openIncidents.map(inc => {
+        const sla = calculateSlaLimit(inc.createdAt, inc.priority);
+        const timerColor = sla.isBreached ? 'text-rose-500 font-bold' : 'text-emerald-400';
+        const priorityColor = inc.priority === 'P1' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 
+                              inc.priority === 'P2' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-800 text-slate-400';
+        return `
+          <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-mono text-slate-400">${inc.id}</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded font-bold ${priorityColor}">${inc.priority}</span>
+                <span class="text-slate-500">| ${inc.location}</span>
+              </div>
+              <p class="font-semibold text-white leading-tight">${inc.category}</p>
+              <p class="text-[10px] text-slate-400 line-clamp-1">${inc.desc}</p>
+            </div>
+            <div class="text-right flex flex-col items-end gap-1">
+              <span class="${timerColor} font-mono text-[10px] flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3"></i> ${sla.formatted}
+              </span>
+              <div class="flex gap-1">
+                <button onclick="updateTicketStatus('${inc.id}', 'RESOLVED')" class="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded text-[9px]">Resolve</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // War Room Timer
+      if (isWarRoomActive) {
+        warRoomSeconds++;
+        const hours = String(Math.floor(warRoomSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((warRoomSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(warRoomSeconds % 60).padStart(2, '0');
+        document.getElementById('warroom-timer').textContent = `${hours}:${mins}:${secs}`;
+      }
+    }
+
+    // ================= RENDERING EXCLUSIVE IT MANAGER DASHBOARD METRICS =================
+    function renderDashboardMetrics() {
+      const container = document.getElementById('dashboard-metrics-container');
+      if (!container) return;
+
+      const activeTicketsCount = tickets.filter(t => t.status !== 'RESOLVED').length;
+      const warningCount = tickets.filter(t => t.priority === 'P1' && t.status !== 'RESOLVED').length;
+      const lowStockCount = inventory.filter(i => i.cur <= i.min).length;
+      
+      const pmsSensor = monitoringSensors.find(s => s.sensor === "Opera PMS Database Link");
+      const pmsStatusText = pmsSensor ? pmsSensor.status : "ONLINE";
+
+      // Metrik Dashboard ITM Ter-optimasi
+      container.innerHTML = `
+        <!-- Card 1: Antrean Aktif Helpdesk -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
+          <div>
+            <p class="text-[10px] uppercase font-bold text-slate-500">Antrean Aktif Helpdesk</p>
+            <h3 class="text-2xl font-bold text-white mt-1">${activeTicketsCount} Tiket</h3>
+          </div>
+          <p class="text-[10px] text-amber-500 flex items-center gap-1 mt-auto">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> ${warningCount} Tiket P1 butuh tindakan segera
+          </p>
+        </div>
+        
+        <!-- Card 2: Kepatuhan SLA Operasional -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
+          <div>
+            <p class="text-[10px] uppercase font-bold text-slate-500">Kepatuhan SLA Bulan Ini</p>
+            <h3 class="text-2xl font-bold text-emerald-400 mt-1">98.4%</h3>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-auto">Target korporasi: 95.0% SLA</p>
+        </div>
+        
+        <!-- Card 3: Suku Cadang Logistik Kritis -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
+          <div>
+            <p class="text-[10px] uppercase font-bold text-slate-500">Logistik Suku Cadang Kritis</p>
+            <h3 class="text-2xl font-bold text-amber-500 mt-1">${lowStockCount} Item</h3>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-auto">Butuh proses reorder cepat</p>
+        </div>
+        
+        <!-- Card 4: Status Link Opera PMS -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between h-32">
+          <div>
+            <p class="text-[10px] uppercase font-bold text-slate-500">Opera PMS Telemetry</p>
+            <h3 class="text-2xl font-bold mt-1 ${pmsStatusText === 'ONLINE' ? 'text-emerald-400' : 'text-rose-500'}">${pmsStatusText}</h3>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-auto">Latensi jaringan database link utama</p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // ================= MODUL 2 & 3: ENGINE LOGISTIK TIKET =================
+    function renderIncidentList() {
+      const container = document.getElementById('incident-cards-container');
+      if (!container) return;
+
+      const priorityFilter = document.getElementById('inc-filter-priority').value;
+      const statusFilter = document.getElementById('inc-filter-status').value;
+      const searchVal = document.getElementById('inc-search').value.toLowerCase();
+
+      let filtered = tickets;
+      if (priorityFilter !== 'all') filtered = filtered.filter(t => t.priority === priorityFilter);
+      if (statusFilter !== 'all') filtered = filtered.filter(t => t.status === statusFilter);
+      if (searchVal) {
+        filtered = filtered.filter(t => 
+          t.id.toLowerCase().includes(searchVal) || 
+          t.location.toLowerCase().includes(searchVal) || 
+          t.category.toLowerCase().includes(searchVal) || 
+          t.reporter.toLowerCase().includes(searchVal) || 
+          t.desc.toLowerCase().includes(searchVal)
+        );
+      }
+
+      document.getElementById('inc-counter-lbl').textContent = `Menampilkan ${filtered.length} dari ${tickets.length} Tiket`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-slate-900 border border-slate-800 p-8 text-center rounded-xl text-slate-500">
+            <i data-lucide="help-circle" class="w-10 h-10 mx-auto text-slate-700 mb-2"></i>
+            <p class="text-xs">Tidak ada tiket ganggguan yang cocok.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => {
+        const sla = calculateSlaLimit(t.createdAt, t.priority);
+        const statusClass = t.status === 'RESOLVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
+                            t.status === 'IN PROGRESS' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+
+        const priorityClass = t.priority === 'P1' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 
+                              t.priority === 'P2' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-slate-800 text-slate-400';
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between h-[210px] transition-all hover:border-slate-700 relative overflow-hidden">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold font-mono text-slate-400">${t.id}</span>
+                <span class="text-[9px] uppercase font-bold px-2 py-0.5 rounded border ${statusClass}">${t.status}</span>
+              </div>
+              <h4 class="font-bold text-white text-sm line-clamp-1">${t.category}</h4>
+              <div class="flex flex-wrap gap-1 items-center mt-1 text-[10px] text-slate-400">
+                <span class="px-1.5 py-0.2 bg-slate-800 rounded border border-slate-700">${t.location}</span>
+                <span>• Pelapor: ${t.reporter}</span>
+              </div>
+              <p class="text-xs text-slate-400 line-clamp-2 mt-3">${t.desc}</p>
+            </div>
+            
+            <div class="flex items-center justify-between border-t border-slate-850 pt-2.5 mt-3 text-xs">
+              <span class="font-semibold ${sla.isBreached ? 'text-rose-500' : 'text-emerald-400'} flex items-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i> ${t.status === 'RESOLVED' ? 'Selesai' : sla.formatted}
+              </span>
+              
+              <div class="flex items-center gap-1">
+                ${t.status === 'OPEN' ? `
+                  <button onclick="updateTicketStatus('${t.id}', 'IN PROGRESS')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 font-semibold text-[9px]">Kerjakan</button>
+                ` : ''}
+                ${t.status === 'IN PROGRESS' ? `
+                  <button onclick="updateTicketStatus('${t.id}', 'RESOLVED')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 rounded text-white font-semibold text-[9px]">Resolve</button>
+                ` : ''}
+                <button onclick="deleteTicket('${t.id}')" class="p-1 text-slate-600 hover:text-rose-400 rounded"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewIncident(e) {
+      e.preventDefault();
+      const cat = document.getElementById('inc-cat').value;
+      const location = document.getElementById('inc-location').value;
+      const priority = document.getElementById('inc-priority').value;
+      const reporter = document.getElementById('inc-reporter').value;
+      const desc = document.getElementById('inc-desc').value;
+
+      const newId = `INC-2026-${String(tickets.length + 1).padStart(4, '0')}`;
+      const newT = {
+        id: newId,
+        category: cat,
+        location: location,
+        priority: priority,
+        reporter: reporter,
+        desc: desc,
+        status: "OPEN",
+        createdAt: new Date().toISOString(),
+        assignedTo: "Unassigned",
+        type: "INCIDENT"
+      };
+
+      tickets.push(newT);
+      saveStateToLocalStorage();
+      closeModal('new-incident-modal');
+      showToast(`Tiket gangguan ${newId} didaftarkan ke antrean dispatch IT.`, 'success');
+      document.getElementById('form-new-incident').reset();
+    }
+
+    function updateTicketStatus(id, status) {
+      const idx = tickets.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        tickets[idx].status = status;
+        saveStateToLocalStorage();
+        showToast(`Tiket ${id} berhasil diperbarui ke status: ${status}.`, 'info');
+      }
+    }
+
+    function deleteTicket(id) {
+      tickets = tickets.filter(t => t.id !== id);
+      saveStateToLocalStorage();
+      showToast(`Tiket ${id} dihapus.`, 'info');
+    }
+
+    // ================= MODUL 16: GUEST TECH SUPPORT =================
+    function renderGuestTechList() {
+      const container = document.getElementById('guest-tech-list');
+      if (!container) return;
+
+      container.innerHTML = guestTechs.map((gt, idx) => {
+        const priorityColor = gt.priority === 'P1' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                              gt.priority === 'P2' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-slate-800 text-slate-400';
+        return `
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-855 flex items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-bold text-white text-xs">${gt.room}</span>
+                <span class="text-[9px] px-1.5 rounded font-bold ${priorityColor}">${gt.priority}</span>
+                ${gt.vipStatus ? `<span class="bg-rose-600 text-white text-[9px] px-1 rounded font-bold animate-pulse">VIP GUEST</span>` : ''}
+              </div>
+              <p class="text-xs font-semibold text-slate-300">Tamu: ${gt.guestName}</p>
+              <p class="text-xs text-slate-400 mt-1">${gt.desc}</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              ${gt.status === 'OPEN' ? `
+                <button onclick="resolveGuestTech(${idx})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] rounded">Selesai</button>
+              ` : `
+                <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">RESOLVED</span>
+              `}
+              <button onclick="deleteGuestTech(${idx})" class="text-slate-600 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewGuestTech(e) {
+      e.preventDefault();
+      const room = document.getElementById('gt-room').value;
+      const guest = document.getElementById('gt-guest').value;
+      const vip = document.getElementById('gt-vip').value === "true";
+      const occupied = document.getElementById('gt-occupied').value === "true";
+      const desc = document.getElementById('gt-desc').value;
+
+      let priority = 'P3';
+      if (vip) priority = 'P1';
+      else if (occupied) priority = 'P2';
+
+      guestTechs.push({
+        room: room,
+        guestName: guest,
+        vipStatus: vip,
+        occupied: occupied,
+        desc: desc,
+        priority: priority,
+        status: "OPEN"
+      });
+
+      saveStateToLocalStorage();
+      closeModal('new-guest-tech-modal');
+      showToast(`Isu Kamar ${room} terdaftar dengan prioritas otomatis: ${priority}.`, 'success');
+      document.getElementById('form-new-guest-tech').reset();
+    }
+
+    function resolveGuestTech(idx) {
+      guestTechs[idx].status = 'RESOLVED';
+      saveStateToLocalStorage();
+      showToast(`Isu Guest-Tech kamar diselesaikan.`, 'success');
+    }
+
+    function deleteGuestTech(idx) {
+      guestTechs.splice(idx, 1);
+      saveStateToLocalStorage();
+      showToast(`Kasus kamar dihapus dari arsip log.`, 'info');
+    }
+
+    // ================= MODUL 1: SERVICE CATALOG =================
+    let activeCatalogDept = 'fo';
+    
+    function renderCatalogMenu() {
+      const navContainer = document.getElementById('catalog-dept-nav');
+      if (!navContainer) return;
+
+      navContainer.innerHTML = defaultCatalogDepts.map(dept => {
+        const isActive = dept.id === activeCatalogDept;
+        return `
+          <button onclick="selectCatalogDept('${dept.id}')" class="w-full text-left px-3 py-2.5 text-xs font-semibold rounded-lg flex items-center gap-2 transition-all ${isActive ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white'}">
+            <i data-lucide="${dept.icon}" class="w-4 h-4"></i> ${dept.name}
+          </button>
+        `;
+      }).join('');
+
+      const activeData = defaultCatalogDepts.find(d => d.id === activeCatalogDept);
+      const itemsGrid = document.getElementById('catalog-items-grid');
+      
+      if (activeData && itemsGrid) {
+        document.getElementById('catalog-header-title').innerHTML = `<i data-lucide="${activeData.icon}" class="w-4 h-4 text-emerald-400"></i> Menu Layanan ${activeData.name}`;
+        
+        itemsGrid.innerHTML = activeData.items.map(item => {
+          return `
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex flex-col justify-between hover:border-slate-800 transition-all">
+              <div>
+                <div class="flex justify-between items-start gap-2 mb-1.5">
+                  <h4 class="font-bold text-white text-xs">${item.title}</h4>
+                  <span class="bg-emerald-500/10 text-emerald-400 text-[9px] px-2 py-0.5 rounded font-bold">Target SLA: ${item.sla}</span>
+                </div>
+                <p class="text-xs text-slate-400">${item.desc}</p>
+              </div>
+              <button onclick="orderServiceCatalog('${item.title}')" class="mt-4 w-full py-1.5 bg-slate-800 hover:bg-emerald-600 text-white font-bold text-[10px] rounded transition-all">
+                Minta Layanan Instan
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function selectCatalogDept(deptId) {
+      activeCatalogDept = deptId;
+      renderCatalogMenu();
+    }
+
+    function orderServiceCatalog(title) {
+      const newId = `SR-2026-${String(tickets.length + 1).padStart(4, '0')}`;
+      tickets.push({
+        id: newId,
+        category: "Service Request",
+        location: "Department Office",
+        priority: "P4",
+        reporter: "Department PIC (Auto)",
+        desc: `Order Layanan Rutin dari Katalog: ${title}`,
+        status: "OPEN",
+        createdAt: new Date().toISOString(),
+        assignedTo: "Unassigned",
+        type: "REQUEST"
+      });
+      saveStateToLocalStorage();
+      showToast(`Request ${newId} berhasil dikirim ke antrean IT Service.`, 'success');
+    }
+
+    // ================= MODUL 17: MAJOR EMERGENCY OUTAGE SIMULATOR =================
+    function triggerEmergencySimulator() {
+      isWarRoomActive = true;
+      warRoomSeconds = 0;
+      warRoomLogs = [
+        "18:25 - [🚨 MAJOR ALERT] CORE SWITCH BACKBONE LAN MATI MENDADAK.",
+        "18:26 - Seluruh koneksi wifi kamar & terminal POS F&B terputus total.",
+        "18:27 - Memulai isolasi trunk port dan mengaktifkan tim krisis IT."
+      ];
+      document.getElementById('warroom-title').textContent = "🚨 BACKBONE CORE NETWORK BREAKDOWN";
+      document.getElementById('warroom-desc').textContent = "Switch utama terputus. Seluruh area Ballroom, Front Office, dan CCTV offline.";
+      
+      const coreSwitchIdx = monitoringSensors.findIndex(s => s.sensor === "Core Switch Cisco Catalyst 3850");
+      if (coreSwitchIdx !== -1) {
+        monitoringSensors[coreSwitchIdx].status = "DOWN";
+        monitoringSensors[coreSwitchIdx].value = "100% Packet Loss (Alerting)";
+      }
+
+      saveStateToLocalStorage();
+      refreshAllViews();
+      showToast("Major Incident diaktifkan! War Room dibuka.", "success");
+    }
+
+    function broadcastWarRoomMessage(msg) {
+      const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      warRoomLogs.unshift(`${timeStr} - ${msg}`);
+      renderWarRoomUI();
+    }
+
+    function closeActiveWarRoom() {
+      isWarRoomActive = false;
+      document.getElementById('warroom-title').textContent = "Tidak Ada Major Incident Aktif";
+      document.getElementById('warroom-desc').textContent = "Seluruh sistem operasional utama hotel dalam kondisi stabil.";
+      warRoomLogs = ["Sistem Normal. War Room Standby."];
+      
+      const coreSwitchIdx = monitoringSensors.findIndex(s => s.sensor === "Core Switch Cisco Catalyst 3850");
+      if (coreSwitchIdx !== -1) {
+        monitoringSensors[coreSwitchIdx].status = "ONLINE";
+        monitoringSensors[coreSwitchIdx].value = "0% Packet Loss";
+      }
+
+      saveStateToLocalStorage();
+      refreshAllViews();
+      showToast("War room ditutup. Status hotel normal.", "success");
+    }
+
+    function renderWarRoomUI() {
+      const container = document.getElementById('warroom-timeline');
+      if (container) {
+        container.innerHTML = warRoomLogs.map(log => `
+          <div class="bg-slate-950 p-2 rounded border border-slate-850 font-mono text-[10px] text-slate-300">
+            ${log}
+          </div>
+        `).join('');
+      }
+    }
+
+    // ================= MODUL 4: ASSETS =================
+    function renderAssetUI() {
+      const tbody = document.getElementById('asset-table-body');
+      if (!tbody) return;
+
+      const typeFilter = document.getElementById('asset-filter-type').value;
+      const searchVal = document.getElementById('asset-search').value.toLowerCase();
+
+      let filtered = assets;
+      if (typeFilter !== 'all') filtered = filtered.filter(a => a.cat === typeFilter);
+      if (searchVal) {
+        filtered = filtered.filter(a => 
+          a.tag.toLowerCase().includes(searchVal) ||
+          a.sn.toLowerCase().includes(searchVal) ||
+          a.name.toLowerCase().includes(searchVal) ||
+          a.vendor.toLowerCase().includes(searchVal)
+        );
+      }
+
+      tbody.innerHTML = filtered.map(a => {
+        const badgeColor = a.status === 'NORMAL' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
+                           a.status === 'WARNING' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+        return `
+          <tr class="hover:bg-slate-900/60 transition-all border-b border-slate-850">
+            <td class="p-4 font-mono font-bold text-slate-300">
+              <div>${a.tag}</div>
+              <div class="text-[9px] text-slate-500">S/N: ${a.sn}</div>
+            </td>
+            <td class="p-4">
+              <p class="font-bold text-white">${a.name}</p>
+              <p class="text-[9px] text-slate-500 font-medium">${a.cat}</p>
+            </td>
+            <td class="p-4">
+              <p class="text-slate-300">${a.location}</p>
+              <p class="text-[9px] text-slate-500">Dept: ${a.dept}</p>
+            </td>
+            <td class="p-4">
+              <p class="text-slate-400 font-medium">${a.vendor}</p>
+              <p class="text-[9px] text-slate-500">Garansi: ${a.warranty}</p>
+            </td>
+            <td class="p-4">
+              <p class="text-slate-300 font-mono font-bold">Rp ${a.val.toLocaleString('id-ID')}</p>
+              <p class="text-[9px] text-slate-500">Umur: ${a.life} Tahun</p>
+            </td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${badgeColor}">${a.status}</span></td>
+            <td class="p-4 text-right">
+              <button onclick="deleteAsset('${a.tag}')" class="text-slate-600 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewAsset(e) {
+      e.preventDefault();
+      const tag = document.getElementById('ast-tag').value;
+      const sn = document.getElementById('ast-sn').value;
+      const name = document.getElementById('ast-name').value;
+      const cat = document.getElementById('ast-cat').value;
+      const loc = document.getElementById('ast-location').value;
+      const dept = document.getElementById('ast-dept').value;
+      const vendor = document.getElementById('ast-vendor').value;
+      const war = document.getElementById('ast-warranty').value;
+      const val = parseInt(document.getElementById('ast-val').value, 10);
+      const life = parseInt(document.getElementById('ast-life').value, 10);
+      const status = document.getElementById('ast-status').value;
+
+      assets.push({
+        tag: tag, sn: sn, name: name, cat: cat, location: loc, dept: dept, vendor: vendor, warranty: war, val: val, life: life, status: status
+      });
+
+      saveStateToLocalStorage();
+      closeModal('new-asset-modal');
+      showToast(`Aset ${tag} didaftarkan ke cloud registry.`, 'success');
+      document.getElementById('form-new-asset').reset();
+    }
+
+    function deleteAsset(tag) {
+      assets = assets.filter(a => a.tag !== tag);
+      saveStateToLocalStorage();
+      showToast(`Aset ${tag} dihapus.`, 'info');
+    }
+
+    // ================= MODUL 5: CMDB CONFIGURATION MAP =================
+    function clickCmdbNode(nodeId) {
+      const container = document.getElementById('cmdb-impact-output');
+      if (!container) return;
+
+      document.querySelectorAll('.cmdb-node').forEach(el => {
+        el.classList.remove('border-rose-500', 'bg-rose-950/20', 'border-emerald-500', 'bg-emerald-950/20');
+        el.classList.add('border-slate-800', 'bg-slate-900');
+      });
+
+      const targetNode = document.getElementById(`cmdb-${nodeId}`);
+      targetNode.classList.remove('border-slate-800', 'bg-slate-900');
+      targetNode.classList.add('border-rose-500', 'bg-rose-950/20');
+
+      let analysisHtml = '';
+
+      if (nodeId === 'booking-engine' || nodeId === 'channel-manager' || nodeId === 'pms') {
+        ['booking-engine', 'channel-manager', 'pms', 'pos', 'erp'].forEach(dep => {
+          const el = document.getElementById(`cmdb-${dep}`);
+          if (el && dep !== nodeId) {
+            el.classList.add('border-amber-500', 'bg-amber-950/10');
+          }
+        });
+
+        analysisHtml = `
+          <div class="bg-rose-950/20 border border-rose-500/30 p-4 rounded-lg space-y-2">
+            <h5 class="font-bold text-rose-400">🚨 Dampak Kritis Terdeteksi</h5>
+            <p>Gangguan pada <strong class="text-white">${nodeId.toUpperCase()}</strong> akan memutuskan rantai pencatatan keuangan otomatis hotel.</p>
+            <p class="font-bold text-slate-300">Sistem Hilir Terdampak (Impacted):</p>
+            <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-400">
+              <li>Opera PMS (Gagal menerima reservasi baru)</li>
+              <li>Sistem POS Makanan (Gagal sinkron harga menu)</li>
+              <li>ERP Keuangan (Gagal penutupan jurnal harian)</li>
+            </ul>
+          </div>
+        `;
+      } else if (nodeId === 'door-lock-server' || nodeId === 'encoder') {
+        ['door-lock-server', 'encoder', 'guest-room-locks'].forEach(dep => {
+          const el = document.getElementById(`cmdb-${dep}`);
+          if (el && dep !== nodeId) {
+            el.classList.add('border-amber-500', 'bg-amber-950/10');
+          }
+        });
+
+        analysisHtml = `
+          <div class="bg-rose-950/20 border border-rose-500/30 p-4 rounded-lg space-y-2">
+            <h5 class="font-bold text-rose-400">⚠️ Resiko Akses Kamar</h5>
+            <p>Gangguan pada modul <strong class="text-white">${nodeId.toUpperCase()}</strong> menghambat pembuatan kartu kunci kamar.</p>
+            <p class="font-bold text-slate-300">Hilir Terdampak:</p>
+            <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-400">
+              <li>Encoder Front Office (Gagal memformat kartu baru)</li>
+              <li>Lock Kamar Tamu (Tamu check-in baru terhambat masuk kamar)</li>
+            </ul>
+          </div>
+        `;
+      } else {
+        analysisHtml = `
+          <div class="bg-emerald-950/10 border border-emerald-500/20 p-4 rounded-lg text-slate-300">
+            Node <strong class="text-emerald-400">${nodeId.toUpperCase()}</strong> dalam kondisi sehat. Dampak kegagalan hilir minimal.
+          </div>
+        `;
+      }
+
+      container.innerHTML = analysisHtml;
+    }
+
+    // ================= MODUL 19: SPARE PARTS =================
+    function renderInventoryUI() {
+      const tbody = document.getElementById('inventory-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = inventory.map((item, idx) => {
+        const isLow = item.cur <= item.min;
+        const statusBadge = isLow ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold animate-pulse' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+        return `
+          <tr class="hover:bg-slate-900/60 border-b border-slate-850">
+            <td class="p-4 font-bold text-white">${item.name}</td>
+            <td class="p-4 font-mono">${item.min} Unit</td>
+            <td class="p-4 font-mono font-bold">${item.cur} Unit</td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] uppercase ${statusBadge}">${isLow ? 'REORDER REQUIRED' : 'STOCK OPTIMAL'}</span></td>
+            <td class="p-4 text-slate-400">${item.rack}</td>
+            <td class="p-4 text-right">
+              <button onclick="increaseStock(${idx})" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded text-[10px]">+1</button>
+              <button onclick="decreaseStock(${idx})" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded text-[10px]">-1</button>
+              <button onclick="deleteSparepart(${idx})" class="text-slate-600 hover:text-rose-400 p-1 ml-2"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewSparepart(e) {
+      e.preventDefault();
+      const name = document.getElementById('sp-name').value;
+      const min = parseInt(document.getElementById('sp-min').value, 10);
+      const cur = parseInt(document.getElementById('sp-cur').value, 10);
+      const rack = document.getElementById('sp-rack').value;
+
+      inventory.push({ name: name, min: min, cur: cur, rack: rack });
+      saveStateToLocalStorage();
+      closeModal('new-sparepart-modal');
+      showToast(`Stok ${name} didaftarkan ke logistik.`, 'success');
+      document.getElementById('form-new-sparepart').reset();
+    }
+
+    function increaseStock(idx) {
+      inventory[idx].cur++;
+      saveStateToLocalStorage();
+    }
+    function decreaseStock(idx) {
+      if (inventory[idx].cur > 0) {
+        inventory[idx].cur--;
+        saveStateToLocalStorage();
+      }
+    }
+    function deleteSparepart(idx) {
+      inventory.splice(idx, 1);
+      saveStateToLocalStorage();
+      showToast("Arsip suku cadang dihapus.", "info");
+    }
+
+    // ================= MODUL 11: PREVENTIVE MAINTENANCE =================
+    function setChecklistPeriod(period) {
+      currentChecklistPeriod = period;
+      ['daily', 'weekly', 'monthly', 'yearly'].forEach(p => {
+        const btn = document.getElementById(`chk-btn-${p}`);
+        if (p === period) {
+          btn.classList.add('bg-emerald-600', 'text-white');
+          btn.classList.remove('text-slate-400');
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.classList.add('text-slate-400');
+        }
+      });
+
+      const titleMap = {
+        daily: 'Daily Routine Check (Cek Backup, AC Server Room, Firewall Sensor)',
+        weekly: 'Weekly Maintenance (Load-Test UPS Baterai, Kabel Switch)',
+        monthly: 'Monthly PM Audit (Rotasi Master Password, Firmware Access Point)',
+        yearly: 'Yearly Strategic Audit (Disaster Recovery Plan Test, Review Lisensi)'
+      };
+      document.getElementById('checklist-period-title').textContent = titleMap[period];
+      renderChecklistUI();
+    }
+
+    function renderChecklistUI() {
+      const container = document.getElementById('checklist-task-list');
+      if (!container) return;
+
+      const tasks = checklists[currentChecklistPeriod];
+      const completed = tasks.filter(t => t.done).length;
+      document.getElementById('checklist-header-status').textContent = `${completed} dari ${tasks.length} tugas diselesaikan`;
+
+      container.innerHTML = tasks.map((t, idx) => {
+        return `
+          <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/40 hover:bg-slate-900/80 transition-all ${t.done ? 'opacity-70' : ''} text-xs">
+            <div class="flex items-start gap-3">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleChecklistTask(${idx})" class="mt-1 w-4 h-4 rounded text-emerald-600 bg-slate-950 border-slate-800">
+              <div>
+                <span class="text-[9px] text-slate-500 font-bold font-mono">TASK-${t.id.toUpperCase()}</span>
+                <p class="text-sm font-medium ${t.done ? 'line-through text-slate-400' : 'text-slate-200'}">${t.task}</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] font-bold uppercase px-2 py-1 bg-slate-855 text-slate-400 rounded border border-slate-800">${t.assigned}</span>
+              <input type="text" value="${t.note || ''}" placeholder="Suhu AC / Catatan..." onchange="updateChecklistNote(${idx}, this.value)" class="bg-slate-950 border border-slate-800 text-xs px-3 py-1.5 rounded-lg text-slate-300 focus:outline-none focus:border-emerald-500 w-full sm:w-48">
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleChecklistTask(idx) {
+      checklists[currentChecklistPeriod][idx].done = !checklists[currentChecklistPeriod][idx].done;
+      saveStateToLocalStorage();
+    }
+    function updateChecklistNote(idx, note) {
+      checklists[currentChecklistPeriod][idx].note = note;
+      saveStateToLocalStorage();
+    }
+    function resetChecklist() {
+      checklists[currentChecklistPeriod].forEach(t => { t.done = false; t.note = ""; });
+      saveStateToLocalStorage();
+      showToast("Checklist PM di-reset.", "info");
+    }
+    function saveChecklist() {
+      showToast(`Berita Acara PM ${currentChecklistPeriod.toUpperCase()} berhasil dikirim ke Google Sheets via Batch Write!`, "success");
+    }
+
+    // ================= MODUL 6: CHANGE MANAGEMENT =================
+    function renderChangeUI() {
+      const tbody = document.getElementById('change-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = changes.map((c, idx) => {
+        const badgeColor = c.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+        return `
+          <tr class="hover:bg-slate-900/60 border-b border-slate-855">
+            <td class="p-4 font-mono font-bold text-slate-300">${c.code}</td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-800 border border-slate-700">${c.type}</span></td>
+            <td class="p-4 font-semibold text-white">${c.desc}</td>
+            <td class="p-4 text-slate-400">${c.execution}</td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold ${badgeColor}">${c.status}</span></td>
+            <td class="p-4 text-right">
+              ${c.status === 'PENDING CAB' ? `
+                <button onclick="approveRfc(${idx})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[9px] rounded">CAB Approve</button>
+              ` : ''}
+              <button onclick="deleteRfc(${idx})" class="text-slate-600 hover:text-rose-400 p-1 ml-2"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewChange(e) {
+      e.preventDefault();
+      const type = document.getElementById('rfc-type').value;
+      const desc = document.getElementById('rfc-desc').value;
+      const impact = document.getElementById('rfc-impact').value;
+
+      const newId = `RFC-2026-${String(changes.length + 1).padStart(3, '0')}`;
+      changes.push({
+        code: newId, type: type, desc: desc, execution: "Scheduled Window (TBD)", status: "PENDING CAB"
+      });
+
+      saveStateToLocalStorage();
+      closeModal('new-change-modal');
+      showToast(`Permintaan Perubahan ${newId} dikirim ke Board CAB.`, 'success');
+      document.getElementById('form-new-change').reset();
+    }
+
+    function approveRfc(idx) {
+      changes[idx].status = 'APPROVED';
+      saveStateToLocalStorage();
+      showToast("RFC disetujui oleh Change Advisory Board.", "success");
+    }
+
+    function deleteRfc(idx) {
+      changes.splice(idx, 1);
+      saveStateToLocalStorage();
+      showToast("RFC dihapus.", "info");
+    }
+
+    // ================= MODUL 7: PROBLEM MANAGEMENT =================
+    function renderProblemUI() {
+      const container = document.getElementById('problem-list-container');
+      if (!container) return;
+
+      container.innerHTML = problems.map((p, idx) => {
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4 text-xs">
+            <div class="flex justify-between items-start border-b border-slate-855 pb-2">
+              <div>
+                <span class="text-[9px] font-mono text-slate-500 font-bold">RCA RECORD ID: ${p.id}</span>
+                <h4 class="text-sm font-bold text-white mt-1">Kasus Berulang: ${p.incident}</h4>
+              </div>
+              <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded text-[9px] font-bold border border-amber-500/20">${p.status}</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
+              <div class="p-3 bg-slate-950 rounded border border-slate-855">
+                <p class="text-[9px] text-slate-500 font-bold uppercase">Root Cause Analysis</p>
+                <p class="mt-1 font-medium text-white">${p.root}</p>
+              </div>
+              <div class="p-3 bg-slate-950 rounded border border-slate-855">
+                <p class="text-[9px] text-slate-500 font-bold uppercase">Temporary Solution (Known Error)</p>
+                <p class="mt-1 font-medium text-slate-300">${p.known}</p>
+              </div>
+              <div class="p-3 bg-slate-950 rounded border border-slate-855">
+                <p class="text-[9px] text-slate-500 font-bold uppercase">Recommended Permanent Fix</p>
+                <p class="mt-1 font-medium text-emerald-400">${p.permanent}</p>
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-2">
+              <button onclick="deleteProblem(${idx})" class="p-1 text-slate-600 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewProblem(e) {
+      e.preventDefault();
+      const inc = document.getElementById('prob-incident').value;
+      const root = document.getElementById('prob-root').value;
+      const known = document.getElementById('prob-known').value;
+      const perm = document.getElementById('prob-permanent').value;
+
+      const newId = `PRB-2026-${String(problems.length + 1).padStart(3, '0')}`;
+      problems.push({
+        id: newId, incident: inc, root: root, known: known, permanent: perm, status: "KNOWN ERROR"
+      });
+
+      saveStateToLocalStorage();
+      closeModal('new-problem-modal');
+      showToast(`Arsip RCA baru ${newId} berhasil disimpan.`, 'success');
+      document.getElementById('form-new-problem').reset();
+    }
+
+    // ================= MODUL 13: USER LIFECYCLE =================
+    function renderUserLifecycleUI() {
+      const container = document.getElementById('user-lifecycle-list');
+      if (!container) return;
+
+      container.innerHTML = lifecycles.map((u, idx) => {
+        const typeBadge = u.type === 'JOINER' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
+                          u.type === 'MOVER' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+        return `
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-855 flex items-center justify-between text-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-bold text-white text-sm">${u.name}</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded font-bold ${typeBadge}">${u.type}</span>
+              </div>
+              <p class="text-slate-400">Divisi: ${u.dept} | Tanggal: ${u.date}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[9px] bg-slate-900 border border-slate-800 text-slate-500 p-1.5 rounded font-bold uppercase">${u.status}</span>
+              <button onclick="deleteLifecycle(${idx})" class="text-slate-600 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function submitUserLifecycle(e) {
+      e.preventDefault();
+      const name = document.getElementById('lifecycle-name').value;
+      const dept = document.getElementById('lifecycle-dept').value;
+      const type = document.getElementById('lifecycle-type').value;
+
+      const dateStr = new Date().toISOString().split('T')[0];
+      const statusMap = {
+        JOINER: 'AD & EMAIL CREATED',
+        MOVER: 'ACCESS PERMISSIONS SYNCED',
+        LEAVER: 'ACCESS REVOKED'
+      };
+
+      lifecycles.push({
+        name: name, dept: dept, type: type, date: dateStr, status: statusMap[type]
+      });
+
+      saveStateToLocalStorage();
+      showToast(`Formulir HR untuk ${name} diproses.`, 'success');
+      document.getElementById('form-user-lifecycle').reset();
+    }
+
+    function deleteLifecycle(idx) {
+      lifecycles.splice(idx, 1);
+      saveStateToLocalStorage();
+      showToast("Arsip log akses dihapus.", "info");
+    }
+
+    // ================= MODUL 12: TELEMETRI MONITORING SENSOR =================
+    function renderMonitoringUI() {
+      const container = document.getElementById('monitoring-sensor-grid');
+      const dashContainer = document.getElementById('dash-monitoring-status');
+      if (!container) return;
+
+      const contentHtml = monitoringSensors.map((s, idx) => {
+        const isOnline = s.status === 'ONLINE';
+        const statusBadge = isOnline ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+        return `
+          <div onclick="toggleSensorStatus(${idx})" class="p-4 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-700 transition-all text-xs flex justify-between items-start">
+            <div class="space-y-1">
+              <span class="text-[9px] font-mono text-slate-500 font-bold uppercase">${s.type}</span>
+              <h4 class="font-bold text-white text-sm">${s.sensor}</h4>
+              <p class="text-slate-400 font-mono text-[10px]">${s.value}</p>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[9px] font-bold ${statusBadge}">${s.status}</span>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = contentHtml;
+
+      if (dashContainer) {
+        dashContainer.innerHTML = monitoringSensors.map(s => {
+          const isOnline = s.status === 'ONLINE';
+          const icon = isOnline ? 'shield-check' : 'alert-octagon';
+          const colorClass = isOnline ? 'text-emerald-400' : 'text-rose-500';
+          return `
+            <div class="flex items-center justify-between border-b border-slate-855 pb-2 text-xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="${icon}" class="w-4 h-4 ${colorClass}"></i>
+                <div>
+                  <p class="font-semibold text-white leading-tight">${s.sensor}</p>
+                  <p class="text-[9px] text-slate-500">${s.value}</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold ${colorClass}">${s.status}</span>
+            </div>
+          `;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function toggleSensorStatus(idx) {
+      const current = monitoringSensors[idx].status;
+      monitoringSensors[idx].status = current === 'ONLINE' ? 'DOWN' : 'ONLINE';
+      monitoringSensors[idx].value = monitoringSensors[idx].status === 'ONLINE' ? '0ms latency (Restored)' : 'No Connection response';
+      saveStateToLocalStorage();
+      showToast(`Status sensor pemantau diperbarui.`, 'info');
+    }
+
+    // ================= MODUL 10: VENDORS =================
+    function renderVendorUI() {
+      const container = document.getElementById('vendor-grid');
+      if (!container) return;
+
+      container.innerHTML = vendors.map(v => {
+        return `
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-3">
+            <div class="border-b border-slate-855 pb-2 flex justify-between items-center">
+              <h4 class="font-bold text-white text-sm">${v.name}</h4>
+              <span class="bg-emerald-500/10 text-emerald-400 text-[9px] px-2 rounded-full border border-emerald-500/20">Active Partner</span>
+            </div>
+            <div class="space-y-1 text-slate-400">
+              <p><strong>PIC:</strong> ${v.pic}</p>
+              <p><strong>Kontak Support:</strong> ${v.contact}</p>
+              <p><strong>Masa Berlaku:</strong> ${v.activeSupport}</p>
+              <p class="text-slate-300 font-semibold flex items-center gap-1 mt-2">
+                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-blue-400"></i> SLA Vendor: ${v.sSupport}
+              </p>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    // ================= MODUL 14: PROJECTS =================
+    function renderProjectsUI() {
+      const container = document.getElementById('projects-container');
+      if (!container) return;
+
+      container.innerHTML = projects.map(p => {
+        return `
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-4">
+            <div class="border-b border-slate-855 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <h3 class="text-sm font-bold text-white">${p.name}</h3>
+              <div class="flex gap-2">
+                <span class="bg-emerald-500/10 text-emerald-400 px-2 rounded font-bold">Budget: ${p.budget}</span>
+                <span class="bg-blue-500/10 text-blue-400 px-2 rounded">Jadwal: ${p.timeline}</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-3 bg-slate-950 rounded border border-slate-855">
+                <p class="text-[9px] text-slate-500 uppercase font-bold">Milestones & Kemajuan Fisik</p>
+                <p class="mt-1 text-slate-300 font-medium">${p.milestone}</p>
+              </div>
+              <div class="p-3 bg-rose-950/20 rounded border border-rose-500/20">
+                <p class="text-[9px] text-rose-400 uppercase font-bold">Risk Register & Hambatan</p>
+                <p class="mt-1 text-slate-300 font-medium">${p.risk}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ================= MODUL 8: KNOWLEDGE BASE =================
+    let activeKbIdx = 0;
+    function renderKbUI() {
+      const catContainer = document.getElementById('kb-categories-container');
+      const contentBox = document.getElementById('kb-content-box');
+      if (!catContainer || !contentBox) return;
+
+      catContainer.innerHTML = kbs.map((kb, idx) => {
+        const isActive = idx === activeKbIdx;
+        return `
+          <button onclick="selectKbArticle(${idx})" class="w-full text-left p-3 text-xs font-semibold rounded-lg flex flex-col transition-all ${isActive ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white'}">
+            <span class="text-[9px] uppercase tracking-wider block opacity-75">${kb.category}</span>
+            <span class="mt-0.5 line-clamp-1">${kb.title}</span>
+          </button>
+        `;
+      }).join('');
+
+      const activeArt = kbs[activeKbIdx];
+      if (activeArt) {
+        contentBox.innerHTML = `
+          <div class="space-y-4">
+            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded font-bold border border-emerald-500/20 uppercase tracking-wider">${activeArt.category}</span>
+            <h3 class="text-base font-bold text-white tracking-tight">${activeArt.title}</h3>
+            <pre class="bg-slate-950 p-4 rounded-lg text-slate-300 text-xs overflow-x-auto font-mono whitespace-pre-wrap leading-relaxed border border-slate-855">
+              ${activeArt.content}
+            </pre>
+          </div>
+        `;
+      }
+    }
+
+    function selectKbArticle(idx) {
+      activeKbIdx = idx;
+      renderKbUI();
+    }
+
+    // ================= MODUL 18: DISASTER RECOVERY PROTOCOL =================
+    function renderDrpPlaybook() {
+      const container = document.getElementById('drp-steps-container');
+      if (!container) return;
+
+      const steps = [
+        { title: "Deteksi Kegagalan Opera PMS", desc: "Jika server database gagal merespons pings dalam 5 menit berturut-turut, picu sistem failover lokal dan buka gateway replikasi NAS." },
+        { title: "Prosedur Failover Sinkronisasi", desc: "Pindahkan port server virtualisasi ke VM backup sekunder (IP 192.168.10.11). Hubungi PIC VingCard untuk memastikan integrasi kunci tidak terganggu." },
+        { title: "Verifikasi Integritas Transaksional (RPO)", desc: "Restore snapshot database yang ditarik 15 menit sebelum kejadian crash. Bandingkan log offline Front Office." }
+      ];
+
+      container.innerHTML = steps.map((s, idx) => `
+        <div class="p-3 bg-slate-950 rounded-lg border border-slate-855 flex gap-3">
+          <span class="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-mono font-bold text-emerald-400 text-xs shrink-0">${idx+1}</span>
+          <div>
+            <h4 class="font-bold text-white text-xs">${s.title}</h4>
+            <p class="text-slate-400 mt-0.5">${s.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ================= MODUL 20: MOBILE TECH SIMULATION =================
+    function renderMobileTechnicianView() {
+      const container = document.getElementById('phone-incident-container');
+      if (!container) return;
+
+      const openIncs = tickets.filter(t => t.status !== 'RESOLVED');
+      if (openIncs.length === 0) {
+        container.innerHTML = `
+          <div class="text-center text-slate-500 py-6 text-[10px]">
+            Selesai! Tidak ada tugas antrean di lapangan.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = openIncs.map(inc => `
+        <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-lg text-[10px]">
+          <div class="flex justify-between font-bold text-white mb-1">
+            <span>${inc.id}</span>
+            <span class="text-rose-400">${inc.priority}</span>
+          </div>
+          <p class="text-slate-300 font-semibold leading-tight">${inc.category}</p>
+          <p class="text-[9px] text-slate-400 line-clamp-1">Lokasi: ${inc.location}</p>
+          <div class="mt-2 flex gap-1">
+            <button onclick="updateTicketStatus('${inc.id}', 'RESOLVED')" class="w-full py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Resolve</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function startSimulatedQrScan() {
+      document.getElementById('phone-home-view').classList.add('hidden');
+      document.getElementById('phone-scanner-view').classList.remove('hidden');
+
+      setTimeout(() => {
+        cancelSimulatedQrScan();
+        showToast("QR CODE Berhasil Terbaca: Tag [GPH-IT-SRV-01] DELL PowerEdge PMS Server.", "success");
+        switchTab('assets');
+        document.getElementById('asset-search').value = "GPH-IT-SRV-01";
+        renderAssetUI();
+      }, 2500);
+    }
+
+    function cancelSimulatedQrScan() {
+      document.getElementById('phone-home-view').classList.remove('hidden');
+      document.getElementById('phone-scanner-view').classList.add('hidden');
+    }
+
+    // ================= LAIN-LAIN / EXPORTER UTILITIES =================
+    function setGasFile(file) {
+      selectedGasFile = file;
+      ['config', 'serializer', 'core'].forEach(f => {
+        const btn = document.getElementById(`gas-btn-${f}`);
+        if (f === file) {
+          btn.classList.add('bg-emerald-600', 'text-white');
+          btn.classList.remove('text-slate-400');
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.classList.add('text-slate-400');
+        }
+      });
+      document.getElementById('gas-code-box').textContent = gasSourceCodes[file];
+    }
+
+    function copyGasCode() {
+      const codeText = gasSourceCodes[selectedGasFile];
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = codeText;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempTextArea);
+      showToast(`Kode ${selectedGasFile.toUpperCase()}.gs disalin ke Clipboard!`, 'success');
+    }
+
+    function saveStateToLocalStorage() {
+      localStorage.setItem('gph_itsm_tickets', JSON.stringify(tickets));
+      localStorage.setItem('gph_itsm_guest_techs', JSON.stringify(guestTechs));
+      localStorage.setItem('gph_itsm_assets', JSON.stringify(assets));
+      localStorage.setItem('gph_itsm_inventory', JSON.stringify(inventory));
+      localStorage.setItem('gph_itsm_checklists', JSON.stringify(checklists));
+      localStorage.setItem('gph_itsm_changes', JSON.stringify(changes));
+      localStorage.setItem('gph_itsm_problems', JSON.stringify(problems));
+      localStorage.setItem('gph_itsm_lifecycles', JSON.stringify(lifecycles));
+      localStorage.setItem('gph_itsm_monitoring', JSON.stringify(monitoringSensors));
+      localStorage.setItem('gph_itsm_vendors', JSON.stringify(vendors));
+      localStorage.setItem('gph_itsm_projects', JSON.stringify(projects));
+      localStorage.setItem('gph_itsm_kb', JSON.stringify(kbs));
+      refreshAllViews();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast-banner');
+      const msg = document.getElementById('toast-message');
+      const icon = document.getElementById('toast-icon');
+
+      msg.textContent = message;
+      if (type === 'success') {
+        toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-emerald-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-0 opacity-100 transition-all duration-300 flex items-center justify-between gap-3";
+        icon.className = "w-5 h-5 text-emerald-400";
+      } else {
+        toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-blue-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-0 opacity-100 transition-all duration-300 flex items-center justify-between gap-3";
+        icon.className = "w-5 h-5 text-blue-400";
+      }
+      setTimeout(dismissToast, 4000);
+    }
+
+    function dismissToast() {
+      const toast = document.getElementById('toast-banner');
+      if (toast) {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }
+    }
+  </script>
+</body>
+</html>
