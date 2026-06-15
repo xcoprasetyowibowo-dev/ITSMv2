@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPH Hotel ITSM - ITM Control Center v3.6</title>
+  <title>GPH Hotel ITSM - ITM Control Center v3.7</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -28,13 +28,42 @@
       background: #334155;
       border-radius: 4px;
     }
+    /* Print media styling for exact A4 Letterhead outputs */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-preview-modal, #print-preview-modal * {
+        visibility: visible;
+      }
+      #print-preview-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-container {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-row overflow-x-hidden">
 
   <!-- ================= SISTEM SIDEBAR UTAMA ================= -->
   <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full lg:translate-x-0 bg-slate-900 border-r border-slate-800 flex flex-col justify-between">
-    <!-- Header Informasi Brand -->
+    <!-- Header Brand -->
     <div class="p-4 border-b border-slate-800 bg-slate-950/40">
       <div class="flex items-center gap-3 mb-2">
         <div class="p-2 bg-emerald-600 rounded-lg text-white shadow-lg shadow-emerald-900/30 flex items-center justify-center">
@@ -48,7 +77,7 @@
       <p class="text-[10px] text-slate-400">Integrated Hotel Technology & Service Operation Desk</p>
     </div>
     
-    <!-- Navigasi Menu Grup -->
+    <!-- Menu Navigasi Sidebar -->
     <nav class="flex-grow p-3 space-y-4 overflow-y-auto custom-scrollbar">
       <!-- Grup 1: Operasional Core -->
       <div>
@@ -111,9 +140,9 @@
         </div>
       </div>
 
-      <!-- Grup 4: Sistem Pemantauan & Integrasi -->
+      <!-- Grup 4: Monitoring & Pelaporan -->
       <div>
-        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Monitoring & Support</p>
+        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-1.5 px-2">Monitoring & Pelaporan</p>
         <div class="space-y-1">
           <button onclick="switchTab('monitoring')" id="btn-monitoring" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center justify-between transition-all">
             <span class="flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> PRTG/Zabbix Feeds</span>
@@ -131,6 +160,9 @@
           <button onclick="switchTab('drp')" id="btn-drp" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-all">
             <i data-lucide="shield-check" class="w-4 h-4"></i> Disaster Recovery (DRP)
           </button>
+          <button onclick="switchTab('reports')" id="btn-reports" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-blue-400 hover:bg-slate-850 flex items-center gap-2 transition-all">
+            <i data-lucide="file-text" class="w-4 h-4"></i> Executive Reporting
+          </button>
           <button onclick="switchTab('technician-app')" id="btn-technician-app" class="tab-btn w-full px-3 py-2 text-xs font-medium rounded-lg text-amber-500 hover:bg-slate-800 flex items-center gap-2 transition-all">
             <i data-lucide="smartphone" class="w-4 h-4"></i> Mobile Technician App
           </button>
@@ -141,7 +173,7 @@
       </div>
     </nav>
 
-    <!-- Sidebar Profile Staf -->
+    <!-- Sidebar Profile -->
     <div class="p-4 border-t border-slate-800 bg-slate-950/40 text-xs">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-emerald-400">IT</div>
@@ -167,7 +199,7 @@
         <div class="p-1.5 bg-emerald-600 rounded text-white">
           <i data-lucide="shield-alert" class="w-4.5 h-4.5"></i>
         </div>
-        <h1 class="text-sm font-bold text-white tracking-tight">GPH ITSM ITM v3.6</h1>
+        <h1 class="text-sm font-bold text-white tracking-tight">GPH ITSM ITM v3.7</h1>
       </div>
       <button onclick="toggleSidebar()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors focus:outline-none">
         <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
@@ -178,7 +210,6 @@
 
       <!-- ================= MODUL 15: EXCLUSIVE IT MANAGER DASHBOARD ================= -->
       <section id="tab-dashboard" class="space-y-6">
-        <!-- Dashboard Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
           <div>
             <h2 class="text-2xl font-bold text-white tracking-tight">IT Manager Control Tower</h2>
@@ -189,15 +220,11 @@
           </div>
         </div>
 
-        <!-- Metric Cards Dashboard -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboard-metrics-container">
-          <!-- Metrik otomatis diinjeksikan oleh engine Javascript -->
-        </div>
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboard-metrics-container"></div>
 
         <!-- Core Operational Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          <!-- Live SLA Monitor Feed -->
           <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[400px]">
             <div class="flex justify-between items-center mb-4">
               <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -205,21 +232,15 @@
               </h4>
               <span class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400">Total Tiket Aktif: <strong id="lbl-active-tickets">0</strong></span>
             </div>
-            <div class="flex-grow overflow-y-auto custom-scrollbar space-y-3" id="live-incident-feed">
-              <!-- Diinjeksikan otomatis -->
-            </div>
+            <div class="flex-grow overflow-y-auto custom-scrollbar space-y-3" id="live-incident-feed"></div>
           </div>
 
-          <!-- Critical System Link Status (PRTG) -->
           <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col h-[400px]">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-4 flex items-center gap-1.5">
               <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> Critical System Link Status (PRTG)
             </h4>
-            <div class="space-y-3 flex-grow overflow-y-auto custom-scrollbar" id="dash-monitoring-status">
-              <!-- Diinjeksikan otomatis -->
-            </div>
+            <div class="space-y-3 flex-grow overflow-y-auto custom-scrollbar" id="dash-monitoring-status"></div>
           </div>
-
         </div>
       </section>
 
@@ -260,10 +281,7 @@
           <span class="text-xs text-slate-400 font-medium" id="inc-counter-lbl">Showing 0 Tickets</span>
         </div>
 
-        <!-- Incident Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="incident-cards-container">
-          <!-- Dynamic cards -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="incident-cards-container"></div>
       </section>
 
       <!-- ================= MODUL 16: GUEST TECHNOLOGY SUPPORT ================= -->
@@ -305,11 +323,16 @@
         </div>
       </section>
 
-      <!-- ================= MODUL 1: SERVICE CATALOG ================= -->
+      <!-- ================= MODUL 1: SERVICE CATALOG & PROVISIONING ================= -->
       <section id="tab-catalog" class="space-y-6 hidden">
-        <div>
-          <h2 class="text-xl font-bold text-white">Service Catalog & Provisioning</h2>
-          <p class="text-xs text-slate-400">Daftar seluruh menu layanan IT hotel yang tersedia untuk departemen operasional</p>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">Service Catalog & Provisioning</h2>
+            <p class="text-xs text-slate-400">Daftar seluruh menu layanan IT hotel standar untuk 10 departemen operasional</p>
+          </div>
+          <button onclick="openModal('new-catalog-item-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all shadow-md">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Tambah Item Layanan
+          </button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div class="md:col-span-1 space-y-1" id="catalog-dept-nav"></div>
@@ -353,7 +376,7 @@
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
               <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Broadcast Emergency Panel</h4>
               <div class="space-y-2">
-                <button onclick="broadcastWarRoomMessage('🚨 [UPDATE IT] Mengisolasi server Opera VM. Membuka jalur cold-standby.')" class="w-full text-left p-2.5 bg-slate-950 hover:bg-slate-850 rounded border border-slate-800 text-xs text-slate-300 transition-colors">Isolasi VM Server</button>
+                <button onclick="broadcastWarRoomMessage('🚨 [UPDATE IT] Mengisolasi server Opera VM. Membuka jalur standby.')" class="w-full text-left p-2.5 bg-slate-950 hover:bg-slate-850 rounded border border-slate-800 text-xs text-slate-300 transition-colors">Isolasi VM Server</button>
                 <button onclick="closeActiveWarRoom()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded transition-colors">Selesaikan Outage (Normal)</button>
               </div>
             </div>
@@ -368,7 +391,12 @@
             <h2 class="text-xl font-bold text-white">IT Asset Management & Registry</h2>
             <p class="text-xs text-slate-400">Database komprehensif aset IT hotel lengkap dengan vendor, garansi, dan nilai ekonomis</p>
           </div>
-          <button onclick="openModal('new-asset-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all"><i data-lucide="plus-circle" class="w-4 h-4"></i> Registrasi Aset Baru</button>
+          <div class="flex gap-2 w-full sm:w-auto">
+            <button onclick="openAssetPrintPreview()" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg flex items-center justify-center gap-1.5 transition-all border border-slate-700 shadow-md">
+              <i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan Aset
+            </button>
+            <button onclick="openModal('new-asset-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all"><i data-lucide="plus-circle" class="w-4 h-4"></i> Registrasi Aset Baru</button>
+          </div>
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
           <div class="p-4 border-b border-slate-800 flex flex-col sm:flex-row gap-3 bg-slate-850/50 justify-between items-center">
@@ -467,20 +495,23 @@
         </div>
       </section>
 
-      <!-- ================= MODUL 11: PREVENTIVE MAINTENANCE (Checklist + CRUD + Upload Evidence) ================= -->
+      <!-- ================= MODUL 11: PREVENTIVE MAINTENANCE ================= -->
       <section id="tab-checklist" class="space-y-6 hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-white">Preventive Maintenance Schedule & Evidence Audit</h2>
-            <p class="text-xs text-slate-400">Verifikasi berkala fungsionalitas IT sistem hotel. Dilengkapi modul CRUD tugas pemeliharaan dan unggah dokumen bukti foto.</p>
+            <p class="text-xs text-slate-400">Verifikasi berkala fungsionalitas IT sistem hotel. Dilengkapi modul tugas pemeliharaan dan unggah dokumen bukti foto.</p>
           </div>
           <div class="flex flex-wrap gap-2 items-center">
             <div class="flex bg-slate-900 border border-slate-800 p-1 rounded-lg">
               <button onclick="setChecklistPeriod('daily')" id="chk-btn-daily" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white transition-all">Harian</button>
-              <button onclick="setChecklistPeriod('weekly')" id="chk-btn-weekly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Mingguan</button>
-              <button onclick="setChecklistPeriod('monthly')" id="chk-btn-monthly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Bulanan</button>
-              <button onclick="setChecklistPeriod('yearly')" id="chk-btn-yearly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all">Tahunan</button>
+              <button onclick="setChecklistPeriod('weekly')" id="chk-btn-weekly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all ml-1">Mingguan</button>
+              <button onclick="setChecklistPeriod('monthly')" id="chk-btn-monthly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all ml-1">Bulanan</button>
+              <button onclick="setChecklistPeriod('yearly')" id="chk-btn-yearly" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white transition-all ml-1">Tahunan</button>
             </div>
+            <button onclick="openChecklistPrintPreview()" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg flex items-center gap-1.5 transition-all border border-slate-700 shadow-md">
+              <i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan PM
+            </button>
             <button onclick="openModal('new-pm-task-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all shadow"><i data-lucide="plus-circle" class="w-4 h-4"></i> Tambah Tugas PM Baru</button>
           </div>
         </div>
@@ -499,7 +530,7 @@
         </div>
       </section>
 
-      <!-- ================= MODUL 10: VENDOR SLA DIRECTORY (CRUD) ================= -->
+      <!-- ================= MODUL 10: VENDOR SLA DIRECTORY ================= -->
       <section id="tab-vendors" class="space-y-6 hidden">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -511,35 +542,83 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="vendor-grid"></div>
       </section>
 
-      <!-- ================= MODUL LAIN (CHANGE, PROBLEM, LIFE_CYCLE, MONITORING, PROJECTS) ================= -->
+      <!-- ================= MODUL 6: CHANGE MANAGEMENT ================= -->
       <section id="tab-change-mgmt" class="space-y-6 hidden">
-        <div class="flex justify-between items-center"><h2 class="text-xl font-bold text-white">Change Management</h2><button onclick="openModal('new-change-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded-lg text-white">Ajukan Perubahan (RFC)</button></div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden"><table class="w-full text-left border-collapse text-xs"><thead><tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase text-[10px] font-bold"><th class="p-4">RFC Code</th><th class="p-4">Jenis Perubahan</th><th class="p-4">Deskripsi</th><th class="p-4">Eksekusi</th><th class="p-4">Status</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody id="change-table-body" class="divide-y divide-slate-850"></tbody></table></div>
-      </section>
-
-      <section id="tab-problem-mgmt" class="space-y-6 hidden">
-        <div class="flex justify-between items-center"><h2 class="text-xl font-bold text-white">Problem Management</h2><button onclick="openModal('new-problem-modal')" class="px-4 py-2 text-xs bg-amber-600 text-white rounded-lg">Log Masalah (RCA)</button></div>
-        <div class="space-y-4" id="problem-list-container"></div>
-      </section>
-
-      <section id="tab-user-mgmt" class="space-y-6 hidden">
-        <h2 class="text-xl font-bold text-white">User Access Lifecycle</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl"><h3 class="font-bold text-xs uppercase mb-4 text-slate-300">Proses Workflow Karyawan</h3><form id="form-user-lifecycle" onsubmit="submitUserLifecycle(event)" class="space-y-4 text-xs"><div><label class="block text-slate-400 mb-1">Nama Lengkap</label><input type="text" id="lifecycle-name" required class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none"></div><div><label class="block text-slate-400 mb-1">Departemen</label><input type="text" id="lifecycle-dept" required class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none"></div><div><label class="block text-slate-400 mb-1">Kategori</label><select id="lifecycle-type" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none"><option value="JOINER">JOINER (Akun Baru)</option><option value="MOVER">MOVER (Mutasi)</option><option value="LEAVER">LEAVER (Nonaktif)</option></select></div><button type="submit" class="w-full py-2 bg-emerald-600 text-white font-bold rounded">Simpan Data HR</button></form></div>
-          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded-xl"><h3 class="font-bold text-xs uppercase mb-4 text-slate-300">Audit Log Akses Karyawan</h3><div class="space-y-3" id="user-lifecycle-list"></div></div>
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-white">Change Management</h2>
+          <button onclick="openModal('new-change-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded-lg text-white">Ajukan Perubahan (RFC)</button>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase text-[10px] font-bold">
+                <th class="p-4">RFC Code</th>
+                <th class="p-4">Jenis Perubahan</th>
+                <th class="p-4">Deskripsi</th>
+                <th class="p-4">Eksekusi</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="change-table-body" class="divide-y divide-slate-850"></tbody>
+          </table>
         </div>
       </section>
 
+      <!-- ================= MODUL 7: PROBLEM MANAGEMENT ================= -->
+      <section id="tab-problem-mgmt" class="space-y-6 hidden">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-white">Problem Management</h2>
+          <button onclick="openModal('new-problem-modal')" class="px-4 py-2 text-xs bg-amber-600 text-white rounded-lg">Log Masalah (RCA)</button>
+        </div>
+        <div class="space-y-4" id="problem-list-container"></div>
+      </section>
+
+      <!-- ================= MODUL 13: USER ACCESS LIFECYCLE ================= -->
+      <section id="tab-user-mgmt" class="space-y-6 hidden">
+        <h2 class="text-xl font-bold text-white">User Access Lifecycle</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <h3 class="font-bold text-xs uppercase mb-4 text-slate-300">Proses Workflow Karyawan</h3>
+            <form id="form-user-lifecycle" onsubmit="submitUserLifecycle(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block text-slate-400 mb-1">Nama Lengkap</label>
+                <input type="text" id="lifecycle-name" required class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Departemen</label>
+                <input type="text" id="lifecycle-dept" required class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Kategori</label>
+                <select id="lifecycle-type" class="w-full bg-slate-950 border border-slate-800 p-2 rounded text-white outline-none">
+                  <option value="JOINER">JOINER (Akun Baru)</option>
+                  <option value="MOVER">MOVER (Mutasi)</option>
+                  <option value="LEAVER">LEAVER (Nonaktif)</option>
+                </select>
+              </div>
+              <button type="submit" class="w-full py-2 bg-emerald-600 text-white font-bold rounded">Simpan Data HR</button>
+            </form>
+          </div>
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded-xl">
+            <h3 class="font-bold text-xs uppercase mb-4 text-slate-300">Audit Log Akses Karyawan</h3>
+            <div class="space-y-3" id="user-lifecycle-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 12: PRTG MONITORING SYSTEM ================= -->
       <section id="tab-monitoring" class="space-y-6 hidden">
         <h2 class="text-xl font-bold text-white">PRTG & Zabbix Integrated Feeds</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="monitoring-sensor-grid"></div>
       </section>
 
+      <!-- ================= MODUL 14: ACTIVE PROJECTS ================= -->
       <section id="tab-projects" class="space-y-6 hidden">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 class="text-xl font-bold text-white">Active IT Projects & Milestones</h2>
-            <p class="text-xs text-slate-400">Pelacakan progress implementasi infrastruktur, budgeting, dan risk mitigation register</p>
+            <p class="text-xs text-slate-400">Perencanaan strategis, manajemen anggaran proyek, dan pelacakan resiko operasional</p>
           </div>
           <button onclick="openModal('new-project-modal')" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded-lg text-white flex items-center gap-1.5 shadow-lg transition-all">
             <i data-lucide="plus-circle" class="w-4 h-4"></i> Inisiasi Proyek Baru
@@ -548,49 +627,84 @@
         <div class="space-y-6" id="projects-container"></div>
       </section>
 
-      <!-- ================= MODUL: SOP KNOWLEDGE BASE (CRUD v3.6) ================= -->
+      <!-- ================= MODUL 8: SOP KNOWLEDGE BASE ================= -->
       <section id="tab-kb" class="space-y-6 hidden">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 class="text-xl font-bold text-white">SOP Knowledge Base</h2>
-            <p class="text-xs text-slate-400">Pusat dokumentasi standarisasi operasional, panduan kerja, dan prosedur recovery IT</p>
+            <h2 class="text-xl font-bold text-white">IT SOP Knowledge Base</h2>
+            <p class="text-xs text-slate-400">Arsip panduan, instruksi kerja, dan prosedur mitigasi hotel</p>
           </div>
-          <button onclick="openModal('new-kb-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg flex items-center gap-1.5 transition-all shadow-md">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i> Daftarkan SOP Baru
-          </button>
+          <div class="flex gap-2 w-full sm:w-auto">
+            <input type="text" id="kb-search" oninput="renderKbUI()" placeholder="Cari SOP..." class="bg-slate-900 border border-slate-850 text-xs px-3 py-1.5 rounded-lg text-white outline-none w-full sm:w-48">
+            <button onclick="openModal('new-kb-modal')" class="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white flex items-center gap-1.5 transition-all shrink-0"><i data-lucide="plus-circle" class="w-4 h-4"></i> SOP Baru</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="space-y-2" id="kb-categories-container"></div>
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl relative" id="kb-content-box"></div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL 18: DISASTER RECOVERY PROTOCOL ================= -->
+      <section id="tab-drp" class="space-y-6 hidden">
+        <h2 class="text-xl font-bold text-white">Disaster Recovery Protocol (DRP)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900 p-5 border border-slate-800 rounded-xl">
+          <div class="text-center"><h4>PMS Backup RPO</h4><p class="text-xl font-bold font-mono text-emerald-400">15 Menit</p></div>
+          <div class="text-center"><h4>SLA Pemulihan RTO</h4><p class="text-xl font-bold font-mono text-emerald-400">2 Jam</p></div>
+          <div class="text-center"><h4>Model Replikasi</h4><p class="text-sm font-semibold">NAS Local + Cloud Drive Sync</p></div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+          <h3 class="font-bold text-xs uppercase mb-4">Langkah Eksekusi Bencana</h3>
+          <div class="space-y-3" id="drp-steps-container"></div>
+        </div>
+      </section>
+
+      <!-- ================= MODUL: EXECUTIVE REPORTING CENTER ================= -->
+      <section id="tab-reports" class="space-y-6 hidden">
+        <div class="border-b border-slate-800 pb-4">
+          <h2 class="text-xl font-bold text-white">Executive Management Reporting</h2>
+          <p class="text-xs text-slate-400">Dashboard evaluasi performa operasional, kepatuhan, dan finansial IT hotel</p>
         </div>
 
-        <!-- Pencarian & Panel Layout -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="space-y-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
-              <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Pencarian SOP</span>
-              <input type="text" id="kb-search" oninput="renderKbUI()" placeholder="Cari SOP berdasarkan judul/konten..." class="w-full bg-slate-950 border border-slate-800 text-xs px-3 py-2 rounded-lg text-slate-100 placeholder-slate-500 outline-none focus:border-emerald-500">
+          <!-- Analytical Insights & Commentary (Editable for PDF output compilation) -->
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300">Executive Commentary Editor</h3>
+              <span class="text-[10px] text-slate-500">Editable (Akan tercetak di PDF resmi)</span>
             </div>
-            
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col h-[400px]">
-              <span class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-3">Daftar Dokumen SOP</span>
-              <div class="flex-grow overflow-y-auto custom-scrollbar space-y-2 pr-1" id="kb-categories-container">
-                <!-- Dynamic categories list of SOP articles -->
+            <textarea id="report-commentary-box" class="w-full h-56 bg-slate-950 border border-slate-800 text-xs p-3 rounded-lg text-slate-300 font-serif leading-relaxed outline-none focus:border-blue-500">Operasional teknologi infrastruktur di Grand Palace Hotel & Residences selama periode berjalan berada pada tingkat stabilitas prima (98.4% SLA Compliance). Migrasi sistem IPTV berada pada jalur yang tepat, meskipun ada sedikit kendala pasokan adapter. Kepatuhan audit pemeliharaan rutin preventif (PM) tercatat 100% tuntas.</textarea>
+            <div class="flex justify-end gap-3">
+              <button onclick="openPrintPreview()" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg flex items-center gap-1.5 transition-all shadow-md">
+                <i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan Manajemen
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Statistics -->
+          <div class="space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h4 class="font-bold text-xs uppercase tracking-wider text-slate-300 mb-3">Distribusi Jenis Laporan</h4>
+              <div class="space-y-3 text-xs">
+                <div class="p-3 bg-slate-950 rounded-lg flex justify-between items-center">
+                  <span>Laporan Bulanan Operasional</span>
+                  <button onclick="openPrintPreview()" class="text-indigo-400 hover:text-indigo-300"><i data-lucide="printer" class="w-4 h-4"></i></button>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-lg flex justify-between items-center">
+                  <span>Laporan Kapitalisasi Aset</span>
+                  <button onclick="openAssetPrintPreview()" class="text-emerald-400 hover:text-emerald-300"><i data-lucide="printer" class="w-4 h-4"></i></button>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-lg flex justify-between items-center">
+                  <span>Laporan Audit Pemeliharaan PM</span>
+                  <button onclick="openChecklistPrintPreview()" class="text-amber-400 hover:text-amber-300"><i data-lucide="printer" class="w-4 h-4"></i></button>
+                </div>
               </div>
             </div>
           </div>
-
-          <!-- SOP Read & Control Block -->
-          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl relative flex flex-col justify-between min-h-[500px]" id="kb-content-box">
-            <!-- Dynamic SOP Content Rendered Here -->
-          </div>
         </div>
       </section>
 
-      <!-- ================= DISASTER RECOVERY PROTOCOLS ================= -->
-      <section id="tab-drp" class="space-y-6 hidden">
-        <h2 class="text-xl font-bold text-white">Disaster Recovery Protocol (DRP)</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900 p-5 border border-slate-800 rounded-xl"><div class="text-center"><h4>PMS Backup RPO</h4><p class="text-xl font-bold font-mono text-emerald-400">15 Menit</p></div><div class="text-center"><h4>SLA Pemulihan RTO</h4><p class="text-xl font-bold font-mono text-emerald-400">2 Jam</p></div><div class="text-center"><h4>Model Replikasi</h4><p class="text-sm font-semibold">NAS Local + Cloud Drive Sync</p></div></div>
-        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl"><h3 class="font-bold text-xs uppercase mb-4">Langkah Eksekusi Bencana</h3><div class="space-y-3" id="drp-steps-container"></div></div>
-      </section>
-
-      <!-- ================= MOBILE DECK SIMULATOR ================= -->
+      <!-- ================= MODUL 20: MOBILE TERMINAL SIMULATOR ================= -->
       <section id="tab-technician-app" class="space-y-6 hidden">
         <h2 class="text-xl font-bold text-white">Mobile Technician Terminal Simulator</h2>
         <div class="flex justify-center">
@@ -611,7 +725,7 @@
         </div>
       </section>
 
-      <!-- ================= GAS CODE CONTAINER ================= -->
+      <!-- ================= MODUL 20B: GOOGLE APPS SCRIPT EXPORTER ================= -->
       <section id="tab-gas-export" class="space-y-6 hidden">
         <h2 class="text-xl font-bold text-white">GAS Integration Exporter Node</h2>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -625,38 +739,121 @@
 
     </main>
 
-    <!-- Notifikasi Toast Banner -->
-    <div id="toast-banner" class="fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-emerald-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <i data-lucide="info" class="w-5 h-5 text-emerald-400" id="toast-icon"></i>
-        <span id="toast-message" class="text-slate-200"></span>
-      </div>
-    </div>
-
     <footer class="bg-slate-900 border-t border-slate-850 px-4 py-4 text-center text-xs text-slate-500">
-      <p>© 2026 Grand Palace Hotel IT Systems. Semua hak cipta dilindungi.</p>
+      <p>© 2026 Grand Palace Hotel IT Systems | ITSM ITM Suite v3.7 Enabled</p>
     </footer>
 
   </div>
 
   <!-- ================= POPUP MODALS DIALOG (ITSM SUITE) ================= -->
-  
-  <!-- Custom Confirm Modal (Safety Guard against native dialogs) -->
-  <div id="confirm-modal" class="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-sm w-full p-5 text-center space-y-4 shadow-2xl">
-      <div class="w-12 h-12 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-        <i data-lucide="alert-octagon" class="w-6 h-6 text-rose-500"></i>
+
+  <!-- Modal: Executive Report Print Preview (A4 Letterhead) -->
+  <div id="print-preview-modal" class="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 hidden overflow-y-auto custom-scrollbar">
+    <div class="bg-white text-slate-900 rounded-xl max-w-4xl w-full p-8 space-y-6 shadow-2xl relative my-8 print-container">
+      <!-- Close & Action panel (hidden on print) -->
+      <div class="flex justify-end gap-3 no-print border-b border-slate-200 pb-4">
+        <button onclick="window.print()" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg flex items-center gap-1.5 transition-all shadow">
+          <i data-lucide="printer" class="w-4 h-4"></i> Mulai Cetak PDF
+        </button>
+        <button onclick="closeModal('print-preview-modal')" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all border border-slate-200">
+          Tutup Preview
+        </button>
       </div>
-      <h4 class="font-bold text-white text-sm" id="confirm-title">Konfirmasi Tindakan</h4>
-      <p class="text-xs text-slate-400" id="confirm-message">Apakah Anda yakin ingin melakukan tindakan ini? Data yang terhapus tidak dapat dipulihkan.</p>
-      <div class="flex justify-center gap-3 pt-2">
-        <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg">Batal</button>
-        <button id="confirm-ok-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold rounded-lg shadow-lg">Lanjutkan</button>
+
+      <!-- A4 Document Content Area (Generated Dynamically via JS Compiler) -->
+      <div id="print-dynamic-content" class="space-y-6 bg-white p-2"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Konfirmasi Kustom (Menggantikan confirm) -->
+  <div id="confirm-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center gap-2.5 text-rose-500">
+        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        <h4 class="font-bold text-sm text-white" id="confirm-title">Konfirmasi Tindakan</h4>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed" id="confirm-message">Apakah Anda yakin ingin memproses ini?</p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="handleCustomConfirm(false)" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white">Batal</button>
+        <button onclick="handleCustomConfirm(true)" class="px-4 py-1.5 text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white rounded">Ya, Hapus</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Daftarkan Vendor Baru (v3.4 CRUD) -->
+  <!-- Modal: Tambah Item Katalog Layanan Baru (Service Catalog CRUD) -->
+  <div id="new-catalog-item-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="book-open" class="text-emerald-400 w-4 h-4"></i> Tambah Layanan Baru</h4>
+        <button onclick="closeModal('new-catalog-item-modal')" class="text-slate-400 hover:text-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-new-catalog-item" onsubmit="submitNewCatalogItem(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Departemen / Kategori</label>
+          <select id="cat-new-dept" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+            <option value="fo">Front Office (Layanan PMS & FO)</option>
+            <option value="hk">Housekeeping (Room Tech & IoT)</option>
+            <option value="fb">Food & Beverage Service (Point of Sales)</option>
+            <option value="ki">Kitchen (Safety & Temperature Sensor)</option>
+            <option value="eg">Engineering (Infrastruktur, PABX, CCTV)</option>
+            <option value="fn">Finance (Akses Bank Link & Payroll)</option>
+            <option value="sc">Security (Panic Button & Control Room)</option>
+            <option value="hr">Human Resources (Sistem Absensi & HRIS)</option>
+            <option value="sm">Sales & Marketing (EDM & CRM Web)</option>
+            <option value="eo">Executive Office (Executive Dashboard)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama / Judul Layanan</label>
+          <input type="text" id="cat-new-title" required placeholder="Contoh: Pembuatan Akses Wi-Fi VIP" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Target Penyelesaian SLA</label>
+          <input type="text" id="cat-new-sla" required placeholder="Contoh: 2 Jam, 1 Hari Kerja" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Layanan</label>
+          <textarea id="cat-new-desc" required placeholder="Tuliskan spesifikasi detail mengenai pemenuhan request layanan ini..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-catalog-item-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Tambahkan Layanan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Item Katalog Layanan (Service Catalog CRUD) -->
+  <div id="edit-catalog-item-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="edit-3" class="text-emerald-400 w-4 h-4"></i> Edit Rincian Layanan</h4>
+        <button onclick="closeModal('edit-catalog-item-modal')" class="text-slate-400 hover:text-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-edit-catalog-item" onsubmit="submitEditCatalogItem(event)" class="p-4 space-y-4 text-xs">
+        <input type="hidden" id="cat-edit-dept-idx">
+        <input type="hidden" id="cat-edit-item-idx">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama / Judul Layanan</label>
+          <input type="text" id="cat-edit-title" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Target Penyelesaian SLA</label>
+          <input type="text" id="cat-edit-sla" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Layanan</label>
+          <textarea id="cat-edit-desc" required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('edit-catalog-item-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Tambah Vendor (Vendor SLA CRUD) -->
   <div id="new-vendor-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
@@ -694,7 +891,7 @@
     </div>
   </div>
 
-  <!-- Modal: Edit Vendor (v3.4 CRUD) -->
+  <!-- Modal: Edit Vendor (Vendor SLA CRUD) -->
   <div id="edit-vendor-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
@@ -733,7 +930,149 @@
     </div>
   </div>
 
-  <!-- Modal: Tambah Tugas PM Baru (v3.4 CRUD) -->
+  <!-- Modal: Tambah Proyek IT Baru (IT Projects CRUD) -->
+  <div id="new-project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="milestone" class="text-blue-400 w-4 h-4"></i> Inisiasi Proyek IT Baru</h4>
+        <button onclick="closeModal('new-project-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-new-project" onsubmit="submitNewProject(event)" class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama Proyek IT</label>
+          <input type="text" id="pj-new-name" required placeholder="Contoh: Implementasi IPTV Kamar Tamu" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-blue-500">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Budget Alokasi (Rp)</label>
+            <input type="text" id="pj-new-budget" required placeholder="150,000,000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Target Timeline</label>
+            <input type="text" id="pj-new-timeline" required placeholder="Q3 2026 (Jul - Sep)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Milestone & Kemajuan</label>
+          <textarea id="pj-new-milestone" required placeholder="Fase 1: Pemasangan Server. Fase 2: Config AP..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Risk Register (Hambatan/Resiko)</label>
+          <textarea id="pj-new-risk" required placeholder="Supply chain modul IPTV tertunda..." rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-project-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-blue-600 text-white rounded-lg">Simpan Proyek</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Rincian Proyek (IT Projects CRUD) -->
+  <div id="edit-project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="edit-3" class="text-blue-400 w-4 h-4"></i> Edit Rincian Proyek</h4>
+        <button onclick="closeModal('edit-project-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-edit-project" onsubmit="submitEditProject(event)" class="p-4 space-y-4 text-xs">
+        <input type="hidden" id="pj-edit-index">
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Nama Proyek</label>
+          <input type="text" id="pj-edit-name" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Budget</label>
+            <input type="text" id="pj-edit-budget" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Timeline</label>
+            <input type="text" id="pj-edit-timeline" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Milestones</label>
+          <textarea id="pj-edit-milestone" required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Risk Register</label>
+          <textarea id="pj-edit-risk" required rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('edit-project-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-blue-600 text-white rounded-lg">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Tambah SOP Baru (SOP KB CRUD) -->
+  <div id="new-kb-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-xl w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Tambah SOP / Dokumentasi Baru
+        </h4>
+        <button onclick="closeModal('new-kb-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-new-kb" onsubmit="submitNewKb(event)" class="p-4 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Kategori Dokumentasi</label>
+            <input type="text" id="kb-new-cat" required placeholder="Contoh: PMS SOP, Wi-Fi SOP" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Judul SOP / Artikel</label>
+            <input type="text" id="kb-new-title" required placeholder="Panduan Recovery Core Switch" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Konten & Instruksi Prosedur</label>
+          <textarea id="kb-new-content" required placeholder="Tuliskan petunjuk langkah-demi-langkah..." rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500 font-mono"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('new-kb-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Tambahkan SOP</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit SOP (SOP KB CRUD) -->
+  <div id="edit-kb-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-xl w-full overflow-hidden shadow-2xl">
+      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
+        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+          <i data-lucide="edit-3" class="text-emerald-400 w-4 h-4"></i> Edit Dokumen SOP
+        </h4>
+        <button onclick="closeModal('edit-kb-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-edit-kb" onsubmit="submitEditKb(event)" class="p-4 space-y-4 text-xs">
+        <input type="hidden" id="kb-edit-index">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Kategori Dokumentasi</label>
+            <input type="text" id="kb-edit-cat" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Judul SOP / Artikel</label>
+            <input type="text" id="kb-edit-title" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-400 mb-1">Konten & Instruksi Prosedur</label>
+          <textarea id="kb-edit-content" required rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500 font-mono"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeModal('edit-kb-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
+          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Tambah Tugas PM Baru (PM CRUD) -->
   <div id="new-pm-task-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
@@ -766,7 +1105,7 @@
     </div>
   </div>
 
-  <!-- Modal: Edit Rincian Tugas PM (v3.4 CRUD) -->
+  <!-- Modal: Edit Rincian Tugas PM (PM CRUD) -->
   <div id="edit-pm-task-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
@@ -816,237 +1155,114 @@
     </div>
   </div>
 
-  <!-- Modal: Tambah Proyek Baru (v3.5 CRUD) -->
-  <div id="new-project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
-      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
-        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="milestone" class="text-blue-400 w-4 h-4"></i> Inisiasi Proyek IT Baru</h4>
-        <button onclick="closeModal('new-project-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <form id="form-new-project" onsubmit="submitNewProject(event)" class="p-4 space-y-4 text-xs">
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Nama Proyek IT</label>
-          <input type="text" id="pj-new-name" required placeholder="Contoh: Implementasi IPTV Kamar Tamu" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-blue-500">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Budget Alokasi (Rp)</label>
-            <input type="text" id="pj-new-budget" required placeholder="150,000,000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Target Timeline</label>
-            <input type="text" id="pj-new-timeline" required placeholder="Q3 2026 (Jul - Sep)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Deskripsi Milestone & Kemajuan</label>
-          <textarea id="pj-new-milestone" required placeholder="Fase 1: Instalasi Server. Fase 2: Config AP..." rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Risk Register (Hambatan/Resiko)</label>
-          <textarea id="pj-new-risk" required placeholder="Supply chain modul IPTV tertunda..." rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
-        </div>
-        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-          <button type="button" onclick="closeModal('new-project-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
-          <button type="submit" class="px-4 py-1.5 font-bold bg-blue-600 text-white rounded-lg">Simpan Proyek</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: Edit Proyek (v3.5 CRUD) -->
-  <div id="edit-project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
-      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
-        <h4 class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="edit-3" class="text-blue-400 w-4 h-4"></i> Edit Rincian Proyek</h4>
-        <button onclick="closeModal('edit-project-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <form id="form-edit-project" onsubmit="submitEditProject(event)" class="p-4 space-y-4 text-xs">
-        <input type="hidden" id="pj-edit-index">
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Nama Proyek</label>
-          <input type="text" id="pj-edit-name" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Budget</label>
-            <input type="text" id="pj-edit-budget" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Timeline</label>
-            <input type="text" id="pj-edit-timeline" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Milestones</label>
-          <textarea id="pj-edit-milestone" required rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Risk Register</label>
-          <textarea id="pj-edit-risk" required rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none"></textarea>
-        </div>
-        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-          <button type="button" onclick="closeModal('edit-project-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
-          <button type="submit" class="px-4 py-1.5 font-bold bg-blue-600 text-white rounded-lg">Simpan Perubahan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: Tambah SOP Baru (v3.6 CRUD) -->
-  <div id="new-kb-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-xl w-full overflow-hidden shadow-2xl">
-      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
-        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
-          <i data-lucide="book-open" class="text-emerald-400 w-4 h-4"></i> Daftarkan Prosedur (SOP) Baru
-        </h4>
-        <button onclick="closeModal('new-kb-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <form id="form-new-kb" onsubmit="submitNewKb(event)" class="p-4 space-y-4 text-xs">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Kategori Dokumentasi</label>
-            <input type="text" id="kb-new-cat" required placeholder="Contoh: PMS Opera, WiFi Jaringan" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Judul SOP / Artikel</label>
-            <input type="text" id="kb-new-title" required placeholder="Contoh: Failover Backup Server" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Konten & Instruksi Prosedur</label>
-          <textarea id="kb-new-content" required placeholder="Tuliskan langkah-langkah penanganan sistem secara urut..." rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500 font-mono"></textarea>
-        </div>
-        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-          <button type="button" onclick="closeModal('new-kb-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
-          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Publikasikan SOP</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: Edit SOP (v3.6 CRUD) -->
-  <div id="edit-kb-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-xl w-full overflow-hidden shadow-2xl">
-      <div class="p-4 bg-slate-850 border-b border-slate-800 flex justify-between items-center">
-        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
-          <i data-lucide="edit-3" class="text-emerald-400 w-4 h-4"></i> Edit Dokumen SOP
-        </h4>
-        <button onclick="closeModal('edit-kb-modal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <form id="form-edit-kb" onsubmit="submitEditKb(event)" class="p-4 space-y-4 text-xs">
-        <input type="hidden" id="kb-edit-index">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Kategori Dokumentasi</label>
-            <input type="text" id="kb-edit-cat" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-400 mb-1">Judul SOP / Artikel</label>
-            <input type="text" id="kb-edit-title" required class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500">
-          </div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-400 mb-1">Konten & Instruksi Prosedur</label>
-          <textarea id="kb-edit-content" required rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white outline-none focus:border-emerald-500 font-mono"></textarea>
-        </div>
-        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-          <button type="button" onclick="closeModal('edit-kb-modal')" class="px-3 py-1.5 text-slate-400">Batal</button>
-          <button type="submit" class="px-4 py-1.5 font-bold bg-emerald-600 text-white rounded-lg">Simpan Perubahan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL PENDUKUNG LAIN (INCIDENT, GUEST, SPAREPARTS, ASSETS) -->
-  <div id="new-incident-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
-      <h4 class="font-bold text-sm text-white flex items-center gap-2"><i data-lucide="alert-triangle" class="text-rose-500 w-4 h-4"></i> Buat Tiket Gangguan IT</h4>
-      <form id="form-new-incident" onsubmit="submitNewIncident(event)" class="space-y-4 text-xs">
-        <input type="text" id="inc-cat" required placeholder="Kategori Isu (PMS/Wi-Fi/Server)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="inc-location" required placeholder="Lokasi (FO/Kamar 102)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <select id="inc-priority" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded"><option value="P1">P1 - Operasional Down (30m)</option><option value="P2">P2 - Tamu Terganggu (2j)</option><option value="P3">P3 - Departemen Terganggu (4j)</option></select>
-        <input type="text" id="inc-reporter" required placeholder="Nama Pelapor" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <textarea id="inc-desc" required placeholder="Deskripsi lengkap..." class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded" rows="3"></textarea>
-        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-incident-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-rose-600 px-4 py-2 rounded font-bold text-white">Buat Tiket</button></div>
-      </form>
-    </div>
-  </div>
-
+  <!-- Modal: Registrasi Guest Tech Baru -->
   <div id="new-guest-tech-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
       <h4 class="font-bold text-sm text-white"><i data-lucide="tv" class="inline text-amber-500 w-4 h-4 mr-2"></i> Log Isu Kamar Tamu</h4>
       <form id="form-new-guest-tech" onsubmit="submitNewGuestTech(event)" class="space-y-4 text-xs">
-        <input type="text" id="gt-room" required placeholder="Nomor Kamar" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="gt-guest" required placeholder="Nama Tamu" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <select id="gt-vip" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded"><option value="false">Regular Guest</option><option value="true">VIP Guest (Prioritas P1)</option></select>
-        <textarea id="gt-desc" required placeholder="Permasalahan..." class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded" rows="3"></textarea>
+        <input type="text" id="gt-room" required placeholder="Nomor Kamar" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="gt-guest" required placeholder="Nama Tamu" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <select id="gt-vip" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+          <option value="false">Regular Guest</option>
+          <option value="true">VIP Guest (Prioritas P1)</option>
+        </select>
+        <textarea id="gt-desc" required placeholder="Permasalahan..." class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none" rows="3"></textarea>
         <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-guest-tech-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-amber-600 px-4 py-2 rounded font-bold text-white">Log Isu</button></div>
       </form>
     </div>
   </div>
 
+  <!-- Modal: Tambah Suku Cadang -->
   <div id="new-sparepart-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
       <h4 class="font-bold text-sm text-white">Tambah Suku Cadang</h4>
       <form id="form-new-sparepart" onsubmit="submitNewSparepart(event)" class="space-y-4 text-xs">
-        <input type="text" id="sp-name" required placeholder="Nama Suku Cadang" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="number" id="sp-min" required placeholder="Min Stock" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="number" id="sp-cur" required placeholder="Current Stock" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="sp-rack" required placeholder="Lokasi Penyimpanan Rak" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
+        <input type="text" id="sp-name" required placeholder="Nama Suku Cadang" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="number" id="sp-min" required placeholder="Min Stock" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="number" id="sp-cur" required placeholder="Current Stock" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="sp-rack" required placeholder="Lokasi Penyimpanan Rak" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
         <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-sparepart-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-emerald-600 px-4 py-2 rounded font-bold text-white">Simpan</button></div>
       </form>
     </div>
   </div>
 
+  <!-- Modal: Registrasi Aset Baru -->
   <div id="new-asset-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
       <h4 class="font-bold text-sm text-white">Registrasi Aset Baru</h4>
       <form id="form-new-asset" onsubmit="submitNewAsset(event)" class="space-y-3 text-xs">
-        <input type="text" id="ast-tag" required placeholder="Tag Aset (GPH-IT-FW-02)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="ast-sn" required placeholder="Serial Number" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="ast-name" required placeholder="Nama Perangkat" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <select id="ast-cat" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded"><option value="Infrastruktur">Infrastruktur</option><option value="End User Device">End User Device</option></select>
-        <input type="text" id="ast-location" required placeholder="Lokasi Penempatan" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="ast-vendor" required placeholder="Vendor" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="number" id="ast-val" required placeholder="Nilai Aset (Rp)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
+        <input type="text" id="ast-tag" required placeholder="Tag Aset (GPH-IT-FW-02)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="ast-sn" required placeholder="Serial Number" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="ast-name" required placeholder="Nama Perangkat" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <select id="ast-cat" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+          <option value="Infrastruktur">Infrastruktur</option>
+          <option value="End User Device">End User Device</option>
+          <option value="Hotel System Equipment">Hotel System Equipment</option>
+        </select>
+        <input type="text" id="ast-location" required placeholder="Lokasi Penempatan" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="ast-vendor" required placeholder="Vendor" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="number" id="ast-val" required placeholder="Nilai Aset (Rp)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
         <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-asset-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-emerald-600 px-4 py-2 rounded font-bold text-white">Registrasikan</button></div>
       </form>
     </div>
   </div>
 
+  <!-- Modal: Registrasi RFC Baru -->
   <div id="new-change-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
-      <h4 class="font-bold text-sm text-white">Ajukan RFC Change Management</h4>
-      <form id="form-new-change" onsubmit="submitNewChange(event)" class="space-y-3 text-xs">
-        <input type="text" id="rfc-type" required placeholder="Jenis Perubahan (Normal/Standard/Emergency)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <textarea id="rfc-desc" required placeholder="Deskripsi rencana pengerjaan..." class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded" rows="3"></textarea>
-        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-change-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-blue-600 px-4 py-2 rounded font-bold text-white">Kirim RFC</button></div>
+      <h4 class="font-bold text-sm text-white">Buat Pengajuan Perubahan (RFC)</h4>
+      <form id="form-new-change" onsubmit="submitNewChange(event)" class="space-y-4 text-xs">
+        <select id="rfc-type" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+          <option value="Standard Change">Standard Change</option>
+          <option value="Normal Change">Normal Change</option>
+        </select>
+        <input type="text" id="rfc-desc" required placeholder="Rencana Perubahan & Tujuan" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-change-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-blue-600 px-4 py-2 rounded text-white font-bold">Ajukan RFC</button></div>
       </form>
     </div>
   </div>
 
+  <!-- Modal: Registrasi Problem Baru -->
   <div id="new-problem-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
-      <h4 class="font-bold text-sm text-white">Buat Masalah Baru (RCA)</h4>
-      <form id="form-new-problem" onsubmit="submitNewProblem(event)" class="space-y-3 text-xs">
-        <input type="text" id="prob-incident" required placeholder="Deskripsi Insiden Terjadi" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="prob-root" required placeholder="Akar Penyebab (Root Cause)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="prob-known" required placeholder="Workaround Penanganan Sementara" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <input type="text" id="prob-permanent" required placeholder="Langkah Perbaikan Permanen" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded">
-        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-problem-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-emerald-600 px-4 py-2 rounded font-bold text-white">Simpan RCA</button></div>
+      <h4 class="font-bold text-sm text-white">Log Masalah Berulang (RCA)</h4>
+      <form id="form-new-problem" onsubmit="submitNewProblem(event)" class="space-y-4 text-xs">
+        <input type="text" id="prob-incident" required placeholder="Identifikasi Isu" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="prob-root" required placeholder="Akar Masalah" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="prob-known" required placeholder="Workaround (Solusi Sementara)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="prob-permanent" required placeholder="Solusi Permanen" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-problem-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-amber-600 px-4 py-2 rounded text-white font-bold">Simpan RCA</button></div>
       </form>
     </div>
   </div>
+
+  <!-- Modal: Buat Tiket Gangguan IT -->
+  <div id="new-incident-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-4 space-y-4">
+      <h4 class="font-bold text-sm text-white flex items-center gap-2"><i data-lucide="alert-triangle" class="text-rose-500 w-4 h-4"></i> Buat Tiket Gangguan IT</h4>
+      <form id="form-new-incident" onsubmit="submitNewIncident(event)" class="space-y-4 text-xs">
+        <input type="text" id="inc-cat" required placeholder="Kategori Isu (PMS/Wi-Fi/Server)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <input type="text" id="inc-location" required placeholder="Lokasi (FO/Kamar 102)" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <select id="inc-priority" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+          <option value="P1">P1 - Operasional Down (30m)</option>
+          <option value="P2">P2 - Tamu Terganggu (2j)</option>
+          <option value="P3">P3 - Departemen Terganggu (4j)</option>
+        </select>
+        <input type="text" id="inc-reporter" required placeholder="Nama Pelapor" class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none">
+        <textarea id="inc-desc" required placeholder="Deskripsi lengkap..." class="w-full bg-slate-950 border border-slate-800 p-2 text-white rounded outline-none" rows="3"></textarea>
+        <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('new-incident-modal')" class="text-slate-400">Batal</button><button type="submit" class="bg-rose-600 px-4 py-2 rounded font-bold text-white">Buat Tiket</button></div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- ================= MASTER SYSTEM ENGINE SCRIPT ================= -->
   <script>
-    // 1. Inisialisasi Seluruh Variabel Global State (Engine Utama)
     let sidebarOpen = false;
     let currentChecklistPeriod = 'daily';
     let activeCatalogDept = 'fo';
     let activeKbIdx = 0;
-    let confirmCallback = null; // Custom Confirm Tracker
+    let confirmCallback = null;
 
     // Skenario War Room Mayor
     let isWarRoomActive = true;
@@ -1057,7 +1273,7 @@
       "18:20 - VM dialihkan ke read-only snapshot backup untuk penyelidikan log."
     ];
 
-    // Source Code Google Apps Script
+    // Source Code Google Apps Script (GAS) Exporter Mocking
     const gasSourceCodes = {
       config: `// File: Config.gs
 const FIREBASE_CONFIG = {
@@ -1068,7 +1284,7 @@ const FIREBASE_CONFIG = {
 const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
     };
 
-    // Data Mocking & Sinkronisasi LocalStorage
+    // Data Mocking Default
     const defaultTickets = [
       { id: "INC-2026-0001", category: "PMS Opera Database Error", location: "FO Desk", priority: "P1", reporter: "Anita (Reception)", desc: "Opera PMS gagal posting transaksi kasir.", status: "IN PROGRESS", createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
       { id: "SR-2026-0002", category: "Pembuatan Email Hotel Baru", location: "Finance Office", priority: "P3", reporter: "Novi (HR Manager)", desc: "Pembuatan akses email baru staff accounting.", status: "OPEN", createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() }
@@ -1090,11 +1306,75 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
         ]
       },
       {
+        id: "hk",
+        name: "Housekeeping",
+        icon: "home",
+        items: [
+          { title: "Smart TV IPTV Troubleshoot", sla: "2 Jam", desc: "Penyelidikan unit Smart TV kamar tamu yang tidak memuat portal IPTV." }
+        ]
+      },
+      {
         id: "fb",
-        name: "Food & Beverage",
+        name: "Food & Beverage Service",
         icon: "coffee",
         items: [
           { title: "Setup Terminal Kasir POS", sla: "4 Jam", desc: "Konfigurasi terminal kasir baru outlet restoran." }
+        ]
+      },
+      {
+        id: "ki",
+        name: "Kitchen",
+        icon: "chef-hat",
+        items: [
+          { title: "Kalibrasi Sensor Suhu Chiller", sla: "1 Hari Kerja", desc: "Pemeriksaan fungsionalitas pengiriman data sensor IoT suhu chiller." }
+        ]
+      },
+      {
+        id: "eg",
+        name: "Engineering",
+        icon: "hammer",
+        items: [
+          { title: "Troubleshoot IP PBX Line", sla: "4 Jam", desc: "Penyelidikan gangguan panggil keluar trunk analog pada PBX." }
+        ]
+      },
+      {
+        id: "fn",
+        name: "Finance",
+        icon: "dollar-sign",
+        items: [
+          { title: "Akses Token Bank Integration", sla: "1 Hari Kerja", desc: "Instalasi dan uji kompatibilitas modul integrasi e-banking." }
+        ]
+      },
+      {
+        id: "sc",
+        name: "Security",
+        icon: "shield",
+        items: [
+          { title: "Extract Rekaman CCTV Mayor", sla: "2 Jam", desc: "Pencarian dan pengekstrakan rekaman kejadian dari NVR Server." }
+        ]
+      },
+      {
+        id: "hr",
+        name: "Human Resources",
+        icon: "users",
+        items: [
+          { title: "Sinkronisasi Absensi Fingerprint", sla: "4 Jam", desc: "Sinkronisasi mesin pemindai sidik jari karyawan ke database cloud." }
+        ]
+      },
+      {
+        id: "sm",
+        name: "Sales & Marketing",
+        icon: "trending-up",
+        items: [
+          { title: "Kirim Email Blast Newsletter", sla: "1 Hari Kerja", desc: "Eksekusi pengiriman campaign promosi via portal marketing." }
+        ]
+      },
+      {
+        id: "eo",
+        name: "Executive Office",
+        icon: "user",
+        items: [
+          { title: "Penyediaan Report Executive Dashboard", sla: "4 Jam", desc: "Konfigurasi akses analitik hotel ke perangkat iPad General Manager." }
         ]
       }
     ];
@@ -1141,25 +1421,26 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
     ];
 
     const defaultProjects = [
-      { name: "Implementasi IPTV & Casting Kamar Tamu", budget: "Rp 150.000.000", timeline: "Q3 2026", milestone: "Fase 1: Server IPTV selesai.", risk: "Hambatan supply adapter HDMI." }
+      { name: "Implementasi Sistem IPTV & Casting Device", budget: "Rp 150.000.000", timeline: "Q3 2026 (Juli - September)", milestone: "Fase 1: Pemasangan Server IPTV (Selesai).", risk: "Keterlambatan supply adapter casting HDMI dari vendor utama." }
     ];
 
     const defaultKbs = [
-      { category: "PMS Opera SOP", title: "Prosedur Manual Night Audit Saat Terjadi Gangguan Database", content: "1. JANGAN mematikan database.\n2. Cetak log transaksi terakhir dari folder local NAS.\n3. Hubungi Oracle Support (+62 811-9273-001) untuk backup routing.\n4. Alihkan slip manual FO untuk pendaftaran tamu check-in berikutnya." },
-      { category: "Sistem Jaringan", title: "Instruksi Penanganan ISP Backup Failover", content: "1. Jika link Biznet terputus, pastikan switch backbone mendeteksi port failover offline.\n2. Hubungi NOC Biznet (1500988) untuk mengonfirmasi outage area.\n3. Masuk ke Fortigate firewall, ubah prioritas routing SD-WAN ke ISP Cadangan Telkomsel Link." }
+      { category: "PMS Opera SOP", title: "Prosedur Manual Night Audit Saat Terjadi Gangguan Database", content: "1. JANGAN mematikan database.\n2. Cetak log terakhir dari folder NAS.\n3. Hubungi Oracle Support (+62 811-9273-001) untuk petunjuk recovery." }
     ];
 
-    let tickets = JSON.parse(localStorage.getItem('gph_tickets_v36')) || defaultTickets;
-    let guestTechs = JSON.parse(localStorage.getItem('gph_gtech_v36')) || defaultGuestTechs;
-    let assets = JSON.parse(localStorage.getItem('gph_assets_v36')) || defaultAssets;
-    let inventory = JSON.parse(localStorage.getItem('gph_inventory_v36')) || defaultInventory;
-    let checklists = JSON.parse(localStorage.getItem('gph_checklists_v36')) || defaultChecklists;
-    let vendors = JSON.parse(localStorage.getItem('gph_vendors_v36')) || defaultVendors;
-    let changes = JSON.parse(localStorage.getItem('gph_changes_v36')) || defaultChanges;
-    let problems = JSON.parse(localStorage.getItem('gph_problems_v36')) || defaultProblems;
-    let lifecycles = JSON.parse(localStorage.getItem('gph_lifecycles_v36')) || defaultLifecycles;
-    let projects = JSON.parse(localStorage.getItem('gph_projects_v36')) || defaultProjects;
-    let kbs = JSON.parse(localStorage.getItem('gph_kbs_v36')) || defaultKbs;
+    // Load state dengan fallbacks
+    let tickets = JSON.parse(localStorage.getItem('gph_tickets_v37')) || defaultTickets;
+    let guestTechs = JSON.parse(localStorage.getItem('gph_gtech_v37')) || defaultGuestTechs;
+    let assets = JSON.parse(localStorage.getItem('gph_assets_v37')) || defaultAssets;
+    let inventory = JSON.parse(localStorage.getItem('gph_inventory_v37')) || defaultInventory;
+    let checklists = JSON.parse(localStorage.getItem('gph_checklists_v37')) || defaultChecklists;
+    let vendors = JSON.parse(localStorage.getItem('gph_vendors_v37')) || defaultVendors;
+    let changes = JSON.parse(localStorage.getItem('gph_changes_v37')) || defaultChanges;
+    let problems = JSON.parse(localStorage.getItem('gph_problems_v37')) || defaultProblems;
+    let lifecycles = JSON.parse(localStorage.getItem('gph_lifecycles_v37')) || defaultLifecycles;
+    let projects = JSON.parse(localStorage.getItem('gph_projects_v37')) || defaultProjects;
+    let kbs = JSON.parse(localStorage.getItem('gph_kbs_v37')) || defaultKbs;
+    let catalogDepts = JSON.parse(localStorage.getItem('gph_catalog_v37')) || defaultCatalogDepts;
 
     let monitoringSensors = [
       { sensor: "Opera PMS Database Link", status: "ONLINE", value: "9ms response time", type: "Database" },
@@ -1167,7 +1448,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       { sensor: "Server Room AC Temperature", status: "ONLINE", value: "19.5°C", type: "Environment" }
     ];
 
-    // 2. Lifecycle & Render Pipeline
+    // 2. Lifecycle & Init
     window.onload = function() {
       switchTab('dashboard');
       refreshAllViews();
@@ -1195,36 +1476,58 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       renderMobileTechnicianView();
 
       const activeTicketsCount = tickets.filter(t => t.status !== 'RESOLVED').length;
-      document.getElementById('badge-incident-count').textContent = activeTicketsCount;
-      document.getElementById('lbl-active-tickets').textContent = activeTicketsCount;
+      const badgeCount = document.getElementById('badge-incident-count');
+      const activeTicketsLabel = document.getElementById('lbl-active-tickets');
+      if (badgeCount) badgeCount.textContent = activeTicketsCount;
+      if (activeTicketsLabel) activeTicketsLabel.textContent = activeTicketsCount;
 
       const lowStockCount = inventory.filter(i => i.cur <= i.min).length;
-      document.getElementById('badge-stock-warning').textContent = `${lowStockCount} Low`;
+      const stockBadge = document.getElementById('badge-stock-warning');
+      if (stockBadge) stockBadge.textContent = `${lowStockCount} Low`;
     }
 
-    // Custom Confirmation Dialog (Non-blocking replacement for native confirm)
+    function saveAllState() {
+      localStorage.setItem('gph_tickets_v37', JSON.stringify(tickets));
+      localStorage.setItem('gph_gtech_v37', JSON.stringify(guestTechs));
+      localStorage.setItem('gph_assets_v37', JSON.stringify(assets));
+      localStorage.setItem('gph_inventory_v37', JSON.stringify(inventory));
+      localStorage.setItem('gph_checklists_v37', JSON.stringify(checklists));
+      localStorage.setItem('gph_vendors_v37', JSON.stringify(vendors));
+      localStorage.setItem('gph_changes_v37', JSON.stringify(changes));
+      localStorage.setItem('gph_problems_v37', JSON.stringify(problems));
+      localStorage.setItem('gph_lifecycles_v37', JSON.stringify(lifecycles));
+      localStorage.setItem('gph_projects_v37', JSON.stringify(projects));
+      localStorage.setItem('gph_kbs_v37', JSON.stringify(kbs));
+      localStorage.setItem('gph_catalog_v37', JSON.stringify(catalogDepts));
+      refreshAllViews();
+    }
+
+    // Modal & Kustom Konfirmasi Engine
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove('hidden');
+    }
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('hidden');
+    }
+
     function showCustomConfirm(title, message, callback) {
       document.getElementById('confirm-title').textContent = title;
       document.getElementById('confirm-message').textContent = message;
       confirmCallback = callback;
       openModal('confirm-modal');
-      lucide.createIcons();
     }
 
-    document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+    function handleCustomConfirm(confirm) {
       closeModal('confirm-modal');
-      if (confirmCallback) {
+      if (confirm && typeof confirmCallback === 'function') {
         confirmCallback();
-        confirmCallback = null;
       }
-    });
-
-    document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
-      closeModal('confirm-modal');
       confirmCallback = null;
-    });
+    }
 
-    // Navigasi Tabs & Sidebar Drawer
+    // Navigation Drawer
     function switchTab(tabId) {
       document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
       const activeSec = document.getElementById('tab-' + tabId);
@@ -1256,32 +1559,16 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       if (sidebarOpen) {
         sidebar.classList.remove('-translate-x-full');
         backdrop.classList.remove('hidden');
-        hamburger.setAttribute('data-lucide', 'x');
+        if (hamburger) hamburger.setAttribute('data-lucide', 'x');
       } else {
         sidebar.classList.add('-translate-x-full');
         backdrop.classList.add('hidden');
-        hamburger.setAttribute('data-lucide', 'menu');
+        if (hamburger) hamburger.setAttribute('data-lucide', 'menu');
       }
       lucide.createIcons();
     }
 
-    // State Persistence
-    function saveAllState() {
-      localStorage.setItem('gph_tickets_v36', JSON.stringify(tickets));
-      localStorage.setItem('gph_gtech_v36', JSON.stringify(guestTechs));
-      localStorage.setItem('gph_assets_v36', JSON.stringify(assets));
-      localStorage.setItem('gph_inventory_v36', JSON.stringify(inventory));
-      localStorage.setItem('gph_checklists_v36', JSON.stringify(checklists));
-      localStorage.setItem('gph_vendors_v36', JSON.stringify(vendors));
-      localStorage.setItem('gph_changes_v36', JSON.stringify(changes));
-      localStorage.setItem('gph_problems_v36', JSON.stringify(problems));
-      localStorage.setItem('gph_lifecycles_v36', JSON.stringify(lifecycles));
-      localStorage.setItem('gph_projects_v36', JSON.stringify(projects));
-      localStorage.setItem('gph_kbs_v36', JSON.stringify(kbs));
-      refreshAllViews();
-    }
-
-    // Realtime timer updates
+    // Timers & SLA calculation
     function updateRealtimeTimers() {
       const openIncidents = tickets.filter(t => t.status !== 'RESOLVED');
       const feedContainer = document.getElementById('live-incident-feed');
@@ -1318,7 +1605,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
         const mins = String(Math.floor((warRoomSeconds % 3600) / 60)).padStart(2, '0');
         const secs = String(warRoomSeconds % 60).padStart(2, '0');
         const timer = document.getElementById('warroom-timer');
-        if(timer) timer.textContent = `${hours}:${mins}:${secs}`;
+        if (timer) timer.textContent = `${hours}:${mins}:${secs}`;
       }
     }
 
@@ -1338,11 +1625,8 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       };
     }
 
-    // Modals Control
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    // ================= RENDERING LOGIC MODULES =================
 
-    // ================= MODUL 15: METRIK DASHBOARD =================
     function renderDashboardMetrics() {
       const container = document.getElementById('dashboard-metrics-container');
       if (!container) return;
@@ -1357,7 +1641,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
             <p class="text-[10px] uppercase font-bold text-slate-500">Antrean Aktif Helpdesk</p>
             <h3 class="text-2xl font-bold mt-1 text-white">${activeIncs} Tiket</h3>
           </div>
-          <p class="text-[10px] text-amber-500">${warningIncs} Tiket P1 butuh penanganan</p>
+          <p class="text-[10px] text-rose-500">${warningIncs} Tiket P1 butuh penanganan</p>
         </div>
         <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow flex flex-col justify-between h-28">
           <div>
@@ -1383,487 +1667,6 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       `;
     }
 
-    // ================= MODUL 11: PREVENTIVE MAINTENANCE CRUD & EVIDENCE =================
-    function setChecklistPeriod(period) {
-      currentChecklistPeriod = period;
-      ['daily', 'weekly', 'monthly', 'yearly'].forEach(p => {
-        const btn = document.getElementById(`chk-btn-${p}`);
-        if(btn) {
-          btn.className = (p === period) ? "px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white" : "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white";
-        }
-      });
-      renderChecklistUI();
-    }
-
-    function renderChecklistUI() {
-      const container = document.getElementById('checklist-task-list');
-      if (!container) return;
-
-      const tasks = checklists[currentChecklistPeriod] || [];
-      const completed = tasks.filter(t => t.done).length;
-      const headerStatus = document.getElementById('checklist-header-status');
-      if(headerStatus) headerStatus.textContent = `${completed} dari ${tasks.length} Selesai`;
-
-      if(tasks.length === 0) {
-        container.innerHTML = `<p class="p-8 text-center text-xs text-slate-500">Belum ada tugas PM yang terdaftar untuk periode ini.</p>`;
-        return;
-      }
-
-      container.innerHTML = tasks.map((t, idx) => {
-        const hasEvidence = t.evidence && t.evidence !== "";
-        const evidencePreview = hasEvidence ? 
-          `<div class="relative w-12 h-12 rounded border border-slate-700 cursor-pointer overflow-hidden group" onclick="openEvidenceLightbox('${currentChecklistPeriod}', ${idx})">
-             <img src="${t.evidence}" class="w-full h-full object-cover">
-             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all"><i data-lucide="zoom-in" class="w-3.5 h-3.5 text-white"></i></div>
-           </div>` : 
-          `<div class="w-12 h-12 rounded border-2 border-dashed border-slate-800 flex flex-col items-center justify-center text-slate-600 hover:border-slate-700 transition-all relative">
-             <i data-lucide="image" class="w-4 h-4"></i>
-             <input type="file" accept="image/*" onchange="handleEvidenceUpload(event, '${currentChecklistPeriod}', ${idx})" class="absolute inset-0 opacity-0 cursor-pointer">
-           </div>`;
-
-        return `
-          <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/40 text-xs">
-            <div class="flex items-start gap-3">
-              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleChecklistTask(${idx})" class="mt-1 w-4 h-4 rounded text-emerald-600 bg-slate-950 border-slate-800 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-200">${t.task}</p>
-                <p class="text-[10px] text-slate-500">PIC: ${t.assigned} ${t.note ? `| Note: ${t.note}` : ''}</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-4 shrink-0">
-              <div class="flex flex-col items-center gap-0.5"><span class="text-[8px] text-slate-500">BUKTI</span>${evidencePreview}</div>
-              <div class="flex gap-1 border-l border-slate-800 pl-3">
-                <button onclick="openEditPmTaskModal('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 border border-slate-800 rounded text-slate-400 hover:text-emerald-400"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                <button onclick="deletePmTask('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 border border-slate-800 rounded text-slate-400 hover:text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-      lucide.createIcons();
-    }
-
-    function handleEvidenceUpload(event, period, idx) {
-      const file = event.target.files[0];
-      if(!file) return;
-
-      if (file.size > 1.5 * 1024 * 1024) {
-        showToast("File terlalu besar! Kompres di bawah 1.5MB.", "error");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        checklists[period][idx].evidence = e.target.result;
-        saveAllState();
-        showToast(`Bukti pengerjaan berhasil terunggah!`, 'success');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function openEvidenceLightbox(period, idx) {
-      const task = checklists[period][idx];
-      if(task && task.evidence) {
-        document.getElementById('evidence-large-view').src = task.evidence;
-        document.getElementById('evidence-caption-lbl').textContent = `Bukti Audit: ${task.task} (PIC: ${task.assigned})`;
-        openModal('preview-evidence-modal');
-      }
-    }
-
-    function submitNewPmTask(e) {
-      e.preventDefault();
-      const period = document.getElementById('pm-new-period').value;
-      const taskText = document.getElementById('pm-new-task').value;
-      const assigned = document.getElementById('pm-new-assigned').value;
-
-      const currentList = checklists[period] || [];
-      const newId = `${period[0]}${currentList.length + 1}`;
-
-      checklists[period].push({
-        id: newId, task: taskText, done: false, assigned: assigned, note: "", evidence: ""
-      });
-
-      saveAllState();
-      closeModal('new-pm-task-modal');
-      document.getElementById('form-new-pm-task').reset();
-      showToast("Tugas PM baru ditambahkan.", "success");
-    }
-
-    function openEditPmTaskModal(period, index) {
-      const task = checklists[period][index];
-      if(!task) return;
-
-      document.getElementById('pm-edit-period').value = period;
-      document.getElementById('pm-edit-index').value = index;
-      document.getElementById('pm-edit-task').value = task.task;
-      document.getElementById('pm-edit-assigned').value = task.assigned;
-      document.getElementById('pm-edit-status').value = task.done.toString();
-      document.getElementById('pm-edit-note').value = task.note || "";
-
-      openModal('edit-pm-task-modal');
-    }
-
-    function submitEditPmTask(e) {
-      e.preventDefault();
-      const period = document.getElementById('pm-edit-period').value;
-      const idx = parseInt(document.getElementById('pm-edit-index').value, 10);
-      const taskText = document.getElementById('pm-edit-task').value;
-      const assigned = document.getElementById('pm-edit-assigned').value;
-      const isDone = document.getElementById('pm-edit-status').value === "true";
-      const noteText = document.getElementById('pm-edit-note').value;
-
-      checklists[period][idx].task = taskText;
-      checklists[period][idx].assigned = assigned;
-      checklists[period][idx].done = isDone;
-      checklists[period][idx].note = noteText;
-
-      saveAllState();
-      closeModal('edit-pm-task-modal');
-      showToast("Tugas pemeliharaan diperbarui.", "success");
-    }
-
-    function deletePmTask(period, idx) {
-      showCustomConfirm("Hapus Tugas PM", "Apakah Anda yakin ingin menghapus tugas Preventive Maintenance ini dari daftar aktif?", () => {
-        checklists[period].splice(idx, 1);
-        saveAllState();
-        showToast("Tugas PM dihapus.", "info");
-      });
-    }
-
-    function toggleChecklistTask(idx) {
-      checklists[currentChecklistPeriod][idx].done = !checklists[currentChecklistPeriod][idx].done;
-      saveAllState();
-    }
-
-    function resetChecklist() {
-      checklists[currentChecklistPeriod].forEach(t => { t.done = false; t.note = ""; t.evidence = ""; });
-      saveAllState();
-      showToast("Modul pemeliharaan di-reset.", "info");
-    }
-
-    function saveChecklist() {
-      showToast("Berita Acara berhasil dikirim ke logsheet Cloud!", "success");
-    }
-
-    // ================= MODUL 10: VENDOR SLA DIRECTORY CRUD =================
-    function renderVendorUI() {
-      const container = document.getElementById('vendor-grid');
-      if (!container) return;
-
-      if(vendors.length === 0) {
-        container.innerHTML = `<p class="p-8 text-center text-xs text-slate-500 col-span-full">Belum ada vendor terdaftar.</p>`;
-        return;
-      }
-
-      container.innerHTML = vendors.map((v, idx) => `
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-xs space-y-3 flex flex-col justify-between hover:border-slate-700 transition-all group">
-          <div class="space-y-2">
-            <div class="border-b border-slate-800 pb-2 flex justify-between items-start">
-              <div>
-                <h4 class="font-bold text-white text-sm">${v.name}</h4>
-                <span class="text-[9px] uppercase tracking-wider text-emerald-400">Kontrak: ${v.activeSupport}</span>
-              </div>
-              <div class="flex gap-1">
-                <button onclick="openEditVendorModal(${idx})" class="p-1 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-emerald-400 rounded border border-slate-800"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                <button onclick="deleteVendor(${idx})" class="p-1 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-400 rounded border border-slate-800"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-              </div>
-            </div>
-            <div class="space-y-1 text-slate-400">
-              <p>PIC: <strong class="text-slate-300 font-semibold">${v.pic}</strong></p>
-              <p>Dukungan Telp: <strong class="text-slate-300 font-semibold">${v.contact}</strong></p>
-            </div>
-            <div class="bg-slate-950 p-2 rounded border border-slate-850">
-              <span class="text-[9px] font-bold text-slate-500 uppercase">Perjanjian SLA</span>
-              <p class="text-[10px] text-slate-300 italic">${v.sSupport}</p>
-            </div>
-          </div>
-          <a href="tel:${v.contact}" class="w-full text-center py-2 bg-slate-800 hover:bg-emerald-600 font-bold rounded text-white block">Hubungi Vendor</a>
-        </div>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function submitNewVendor(e) {
-      e.preventDefault();
-      vendors.push({
-        name: document.getElementById('vn-new-name').value,
-        pic: document.getElementById('vn-new-pic').value,
-        contact: document.getElementById('vn-new-contact').value,
-        activeSupport: document.getElementById('vn-new-expiry').value,
-        sSupport: document.getElementById('vn-new-sla').value
-      });
-      saveAllState();
-      closeModal('new-vendor-modal');
-      document.getElementById('form-new-vendor').reset();
-      showToast("Mitra Vendor berhasil terdaftar.", "success");
-    }
-
-    function openEditVendorModal(idx) {
-      const v = vendors[idx];
-      document.getElementById('vn-edit-index').value = idx;
-      document.getElementById('vn-edit-name').value = v.name;
-      document.getElementById('vn-edit-pic').value = v.pic;
-      document.getElementById('vn-edit-contact').value = v.contact;
-      document.getElementById('vn-edit-expiry').value = v.activeSupport;
-      document.getElementById('vn-edit-sla').value = v.sSupport;
-
-      openModal('edit-vendor-modal');
-    }
-
-    function submitEditVendor(e) {
-      e.preventDefault();
-      const idx = parseInt(document.getElementById('vn-edit-index').value, 10);
-      vendors[idx] = {
-        name: document.getElementById('vn-edit-name').value,
-        pic: document.getElementById('vn-edit-pic').value,
-        contact: document.getElementById('vn-edit-contact').value,
-        activeSupport: document.getElementById('vn-edit-expiry').value,
-        sSupport: document.getElementById('vn-edit-sla').value
-      };
-      saveAllState();
-      closeModal('edit-vendor-modal');
-      showToast("Data vendor diperbarui.", "success");
-    }
-
-    function deleteVendor(idx) {
-      showCustomConfirm("Hapus Partner Vendor", `Apakah Anda yakin ingin memutuskan kerja sama & menghapus data ${vendors[idx].name}?`, () => {
-        vendors.splice(idx, 1);
-        saveAllState();
-        showToast("Vendor dihapus.", "info");
-      });
-    }
-
-    // ================= MODUL 14: ACTIVE IT PROJECTS CRUD ENGINE =================
-    function renderProjectsUI() {
-      const container = document.getElementById('projects-container');
-      if (!container) return;
-
-      if (projects.length === 0) {
-        container.innerHTML = `<div class="bg-slate-900 border border-slate-800 p-12 text-center text-slate-500 text-xs rounded-xl">Belum ada proyek aktif yang direncanakan.</div>`;
-        return;
-      }
-
-      container.innerHTML = projects.map((p, idx) => `
-        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-4 hover:border-slate-700 transition-all group relative">
-          <div class="border-b border-slate-850 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div>
-              <h3 class="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">${p.name}</h3>
-              <div class="flex gap-2 mt-1">
-                <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded font-bold border border-blue-500/20">Budget: ${p.budget}</span>
-                <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-bold">Timeline: ${p.timeline}</span>
-              </div>
-            </div>
-            <div class="flex gap-1">
-              <button onclick="openEditProjectModal(${idx})" class="p-1.5 bg-slate-950 text-slate-400 hover:text-blue-400 rounded border border-slate-800 transition-all"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-              <button onclick="deleteProject(${idx})" class="p-1.5 bg-slate-950 text-slate-400 hover:text-rose-400 rounded border border-slate-800 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-3 bg-slate-950 rounded-lg border border-slate-855 relative font-xs">
-              <p class="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1.5">Milestones & Kemajuan Fisik</p>
-              <p class="mt-1 text-slate-200 font-medium leading-relaxed">${p.milestone}</p>
-              <div class="absolute top-2 right-3 flex items-center gap-1 text-emerald-400"><i data-lucide="trending-up" class="w-3 h-3"></i> <span class="text-[8px] font-bold">PROG</span></div>
-            </div>
-            <div class="p-3 bg-rose-950/10 rounded-lg border border-rose-500/20 relative font-xs">
-              <p class="text-[9px] text-rose-400 uppercase font-bold tracking-widest mb-1.5">Risk Register & Hambatan</p>
-              <p class="mt-1 text-slate-300 font-medium leading-relaxed">${p.risk}</p>
-              <div class="absolute top-2 right-3 flex items-center gap-1 text-rose-500"><i data-lucide="alert-octagon" class="w-3 h-3"></i> <span class="text-[8px] font-bold">RISK</span></div>
-            </div>
-          </div>
-        </div>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function submitNewProject(e) {
-      e.preventDefault();
-      projects.push({
-        name: document.getElementById('pj-new-name').value,
-        budget: document.getElementById('pj-new-budget').value,
-        timeline: document.getElementById('pj-new-timeline').value,
-        milestone: document.getElementById('pj-new-milestone').value,
-        risk: document.getElementById('pj-new-risk').value
-      });
-      saveAllState();
-      closeModal('new-project-modal');
-      document.getElementById('form-new-project').reset();
-      showToast("Proyek IT Baru berhasil didaftarkan!", "success");
-    }
-
-    function openEditProjectModal(idx) {
-      const p = projects[idx];
-      document.getElementById('pj-edit-index').value = idx;
-      document.getElementById('pj-edit-name').value = p.name;
-      document.getElementById('pj-edit-budget').value = p.budget;
-      document.getElementById('pj-edit-timeline').value = p.timeline;
-      document.getElementById('pj-edit-milestone').value = p.milestone;
-      document.getElementById('pj-edit-risk').value = p.risk;
-      openModal('edit-project-modal');
-    }
-
-    function submitEditProject(e) {
-      e.preventDefault();
-      const idx = document.getElementById('pj-edit-index').value;
-      projects[idx] = {
-        name: document.getElementById('pj-edit-name').value,
-        budget: document.getElementById('pj-edit-budget').value,
-        timeline: document.getElementById('pj-edit-timeline').value,
-        milestone: document.getElementById('pj-edit-milestone').value,
-        risk: document.getElementById('pj-edit-risk').value
-      };
-      saveAllState();
-      closeModal('edit-project-modal');
-      showToast("Data kemajuan proyek diperbarui.", "success");
-    }
-
-    function deleteProject(idx) {
-      showCustomConfirm("Hapus Rencana Proyek", `Apakah Anda yakin ingin menghapus proyek "${projects[idx].name}" dari timeline aktif?`, () => {
-        projects.splice(idx, 1);
-        saveAllState();
-        showToast("Arsip proyek dihapus.", "info");
-      });
-    }
-
-    // ================= MODUL: SOP KNOWLEDGE BASE (CRUD v3.6) =================
-    function renderKbUI() {
-      const catContainer = document.getElementById('kb-categories-container');
-      const contentBox = document.getElementById('kb-content-box');
-      if (!catContainer || !contentBox) return;
-
-      const searchVal = document.getElementById('kb-search').value.toLowerCase();
-
-      // Filter SOP berdasarkan pencarian
-      let filteredKbs = kbs;
-      if (searchVal) {
-        filteredKbs = kbs.filter(kb => 
-          kb.title.toLowerCase().includes(searchVal) || 
-          kb.category.toLowerCase().includes(searchVal) || 
-          kb.content.toLowerCase().includes(searchVal)
-        );
-      }
-
-      // 1. Render Left Category/Title Menu List
-      if (filteredKbs.length === 0) {
-        catContainer.innerHTML = `<p class="p-4 text-[11px] text-slate-500 text-center">Tidak ada artikel SOP yang cocok.</p>`;
-      } else {
-        catContainer.innerHTML = filteredKbs.map((kb, index) => {
-          // Cari index asli pada array kbs global
-          const originalIndex = kbs.indexOf(kb);
-          const isActive = originalIndex === activeKbIdx;
-
-          return `
-            <div onclick="selectKbArticle(${originalIndex})" class="p-2.5 rounded-lg text-xs cursor-pointer transition-all flex flex-col justify-between ${isActive ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-950 text-slate-400 hover:bg-slate-850'}">
-              <div class="flex justify-between items-start gap-2 mb-1">
-                <span class="text-[9px] px-1.5 py-0.2 rounded uppercase ${isActive ? 'bg-emerald-700 text-emerald-100' : 'bg-slate-900 text-slate-500'}">${kb.category}</span>
-                <div class="flex items-center gap-1.5 opacity-80 hover:opacity-100" onclick="event.stopPropagation()">
-                  <button onclick="openEditKbModal(${originalIndex})" class="text-slate-400 hover:text-white"><i data-lucide="edit-3" class="w-3 h-3"></i></button>
-                  <button onclick="deleteKbArticle(${originalIndex})" class="text-slate-400 hover:text-rose-400"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                </div>
-              </div>
-              <p class="line-clamp-1 leading-tight">${kb.title}</p>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // 2. Render Active Article Reader Panel
-      const activeArt = kbs[activeKbIdx];
-      if (activeArt) {
-        contentBox.innerHTML = `
-          <div class="space-y-4">
-            <div class="border-b border-slate-800 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <div>
-                <span class="text-[9px] uppercase tracking-wider font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">${activeArt.category}</span>
-                <h3 class="text-base font-bold text-white mt-1.5">${activeArt.title}</h3>
-              </div>
-              <div class="flex gap-2">
-                <button onclick="openEditKbModal(${activeKbIdx})" class="px-2.5 py-1 text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg flex items-center gap-1">
-                  <i data-lucide="edit-3" class="w-3 h-3"></i> Edit SOP
-                </button>
-                <button onclick="deleteKbArticle(${activeKbIdx})" class="px-2.5 py-1 text-[10px] font-bold bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 rounded-lg flex items-center gap-1">
-                  <i data-lucide="trash-2" class="w-3 h-3"></i> Hapus
-                </button>
-              </div>
-            </div>
-            <div class="bg-slate-950 p-4 border border-slate-850 rounded-lg text-slate-300 text-xs overflow-y-auto max-h-[350px] custom-scrollbar leading-relaxed whitespace-pre-wrap font-mono">${activeArt.content}</div>
-          </div>
-          <div class="border-t border-slate-800/80 pt-3 text-[10px] text-slate-500 flex justify-between items-center">
-            <span>Dikelola secara lokal di GPH ITSM Node</span>
-            <span class="font-mono">Last updated: June 2026</span>
-          </div>
-        `;
-      } else {
-        contentBox.innerHTML = `
-          <div class="h-full flex flex-col items-center justify-center text-slate-500 py-12">
-            <i data-lucide="database" class="w-12 h-12 text-slate-700 mb-2"></i>
-            <p class="text-xs">SOP Kosong atau Tidak Ditemukan.</p>
-            <p class="text-[10px] mt-1 text-slate-600">Klik tombol di atas untuk mendaftarkan panduan IT baru.</p>
-          </div>
-        `;
-      }
-      lucide.createIcons();
-    }
-
-    function selectKbArticle(idx) {
-      activeKbIdx = idx;
-      renderKbUI();
-    }
-
-    function submitNewKb(e) {
-      e.preventDefault();
-      kbs.push({
-        category: document.getElementById('kb-new-cat').value,
-        title: document.getElementById('kb-new-title').value,
-        content: document.getElementById('kb-new-content').value
-      });
-      activeKbIdx = kbs.length - 1; // Langsung arahkan ke artikel baru
-      saveAllState();
-      closeModal('new-kb-modal');
-      document.getElementById('form-new-kb').reset();
-      showToast("SOP Baru berhasil diterbitkan!", "success");
-    }
-
-    function openEditKbModal(idx) {
-      const kb = kbs[idx];
-      if (!kb) return;
-
-      document.getElementById('kb-edit-index').value = idx;
-      document.getElementById('kb-edit-cat').value = kb.category;
-      document.getElementById('kb-edit-title').value = kb.title;
-      document.getElementById('kb-edit-content').value = kb.content;
-
-      openModal('edit-kb-modal');
-    }
-
-    function submitEditKb(e) {
-      e.preventDefault();
-      const idx = parseInt(document.getElementById('kb-edit-index').value, 10);
-      
-      kbs[idx] = {
-        category: document.getElementById('kb-edit-cat').value,
-        title: document.getElementById('kb-edit-title').value,
-        content: document.getElementById('kb-edit-content').value
-      };
-      
-      saveAllState();
-      closeModal('edit-kb-modal');
-      showToast("Dokumen SOP berhasil diperbarui.", "success");
-    }
-
-    function deleteKbArticle(idx) {
-      showCustomConfirm("Hapus Dokumen SOP", `Apakah Anda yakin ingin menghapus panduan prosedur "${kbs[idx].title}" dari basis pengetahuan hotel?`, () => {
-        kbs.splice(idx, 1);
-        if (activeKbIdx >= kbs.length) {
-          activeKbIdx = Math.max(0, kbs.length - 1);
-        }
-        saveAllState();
-        showToast("Artikel SOP dihapus.", "info");
-      });
-    }
-
-    // ================= SISA FITUR OPERASIONAL PENUNJANG (RESTORED v3.1) =================
-    
-    // Incident List
     function renderIncidentList() {
       const container = document.getElementById('incident-cards-container');
       if (!container) return;
@@ -1879,7 +1682,8 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
         filtered = filtered.filter(t => t.id.toLowerCase().includes(searchVal) || t.category.toLowerCase().includes(searchVal));
       }
 
-      document.getElementById('inc-counter-lbl').textContent = `Showing ${filtered.length} Tickets`;
+      const counterLbl = document.getElementById('inc-counter-lbl');
+      if (counterLbl) counterLbl.textContent = `Showing ${filtered.length} Tickets`;
 
       container.innerHTML = filtered.map(t => `
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col justify-between h-48">
@@ -1904,6 +1708,23 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       lucide.createIcons();
     }
 
+    function updateTicketStatus(id, status) {
+      const idx = tickets.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        tickets[idx].status = status;
+        saveAllState();
+        showToast(`Tiket ${id} diselesaikan.`, 'success');
+      }
+    }
+
+    function deleteTicket(id) {
+      showCustomConfirm("Hapus Tiket", `Hapus tiket ${id} dari rekap desk?`, () => {
+        tickets = tickets.filter(t => t.id !== id);
+        saveAllState();
+        showToast(`Tiket ${id} berhasil dihapus.`, 'info');
+      });
+    }
+
     function submitNewIncident(e) {
       e.preventDefault();
       const newId = `INC-2026-${String(tickets.length + 1).padStart(4, '0')}`;
@@ -1920,42 +1741,22 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       saveAllState();
       closeModal('new-incident-modal');
       document.getElementById('form-new-incident').reset();
-      showToast("Tiket insiden baru berhasil dibuat.", "success");
+      showToast(`Incident ${newId} dibuka.`, 'success');
     }
 
-    function updateTicketStatus(id, status) {
-      const idx = tickets.findIndex(t => t.id === id);
-      if (idx !== -1) {
-        tickets[idx].status = status;
-        saveAllState();
-        showToast(`Tiket ${id} diselesaikan.`, 'info');
-      }
-    }
-
-    function deleteTicket(id) {
-      showCustomConfirm("Hapus Tiket Gangguan", `Apakah Anda yakin ingin menghapus arsip tiket ${id} dari dashboard operasional?`, () => {
-        tickets = tickets.filter(t => t.id !== id);
-        saveAllState();
-        showToast(`Tiket ${id} dihapus.`, 'info');
-      });
-    }
-
-    // Guest Tech
+    // Guest Tech support
     function renderGuestTechList() {
       const container = document.getElementById('guest-tech-list');
       if (!container) return;
 
       container.innerHTML = guestTechs.map((gt, idx) => `
-        <div class="bg-slate-950 p-3 rounded-lg border border-slate-850 flex justify-between items-center text-xs">
+        <div class="bg-slate-950 p-3 rounded-lg border border-slate-855 flex justify-between items-center text-xs">
           <div>
-            <div class="flex items-center gap-2 mb-1">
-              <p class="font-bold text-white">${gt.room} | Guest: ${gt.guestName}</p>
-              ${gt.vipStatus ? `<span class="bg-amber-500/15 text-amber-400 px-1.5 py-0.1 text-[9px] font-bold rounded border border-amber-500/20">VIP Priority</span>` : ''}
-            </div>
+            <p class="font-bold text-white">${gt.room} | Guest: ${gt.guestName}</p>
             <p class="text-[10px] text-slate-400">${gt.desc}</p>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            ${gt.status === 'OPEN' ? `<button onclick="resolveGuestTech(${idx})" class="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[10px] transition-all">Resolve</button>` : `<span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> RESOLVED</span>`}
+          <div class="flex items-center gap-2">
+            ${gt.status === 'OPEN' ? `<button onclick="resolveGuestTech(${idx})" class="px-2 py-0.5 bg-emerald-600 text-white rounded text-[10px]">Resolve</button>` : `<span class="text-[10px] text-emerald-400">RESOLVED</span>`}
             <button onclick="deleteGuestTech(${idx})" class="p-1 text-slate-500 hover:text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </div>
         </div>
@@ -1963,64 +1764,85 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       lucide.createIcons();
     }
 
+    function resolveGuestTech(idx) {
+      guestTechs[idx].status = 'RESOLVED';
+      saveAllState();
+      showToast("Isu kamar teratasi.", "success");
+    }
+
+    function deleteGuestTech(idx) {
+      showCustomConfirm("Hapus Isu Kamar", `Hapus rekaman teknologi Kamar ${guestTechs[idx].room}?`, () => {
+        guestTechs.splice(idx, 1);
+        saveAllState();
+        showToast("Log Kamar dihapus.", "info");
+      });
+    }
+
     function submitNewGuestTech(e) {
       e.preventDefault();
-      const vip = document.getElementById('gt-vip').value === "true";
       guestTechs.push({
         room: document.getElementById('gt-room').value,
         guestName: document.getElementById('gt-guest').value,
-        vipStatus: vip,
+        vipStatus: document.getElementById('gt-vip').value === "true",
         occupied: true,
         desc: document.getElementById('gt-desc').value,
-        priority: vip ? "P1" : "P2",
+        priority: "P2",
         status: "OPEN"
       });
       saveAllState();
       closeModal('new-guest-tech-modal');
       document.getElementById('form-new-guest-tech').reset();
-      showToast("Isu teknologi kamar berhasil didaftarkan.", "success");
+      showToast("Tamu terdaftar.", "success");
     }
 
-    function resolveGuestTech(idx) {
-      guestTechs[idx].status = 'RESOLVED';
-      saveAllState();
-      showToast("Isu kamar selesai.", "success");
-    }
-
-    function deleteGuestTech(idx) {
-      showCustomConfirm("Hapus Laporan Kamar", `Apakah Anda yakin ingin menghapus data gangguan teknologi di ${guestTechs[idx].room}?`, () => {
-        guestTechs.splice(idx, 1);
-        saveAllState();
-        showToast("Kasus kamar dihapus.", "info");
-      });
-    }
-
-    // Catalog Menu
     function renderCatalogMenu() {
       const navContainer = document.getElementById('catalog-dept-nav');
       const itemsGrid = document.getElementById('catalog-items-grid');
       const headerTitle = document.getElementById('catalog-header-title');
       if (!navContainer || !itemsGrid) return;
 
-      navContainer.innerHTML = defaultCatalogDepts.map(dept => `
-        <button onclick="selectCatalogDept('${dept.id}')" class="w-full text-left px-3 py-2 text-xs rounded transition-all ${dept.id === activeCatalogDept ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">
-          ${dept.name}
+      navContainer.innerHTML = catalogDepts.map(dept => `
+        <button onclick="selectCatalogDept('${dept.id}')" class="w-full text-left px-3 py-2 text-xs rounded transition-all flex items-center justify-between ${dept.id === activeCatalogDept ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">
+          <span>${dept.name}</span>
+          <span class="text-[9px] bg-slate-950/40 px-1.5 py-0.5 rounded text-white">${dept.items.length}</span>
         </button>
       `).join('');
 
-      const activeData = defaultCatalogDepts.find(d => d.id === activeCatalogDept);
-      if(activeData) {
+      const activeDeptIdx = catalogDepts.findIndex(d => d.id === activeCatalogDept);
+      const activeData = catalogDepts[activeDeptIdx];
+      if (activeData) {
         headerTitle.innerHTML = `Menu Layanan ${activeData.name}`;
-        itemsGrid.innerHTML = activeData.items.map(item => `
-          <div class="bg-slate-950 p-4 border border-slate-850 rounded-xl flex flex-col justify-between h-28">
-            <div>
-              <p class="font-bold text-xs text-white">${item.title}</p>
-              <p class="text-[10px] text-slate-400 mt-1">${item.desc}</p>
+        
+        if (activeData.items.length === 0) {
+          itemsGrid.innerHTML = `
+            <div class="col-span-full py-12 text-center text-xs text-slate-500 bg-slate-950/20 rounded-xl">
+              <i data-lucide="info" class="w-8 h-8 text-slate-700 mx-auto mb-2"></i>
+              Belum ada item layanan di kategori ini.
+            </div>`;
+        } else {
+          itemsGrid.innerHTML = activeData.items.map((item, itemIdx) => `
+            <div class="bg-slate-950 p-4 border border-slate-850 rounded-xl flex flex-col justify-between h-36">
+              <div>
+                <div class="flex justify-between items-start">
+                  <p class="font-bold text-xs text-white leading-snug">${item.title}</p>
+                  <div class="flex gap-2 ml-2 shrink-0">
+                    <button onclick="openEditCatalogItemModal(${activeDeptIdx}, ${itemIdx})" class="text-slate-500 hover:text-emerald-400 transition-colors">
+                      <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="deleteCatalogItem(${activeDeptIdx}, ${itemIdx})" class="text-slate-500 hover:text-rose-400 transition-colors">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                  </div>
+                </div>
+                <span class="text-[9px] text-emerald-400 font-semibold uppercase mt-0.5 inline-block">SLA: ${item.sla}</span>
+                <p class="text-[10px] text-slate-400 mt-1.5 line-clamp-2">${item.desc}</p>
+              </div>
+              <button onclick="orderServiceCatalog('${item.title}')" class="w-full py-1 bg-slate-850 hover:bg-emerald-600 rounded text-[9px] text-white">Request Layanan</button>
             </div>
-            <button onclick="orderServiceCatalog('${item.title}')" class="w-full py-1 bg-slate-850 hover:bg-emerald-600 rounded text-[9px] text-white">Request Layanan</button>
-          </div>
-        `).join('');
+          `).join('');
+        }
       }
+      lucide.createIcons();
     }
 
     function selectCatalogDept(deptId) {
@@ -2037,7 +1859,67 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       showToast(`Layanan ${newId} dimasukkan ke antrean.`, "success");
     }
 
-    // Asset Management & Registry
+    function submitNewCatalogItem(e) {
+      e.preventDefault();
+      const deptId = document.getElementById('cat-new-dept').value;
+      const title = document.getElementById('cat-new-title').value;
+      const sla = document.getElementById('cat-new-sla').value;
+      const desc = document.getElementById('cat-new-desc').value;
+
+      const deptIdx = catalogDepts.findIndex(d => d.id === deptId);
+      if (deptIdx !== -1) {
+        catalogDepts[deptIdx].items.push({ title, sla, desc });
+        saveAllState();
+        closeModal('new-catalog-item-modal');
+        document.getElementById('form-new-catalog-item').reset();
+        showToast("Item Layanan baru berhasil ditambahkan.", "success");
+      }
+    }
+
+    function openEditCatalogItemModal(deptIdx, itemIdx) {
+      const dept = catalogDepts[deptIdx];
+      const item = dept.items[itemIdx];
+      if (!item) return;
+
+      document.getElementById('cat-edit-dept-idx').value = deptIdx;
+      document.getElementById('cat-edit-item-idx').value = itemIdx;
+      document.getElementById('cat-edit-title').value = item.title;
+      document.getElementById('cat-edit-sla').value = item.sla;
+      document.getElementById('cat-edit-desc').value = item.desc;
+
+      openModal('edit-catalog-item-modal');
+    }
+
+    function submitEditCatalogItem(e) {
+      e.preventDefault();
+      const deptIdx = parseInt(document.getElementById('cat-edit-dept-idx').value, 10);
+      const itemIdx = parseInt(document.getElementById('cat-edit-item-idx').value, 10);
+      const title = document.getElementById('cat-edit-title').value;
+      const sla = document.getElementById('cat-edit-sla').value;
+      const desc = document.getElementById('cat-edit-desc').value;
+
+      if (catalogDepts[deptIdx] && catalogDepts[deptIdx].items[itemIdx]) {
+        catalogDepts[deptIdx].items[itemIdx] = { title, sla, desc };
+        saveAllState();
+        closeModal('edit-catalog-item-modal');
+        showToast("Layanan katalog diperbarui.", "success");
+      }
+    }
+
+    function deleteCatalogItem(deptIdx, itemIdx) {
+      const item = catalogDepts[deptIdx].items[itemIdx];
+      showCustomConfirm(
+        "Hapus Item Layanan", 
+        `Apakah Anda yakin ingin menghapus item layanan "${item.title}" dari katalog?`, 
+        () => {
+          catalogDepts[deptIdx].items.splice(itemIdx, 1);
+          saveAllState();
+          showToast("Item Layanan dihapus.", "info");
+        }
+      );
+    }
+
+    // Asset Management
     function renderAssetUI() {
       const tbody = document.getElementById('asset-table-body');
       if (!tbody) return;
@@ -2085,17 +1967,17 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
     }
 
     function deleteAsset(tag) {
-      showCustomConfirm("Hapus Registrasi Aset", `Apakah Anda yakin ingin menghapus data inventaris aset ${tag}?`, () => {
+      showCustomConfirm("Hapus Aset", `Apakah Anda yakin ingin menghapus aset ${tag}?`, () => {
         assets = assets.filter(a => a.tag !== tag);
         saveAllState();
         showToast("Aset dihapus.", "info");
       });
     }
 
-    // CMDB Click Node
+    // CMDB Click Impact Analysis
     function clickCmdbNode(nodeId) {
       const out = document.getElementById('cmdb-impact-output');
-      if(!out) return;
+      if (!out) return;
 
       out.innerHTML = `
         <div class="bg-rose-950/20 border border-rose-500/20 p-4 rounded-lg text-xs space-y-2">
@@ -2106,7 +1988,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       `;
     }
 
-    // Spare parts stock
+    // Inventory spare parts
     function renderInventoryUI() {
       const tbody = document.getElementById('inventory-table-body');
       if (!tbody) return;
@@ -2116,7 +1998,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
           <td class="p-4 font-bold text-white">${item.name}</td>
           <td class="p-4 font-mono">${item.min} Unit</td>
           <td class="p-4 font-mono font-bold">${item.cur} Unit</td>
-          <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] ${item.cur <= item.min ? 'bg-rose-500/20 text-rose-400 font-bold' : 'bg-slate-800 text-slate-300'}">${item.cur <= item.min ? 'REORDER' : 'OPTIMAL'}</span></td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] ${item.cur <= item.min ? 'bg-rose-500/20 text-rose-400 font-bold animate-pulse' : 'bg-slate-800 text-slate-300'}">${item.cur <= item.min ? 'REORDER' : 'OPTIMAL'}</span></td>
           <td class="p-4 text-slate-400">${item.rack}</td>
           <td class="p-4 text-right">
             <button onclick="increaseStock(${idx})" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 font-bold text-white rounded text-[10px]">+1</button>
@@ -2142,18 +2024,271 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
     function increaseStock(idx) { inventory[idx].cur++; saveAllState(); }
     function decreaseStock(idx) { if(inventory[idx].cur > 0) { inventory[idx].cur--; saveAllState(); } }
 
-    // Change Management list
+    // ================= PM CHECKLIST LOGIC =================
+    function setChecklistPeriod(period) {
+      currentChecklistPeriod = period;
+      ['daily', 'weekly', 'monthly', 'yearly'].forEach(p => {
+        const btn = document.getElementById(`chk-btn-${p}`);
+        if(btn) {
+          btn.className = (p === period) ? "px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white" : "px-3 py-1.5 text-xs font-semibold rounded-md text-slate-400 hover:text-white";
+        }
+      });
+      renderChecklistUI();
+    }
+
+    function renderChecklistUI() {
+      const container = document.getElementById('checklist-task-list');
+      if (!container) return;
+
+      const tasks = checklists[currentChecklistPeriod] || [];
+      const completed = tasks.filter(t => t.done).length;
+      const headerStatus = document.getElementById('checklist-header-status');
+      if (headerStatus) headerStatus.textContent = `${completed} dari ${tasks.length} Selesai`;
+
+      const titleMap = {
+        daily: 'Daily Routine Check (Cek Backup, AC Server Room, Firewall Sensor)',
+        weekly: 'Weekly Maintenance (Load-Test UPS Baterai, Kabel Switch)',
+        monthly: 'Monthly PM Audit (Rotasi Master Password, Firmware Access Point)',
+        yearly: 'Yearly Strategic Audit (Disaster Recovery Plan Test, Review Lisensi)'
+      };
+      document.getElementById('checklist-period-title').textContent = titleMap[currentChecklistPeriod];
+
+      if (tasks.length === 0) {
+        container.innerHTML = `<p class="p-8 text-center text-xs text-slate-500">Belum ada tugas PM yang terdaftar untuk periode ini.</p>`;
+        return;
+      }
+
+      container.innerHTML = tasks.map((t, idx) => {
+        const hasEvidence = t.evidence && t.evidence !== "";
+        const evidencePreview = hasEvidence ? 
+          `<div class="relative w-12 h-12 rounded border border-slate-700 cursor-pointer overflow-hidden group" onclick="openEvidenceLightbox('${currentChecklistPeriod}', ${idx})">
+             <img src="${t.evidence}" class="w-full h-full object-cover">
+             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all"><i data-lucide="zoom-in" class="w-3.5 h-3.5 text-white"></i></div>
+           </div>` : 
+          `<div class="w-12 h-12 rounded border-2 border-dashed border-slate-800 flex flex-col items-center justify-center text-slate-600 hover:border-slate-700 transition-all relative">
+             <i data-lucide="camera" class="w-4 h-4"></i>
+             <input type="file" accept="image/*" onchange="handleEvidenceUpload(event, '${currentChecklistPeriod}', ${idx})" class="absolute inset-0 opacity-0 cursor-pointer">
+           </div>`;
+
+        return `
+          <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/40 text-xs">
+            <div class="flex items-start gap-3">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleChecklistTask(${idx})" class="mt-1 w-4 h-4 rounded text-emerald-600 bg-slate-950 border-slate-800 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-200">${t.task}</p>
+                <p class="text-[10px] text-slate-500">PIC: ${t.assigned} ${t.note ? `| Note: ${t.note}` : ''}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+              <div class="flex flex-col items-center gap-0.5"><span class="text-[8px] text-slate-500">BUKTI</span>${evidencePreview}</div>
+              <div class="flex gap-1 border-l border-slate-800 pl-3">
+                <button onclick="openEditPmTaskModal('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 border border-slate-800 rounded text-slate-400 hover:text-emerald-400"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                <button onclick="deletePmTask('${currentChecklistPeriod}', ${idx})" class="p-1.5 bg-slate-950 border border-slate-800 rounded text-slate-400 hover:text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function toggleChecklistTask(idx) {
+      checklists[currentChecklistPeriod][idx].done = !checklists[currentChecklistPeriod][idx].done;
+      saveAllState();
+    }
+
+    function handleEvidenceUpload(event, period, idx) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 1.5 * 1024 * 1024) {
+        showToast("Ukuran file maksimal 1.5MB.", "error");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        checklists[period][idx].evidence = e.target.result;
+        saveAllState();
+        showToast("Bukti visual berhasil diunggah.", "success");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openEvidenceLightbox(period, idx) {
+      const task = checklists[period][idx];
+      if (task && task.evidence) {
+        document.getElementById('evidence-large-view').src = task.evidence;
+        document.getElementById('evidence-caption-lbl').textContent = `Bukti PM: ${task.task} (PIC: ${task.assigned})`;
+        openModal('preview-evidence-modal');
+      }
+    }
+
+    function submitNewPmTask(e) {
+      e.preventDefault();
+      const period = document.getElementById('pm-new-period').value;
+      const taskText = document.getElementById('pm-new-task').value;
+      const assigned = document.getElementById('pm-new-assigned').value;
+
+      const currentList = checklists[period] || [];
+      const newId = `${period[0]}${currentList.length + 1}`;
+
+      checklists[period].push({
+        id: newId, task: taskText, done: false, assigned: assigned, note: "", evidence: ""
+      });
+
+      saveAllState();
+      closeModal('new-pm-task-modal');
+      document.getElementById('form-new-pm-task').reset();
+      showToast("Tugas PM baru ditambahkan.", "success");
+    }
+
+    function openEditPmTaskModal(period, index) {
+      const task = checklists[period][index];
+      if (!task) return;
+
+      document.getElementById('pm-edit-period').value = period;
+      document.getElementById('pm-edit-index').value = index;
+      document.getElementById('pm-edit-task').value = task.task;
+      document.getElementById('pm-edit-assigned').value = task.assigned;
+      document.getElementById('pm-edit-status').value = task.done.toString();
+      document.getElementById('pm-edit-note').value = task.note || "";
+
+      openModal('edit-pm-task-modal');
+    }
+
+    function submitEditPmTask(e) {
+      e.preventDefault();
+      const period = document.getElementById('pm-edit-period').value;
+      const idx = parseInt(document.getElementById('pm-edit-index').value, 10);
+
+      checklists[period][idx].task = document.getElementById('pm-edit-task').value;
+      checklists[period][idx].assigned = document.getElementById('pm-edit-assigned').value;
+      checklists[period][idx].done = document.getElementById('pm-edit-status').value === "true";
+      checklists[period][idx].note = document.getElementById('pm-edit-note').value;
+
+      saveAllState();
+      closeModal('edit-pm-task-modal');
+      showToast("Tugas PM diperbarui.", "success");
+    }
+
+    function deletePmTask(period, idx) {
+      showCustomConfirm("Hapus Tugas PM", "Apakah Anda yakin ingin menghapus tugas ini?", () => {
+        checklists[period].splice(idx, 1);
+        saveAllState();
+        showToast("Tugas PM dihapus.", "info");
+      });
+    }
+
+    function resetChecklist() {
+      checklists[currentChecklistPeriod].forEach(t => { t.done = false; t.note = ""; t.evidence = ""; });
+      saveAllState();
+      showToast("Audit di-reset.", "info");
+    }
+
+    function saveChecklist() {
+      showToast("Laporan Berita Acara berhasil dikompilasi.", "success");
+    }
+
+    // ================= VENDORS LOGIC =================
+    function renderVendorUI() {
+      const container = document.getElementById('vendor-grid');
+      if (!container) return;
+
+      if (vendors.length === 0) {
+        container.innerHTML = `<p class="p-8 text-center text-xs text-slate-500 col-span-full">Belum ada vendor terdaftar.</p>`;
+        return;
+      }
+
+      container.innerHTML = vendors.map((v, idx) => `
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-xs space-y-3 flex flex-col justify-between hover:border-slate-700 transition-all group">
+          <div class="space-y-2">
+            <div class="border-b border-slate-800 pb-2 flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white text-sm">${v.name}</h4>
+                <span class="text-[9px] uppercase tracking-wider text-emerald-400">Kontrak: ${v.activeSupport}</span>
+              </div>
+              <div class="flex gap-1">
+                <button onclick="openEditVendorModal(${idx})" class="p-1 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-emerald-400 rounded border border-slate-800"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                <button onclick="deleteVendor(${idx})" class="p-1 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-400 rounded border border-slate-800"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+            <div class="space-y-1 text-slate-400">
+              <p>PIC: <strong class="text-slate-300 font-semibold">${v.pic}</strong></p>
+              <p>Dukungan Telp: <strong class="text-slate-300 font-semibold">${v.contact}</strong></p>
+            </div>
+            <div class="bg-slate-950 p-2 rounded border border-slate-855">
+              <span class="text-[9px] font-bold text-slate-500 uppercase">Perjanjian SLA</span>
+              <p class="text-[10px] text-slate-300 italic">${v.sSupport}</p>
+            </div>
+          </div>
+          <a href="tel:${v.contact}" class="w-full text-center py-2 bg-slate-800 hover:bg-emerald-600 font-bold rounded text-white block">Hubungi Vendor</a>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewVendor(e) {
+      e.preventDefault();
+      vendors.push({
+        name: document.getElementById('vn-new-name').value,
+        pic: document.getElementById('vn-new-pic').value,
+        contact: document.getElementById('vn-new-contact').value,
+        activeSupport: document.getElementById('vn-new-expiry').value,
+        sSupport: document.getElementById('vn-new-sla').value
+      });
+      saveAllState();
+      closeModal('new-vendor-modal');
+      document.getElementById('form-new-vendor').reset();
+      showToast("Vendor baru disimpan.", "success");
+    }
+
+    function openEditVendorModal(idx) {
+      const v = vendors[idx];
+      document.getElementById('vn-edit-index').value = idx;
+      document.getElementById('vn-edit-name').value = v.name;
+      document.getElementById('vn-edit-pic').value = v.pic;
+      document.getElementById('vn-edit-contact').value = v.contact;
+      document.getElementById('vn-edit-expiry').value = v.activeSupport;
+      document.getElementById('vn-edit-sla').value = v.sSupport;
+      openModal('edit-vendor-modal');
+    }
+
+    function submitEditVendor(e) {
+      e.preventDefault();
+      const idx = parseInt(document.getElementById('vn-edit-index').value, 10);
+      vendors[idx] = {
+        name: document.getElementById('vn-edit-name').value,
+        pic: document.getElementById('vn-edit-pic').value,
+        contact: document.getElementById('vn-edit-contact').value,
+        activeSupport: document.getElementById('vn-edit-expiry').value,
+        sSupport: document.getElementById('vn-edit-sla').value
+      };
+      saveAllState();
+      closeModal('edit-vendor-modal');
+      showToast("Kontrak vendor diperbarui.", "success");
+    }
+
+    function deleteVendor(idx) {
+      showCustomConfirm("Hapus Vendor", `Hapus data kemitraan vendor ${vendors[idx].name}?`, () => {
+        vendors.splice(idx, 1);
+        saveAllState();
+        showToast("Vendor dihapus.", "info");
+      });
+    }
+
+    // ================= CHANGE MANAGEMENT LOGIC =================
     function renderChangeUI() {
       const tbody = document.getElementById('change-table-body');
       if (!tbody) return;
       tbody.innerHTML = changes.map((c, idx) => `
-        <tr class="hover:bg-slate-900 border-b border-slate-850">
+        <tr class="hover:bg-slate-900 border-b border-slate-850 text-xs">
           <td class="p-4 font-mono font-bold">${c.code}</td>
           <td class="p-4">${c.type}</td>
           <td class="p-4 font-semibold text-white">${c.desc}</td>
           <td class="p-4">${c.execution}</td>
-          <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-800 text-slate-300">${c.status}</span></td>
-          <td class="p-4 text-right"><button onclick="approveRfc(${idx})" class="px-2 py-1 bg-emerald-600 rounded text-[10px]">Approve</button></td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[9px] bg-slate-800 text-slate-300 border border-slate-700">${c.status}</span></td>
+          <td class="p-4 text-right"><button onclick="approveRfc(${idx})" class="px-2 py-1 bg-emerald-600 rounded text-[10px] text-white">Approve</button></td>
         </tr>
       `).join('');
     }
@@ -2161,7 +2296,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
     function approveRfc(idx) {
       changes[idx].status = 'APPROVED';
       saveAllState();
-      showToast("Perubahan RFC disetujui.", "success");
+      showToast("RFC disetujui CAB.", "success");
     }
 
     function submitNewChange(e) {
@@ -2170,21 +2305,22 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
         code: `RFC-2026-${String(changes.length + 1).padStart(3, '0')}`,
         type: document.getElementById('rfc-type').value,
         desc: document.getElementById('rfc-desc').value,
-        execution: "Scheduled Window",
+        execution: "Scheduled Maintenance Window",
         status: "PENDING CAB"
       });
       saveAllState();
       closeModal('new-change-modal');
-      showToast("RFC baru didaftarkan.", "success");
+      document.getElementById('form-new-change').reset();
+      showToast("RFC didaftarkan.", "success");
     }
 
-    // Problem Management list
+    // ================= PROBLEM MANAGEMENT LOGIC =================
     function renderProblemUI() {
       const container = document.getElementById('problem-list-container');
       if (!container) return;
-      container.innerHTML = problems.map((p, idx) => `
+      container.innerHTML = problems.map(p => `
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-xs space-y-2">
-          <div class="flex justify-between items-center"><h4 class="font-bold text-white text-sm">Masalah: ${p.incident}</h4><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold">${p.status}</span></div>
+          <div class="flex justify-between items-center"><h4 class="font-bold text-white text-sm">Masalah: ${p.incident}</h4><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20">${p.status}</span></div>
           <p>RCA: <strong class="text-slate-300">${p.root}</strong></p>
           <p>Workaround: <strong class="text-slate-400">${p.known}</strong></p>
           <p>Permanent Fix: <strong class="text-emerald-400">${p.permanent}</strong></p>
@@ -2204,10 +2340,11 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       });
       saveAllState();
       closeModal('new-problem-modal');
-      showToast("RCA terdaftar.", "success");
+      document.getElementById('form-new-problem').reset();
+      showToast("RCA berhasil direkam.", "success");
     }
 
-    // User Life cycle
+    // ================= USER LIFE CYCLE =================
     function renderUserLifecycleUI() {
       const container = document.getElementById('user-lifecycle-list');
       if (!container) return;
@@ -2234,14 +2371,15 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
         status: statusMap[type]
       });
       saveAllState();
+      document.getElementById('form-user-lifecycle').reset();
       showToast("Workflow user lifecycle diproses.", "success");
     }
 
-    // Monitoring Sensors
+    // ================= PRTG TELEMETRY SENSORS =================
     function renderMonitoringUI() {
       const grid = document.getElementById('monitoring-sensor-grid');
       const dash = document.getElementById('dash-monitoring-status');
-      if(!grid || !dash) return;
+      if (!grid || !dash) return;
 
       grid.innerHTML = monitoringSensors.map((s, idx) => `
         <div onclick="toggleSensorStatus(${idx})" class="p-4 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-700 transition-all text-xs flex justify-between items-start">
@@ -2257,7 +2395,7 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       dash.innerHTML = monitoringSensors.map(s => `
         <div class="flex justify-between items-center text-xs border-b border-slate-850 pb-2">
           <div><p class="text-white font-bold leading-tight">${s.sensor}</p><p class="text-[9px] text-slate-500">${s.value}</p></div>
-          <span class="font-bold text-emerald-400 text-[10px]">${s.status}</span>
+          <span class="font-bold ${s.status === 'ONLINE' ? 'text-emerald-400' : 'text-rose-500'} text-[10px]">${s.status}</span>
         </div>
       `).join('');
     }
@@ -2266,11 +2404,193 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       const state = monitoringSensors[idx].status;
       monitoringSensors[idx].status = (state === 'ONLINE') ? 'DOWN' : 'ONLINE';
       monitoringSensors[idx].value = (state === 'ONLINE') ? 'Outage Alerting' : '0ms Latency (Restored)';
-      refreshAllViews();
-      showToast("Status sensor PRTG disimulasikan.", "info");
+      saveAllState();
+      showToast("Status link PRTG disimulasikan.", "info");
     }
 
-    // DRP steps
+    // ================= ACTIVE IT PROJECTS (CRUD) =================
+    function renderProjectsUI() {
+      const container = document.getElementById('projects-container');
+      if (!container) return;
+
+      if (projects.length === 0) {
+        container.innerHTML = `<div class="bg-slate-900 border border-slate-800 p-12 text-center text-slate-500 text-xs rounded-xl">Belum ada proyek aktif.</div>`;
+        return;
+      }
+
+      container.innerHTML = projects.map((p, idx) => `
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-xs space-y-4 hover:border-slate-700 transition-all group relative">
+          <div class="border-b border-slate-850 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <h3 class="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">${p.name}</h3>
+              <div class="flex gap-2 mt-1">
+                <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded font-bold border border-blue-500/20">Budget: ${p.budget}</span>
+                <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-bold">Timeline: ${p.timeline}</span>
+              </div>
+            </div>
+            <div class="flex gap-1">
+              <button onclick="openEditProjectModal(${idx})" class="p-1.5 bg-slate-950 text-slate-400 hover:text-blue-400 rounded border border-slate-800 transition-all"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+              <button onclick="deleteProject(${idx})" class="p-1.5 bg-slate-950 text-slate-400 hover:text-rose-400 rounded border border-slate-800 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3 bg-slate-950 rounded-lg border border-slate-855">
+              <p class="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">Milestones & Kemajuan Fisik</p>
+              <p class="mt-1 text-slate-200 font-medium leading-relaxed">${p.milestone}</p>
+            </div>
+            <div class="p-3 bg-rose-950/10 rounded-lg border border-rose-500/20">
+              <p class="text-[9px] text-rose-400 uppercase font-bold tracking-widest mb-1">Risk Register & Hambatan</p>
+              <p class="mt-1 text-slate-300 font-medium leading-relaxed">${p.risk}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function submitNewProject(e) {
+      e.preventDefault();
+      projects.push({
+        name: document.getElementById('pj-new-name').value,
+        budget: document.getElementById('pj-new-budget').value,
+        timeline: document.getElementById('pj-new-timeline').value,
+        milestone: document.getElementById('pj-new-milestone').value,
+        risk: document.getElementById('pj-new-risk').value
+      });
+      saveAllState();
+      closeModal('new-project-modal');
+      document.getElementById('form-new-project').reset();
+      showToast("Proyek IT didaftarkan.", "success");
+    }
+
+    function openEditProjectModal(idx) {
+      const p = projects[idx];
+      document.getElementById('pj-edit-index').value = idx;
+      document.getElementById('pj-edit-name').value = p.name;
+      document.getElementById('pj-edit-budget').value = p.budget;
+      document.getElementById('pj-edit-timeline').value = p.timeline;
+      document.getElementById('pj-edit-milestone').value = p.milestone;
+      document.getElementById('pj-edit-risk').value = p.risk;
+      openModal('edit-project-modal');
+    }
+
+    function submitEditProject(e) {
+      e.preventDefault();
+      const idx = document.getElementById('pj-edit-index').value;
+      projects[idx] = {
+        name: document.getElementById('pj-edit-name').value,
+        budget: document.getElementById('pj-edit-budget').value,
+        timeline: document.getElementById('pj-edit-timeline').value,
+        milestone: document.getElementById('pj-edit-milestone').value,
+        risk: document.getElementById('pj-edit-risk').value
+      };
+      saveAllState();
+      closeModal('edit-project-modal');
+      showToast("Kemajuan proyek diperbarui.", "success");
+    }
+
+    function deleteProject(idx) {
+      showCustomConfirm("Hapus Proyek", `Apakah Anda yakin ingin menghapus proyek "${projects[idx].name}"?`, () => {
+        projects.splice(idx, 1);
+        saveAllState();
+        showToast("Proyek IT dihapus.", "info");
+      });
+    }
+
+    // ================= SOP KNOWLEDGE BASE (CRUD) =================
+    function renderKbUI() {
+      const catContainer = document.getElementById('kb-categories-container');
+      const contentBox = document.getElementById('kb-content-box');
+      if (!catContainer || !contentBox) return;
+
+      const searchVal = document.getElementById('kb-search').value.toLowerCase();
+      let filteredKbs = kbs;
+      if (searchVal) {
+        filteredKbs = kbs.filter(kb => 
+          kb.title.toLowerCase().includes(searchVal) || 
+          kb.category.toLowerCase().includes(searchVal) ||
+          kb.content.toLowerCase().includes(searchVal)
+        );
+      }
+
+      catContainer.innerHTML = filteredKbs.map((kb, idx) => `
+        <div class="w-full text-left p-3 rounded-lg flex justify-between items-center transition-all ${idx === activeKbIdx ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">
+          <button onclick="selectKbArticle(${idx})" class="flex-grow text-left">
+            <span class="text-[9px] uppercase tracking-wider block opacity-75">${kb.category}</span>
+            <span class="mt-0.5 line-clamp-1 font-semibold text-xs text-white">${kb.title}</span>
+          </button>
+          <div class="flex gap-1 ml-2 shrink-0">
+            <button onclick="openEditKbModal(${idx})" class="p-1 hover:text-slate-100"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteKbArticle(${idx})" class="p-1 hover:text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      const activeArt = filteredKbs[activeKbIdx];
+      if (activeArt) {
+        contentBox.innerHTML = `
+          <div class="space-y-4">
+            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded font-bold border border-emerald-500/20 uppercase tracking-wider">${activeArt.category}</span>
+            <h3 class="text-base font-bold text-white tracking-tight">${activeArt.title}</h3>
+            <pre class="bg-slate-950 p-4 rounded-lg text-slate-300 text-xs overflow-x-auto font-mono whitespace-pre-wrap leading-relaxed border border-slate-855">${activeArt.content}</pre>
+          </div>
+        `;
+      } else {
+        contentBox.innerHTML = `<div class="text-center text-xs text-slate-500 py-12">Pilih dokumen atau tidak ada hasil pencarian.</div>`;
+      }
+      lucide.createIcons();
+    }
+
+    function selectKbArticle(idx) {
+      activeKbIdx = idx;
+      renderKbUI();
+    }
+
+    function submitNewKb(e) {
+      e.preventDefault();
+      kbs.push({
+        category: document.getElementById('kb-new-cat').value,
+        title: document.getElementById('kb-new-title').value,
+        content: document.getElementById('kb-new-content').value
+      });
+      saveAllState();
+      closeModal('new-kb-modal');
+      document.getElementById('form-new-kb').reset();
+      showToast("Dokumentasi SOP baru disimpan.", "success");
+    }
+
+    function openEditKbModal(idx) {
+      const kb = kbs[idx];
+      document.getElementById('kb-edit-index').value = idx;
+      document.getElementById('kb-edit-cat').value = kb.category;
+      document.getElementById('kb-edit-title').value = kb.title;
+      document.getElementById('kb-edit-content').value = kb.content;
+      openModal('edit-kb-modal');
+    }
+
+    function submitEditKb(e) {
+      e.preventDefault();
+      const idx = document.getElementById('kb-edit-index').value;
+      kbs[idx] = {
+        category: document.getElementById('kb-edit-cat').value,
+        title: document.getElementById('kb-edit-title').value,
+        content: document.getElementById('kb-edit-content').value
+      };
+      saveAllState();
+      closeModal('edit-kb-modal');
+      showToast("Artikel SOP diperbarui.", "success");
+    }
+
+    function deleteKbArticle(idx) {
+      showCustomConfirm("Hapus SOP", `Hapus dokumen "${kbs[idx].title}" dari Knowledge Base?`, () => {
+        kbs.splice(idx, 1);
+        activeKbIdx = 0;
+        saveAllState();
+        showToast("Prosedur dihapus.", "info");
+      });
+    }
+
+    // DRP
     function renderDrpPlaybook() {
       const container = document.getElementById('drp-steps-container');
       if (!container) return;
@@ -2293,13 +2613,13 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       if (!container) return;
 
       const active = tickets.filter(t => t.status !== 'RESOLVED');
-      if(active.length === 0) {
+      if (active.length === 0) {
         container.innerHTML = `<p class="text-center text-[10px] text-slate-500">Antrean Lapangan Kosong.</p>`;
         return;
       }
 
       container.innerHTML = active.map(t => `
-        <div class="bg-slate-900 p-2 border border-slate-850 rounded text-[9px] space-y-1">
+        <div class="bg-slate-900 p-2 border border-slate-855 rounded text-[9px] space-y-1">
           <p class="font-bold text-white">${t.id}</p>
           <p class="text-slate-300 line-clamp-1">${t.category}</p>
           <button onclick="updateTicketStatus('${t.id}', 'RESOLVED')" class="w-full py-0.5 bg-emerald-600 rounded text-white font-bold text-[8px] mt-2">RESOLVE</button>
@@ -2363,26 +2683,332 @@ const SPREADSHEET_ID = SpreadsheetApp.getActiveSpreadsheet().getId();`
       const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
       warRoomLogs.unshift(`${timeStr} - ${msg}`);
       const tl = document.getElementById('warroom-timeline');
-      if(tl) {
+      if (tl) {
         tl.innerHTML = warRoomLogs.map(log => `<div class="p-2 bg-slate-950 border border-slate-850 font-mono text-[10px] text-slate-300 rounded">${log}</div>`).join('');
       }
     }
 
-    // Toast Notification
+    // Toast Notification Banner
     function showToast(message, type) {
       const toast = document.getElementById('toast-banner');
       const msg = document.getElementById('toast-message');
       const icon = document.getElementById('toast-icon');
 
+      if (!toast || !msg) return;
+
       msg.textContent = message;
       if (type === 'success') {
         toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-emerald-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-0 opacity-100 transition-all duration-300 flex items-center justify-between gap-3";
-        icon.className = "w-5 h-5 text-emerald-400";
+        if (icon) icon.className = "w-5 h-5 text-emerald-400";
       } else {
         toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 border-l-4 border-blue-500 px-4 py-3 rounded shadow-xl text-xs max-w-sm w-full translate-y-0 opacity-100 transition-all duration-300 flex items-center justify-between gap-3";
-        icon.className = "w-5 h-5 text-blue-400";
+        if (icon) icon.className = "w-5 h-5 text-blue-400";
       }
       setTimeout(() => { toast.classList.add('translate-y-24', 'opacity-0'); }, 4000);
+    }
+
+    // ================= PRINT & EXECUTIVE REPORTING COMPILER SYSTEM =================
+    function getLetterheadHTML(title, docRef, subtitle) {
+      return `
+        <!-- Professional Letterhead Header -->
+        <div class="flex justify-between items-start border-b-2 border-slate-800 pb-4">
+          <div>
+            <h2 class="text-lg font-bold tracking-tight text-slate-950 uppercase">Grand Palace Hotel & Residences</h2>
+            <p class="text-[9px] text-slate-500 uppercase font-semibold">Technology & Service Operation Department (ITSD)</p>
+            <p class="text-[8px] text-slate-400 italic">Jalan Embong Malang No. 85, Surabaya, Indonesia</p>
+          </div>
+          <div class="text-right">
+            <span class="bg-slate-100 border border-slate-200 text-slate-800 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider inline-block">CONFIDENTIAL REPORT</span>
+            <p class="text-[9px] font-mono text-slate-600 mt-2">${docRef}</p>
+          </div>
+        </div>
+
+        <!-- Title Block -->
+        <div class="text-center py-2">
+          <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">${title}</h3>
+          <p class="text-[9px] text-slate-600 font-semibold">${subtitle}</p>
+        </div>
+      `;
+    }
+
+    function getSignaturesHTML() {
+      return `
+        <!-- Signatures and Audit Sign-Off Section -->
+        <div class="pt-8 grid grid-cols-3 gap-6 text-center text-[10px] text-slate-700 font-medium">
+          <div class="space-y-12">
+            <p>Submitted By:</p>
+            <div class="border-t border-slate-300 pt-1.5">
+              <strong class="text-slate-900 block font-bold">IT Duty Shift Chief</strong>
+              <span class="text-[8px] text-slate-500 uppercase block font-semibold">IT Department Staff</span>
+            </div>
+          </div>
+          <div class="space-y-12">
+            <p>Reviewed By:</p>
+            <div class="border-t border-slate-300 pt-1.5">
+              <strong class="text-slate-900 block font-bold">Andrianto Wijaya</strong>
+              <span class="text-[8px] text-slate-500 uppercase block font-semibold">IT Manager / Chief Operations</span>
+            </div>
+          </div>
+          <div class="space-y-12">
+            <p>Approved By:</p>
+            <div class="border-t border-slate-300 pt-1.5">
+              <strong class="text-slate-900 block font-bold">Herman Santoso</strong>
+              <span class="text-[8px] text-slate-500 uppercase block font-semibold">General Manager / Executive Com.</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 1. Executive Commentary & Metrics
+    function openPrintPreview() {
+      const activeTickets = tickets.filter(t => t.status !== 'RESOLVED').length;
+      const resolvedTickets = tickets.filter(t => t.status === 'RESOLVED').length;
+      const totalTickets = tickets.length;
+      const slaCompliance = totalTickets > 0 ? Math.round((resolvedTickets / totalTickets) * 100) : 100;
+      const totalAssetValue = assets.reduce((sum, a) => sum + a.val, 0);
+
+      const commentary = document.getElementById('report-commentary-box').value;
+
+      let html = getLetterheadHTML(
+        "IT Operations & Service Delivery Executive Summary",
+        "REF: GPH/ITM-REP/2026/06",
+        `Reporting Date: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`
+      );
+
+      html += `
+        <div class="grid grid-cols-4 gap-4 text-center border-t border-b border-slate-200 py-3">
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Kepatuhan SLA</span>
+            <strong class="text-sm text-slate-900 font-mono">${slaCompliance}%</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Total SLA Breaches</span>
+            <strong class="text-sm text-slate-900 font-mono">${tickets.filter(t => calculateSlaLimit(t.createdAt, t.priority).isBreached).length} Isu</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Valuasi Kapital IT</span>
+            <strong class="text-[10px] text-slate-900 font-mono font-bold">Rp ${totalAssetValue.toLocaleString('id-ID')}</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Beban Gangguan</span>
+            <strong class="text-sm text-slate-900 font-mono">${activeTickets} Tiket Aktif</strong>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1 flex items-center gap-1.5">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 1. Executive Commentary & Analytical Insights
+          </h4>
+          <p class="text-[10px] text-slate-700 italic leading-relaxed font-serif whitespace-pre-wrap text-justify">
+            ${commentary}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 pt-2">
+          <div class="space-y-1">
+            <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1">
+              2. SLA & Priority Weight Breakdown
+            </h4>
+            <table class="w-full text-left border-collapse text-[9px]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase text-[8px]">
+                  <th class="p-1.5">Priority Impact</th>
+                  <th class="p-1.5">Target SLA</th>
+                  <th class="p-1.5 text-right">Tiket</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr class="border-b border-slate-100"><td class="p-1.5 font-bold text-rose-600">Critical Outage (P1)</td><td class="p-1.5 text-slate-500">30 Menit</td><td class="p-1.5 text-right font-bold">${tickets.filter(t => t.priority === 'P1').length}</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1.5 font-bold text-amber-600">High Area Down (P2)</td><td class="p-1.5 text-slate-500">2 Jam</td><td class="p-1.5 text-right font-bold">${tickets.filter(t => t.priority === 'P2').length}</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1.5 font-bold text-blue-600">Medium Impact (P3)</td><td class="p-1.5 text-slate-500">4 Jam</td><td class="p-1.5 text-right font-bold">${tickets.filter(t => t.priority === 'P3').length}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1">
+              3. Portofolio Proyek Aktif
+            </h4>
+            <table class="w-full text-left border-collapse text-[9px]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase text-[8px]">
+                  <th class="p-1.5">Nama Proyek</th>
+                  <th class="p-1.5 text-right">Alokasi Anggaran</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                ${projects.map(p => `
+                  <tr class="border-b border-slate-100">
+                    <td class="p-1.5 font-semibold text-slate-800">${p.name}</td>
+                    <td class="p-1.5 text-right font-bold text-slate-900">${p.budget}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      html += getSignaturesHTML();
+
+      document.getElementById('print-dynamic-content').innerHTML = html;
+      lucide.createIcons();
+      openModal('print-preview-modal');
+    }
+
+    // 2. IT Asset Registry Report
+    function openAssetPrintPreview() {
+      const totalAssetValue = assets.reduce((sum, a) => sum + a.val, 0);
+
+      let html = getLetterheadHTML(
+        "Laporan Inventarisasi & Kapitalisasi Aset Infrastruktur IT",
+        "REF: GPH/IT-AST/2026/06",
+        `Periode Audit: Juni 2026`
+      );
+
+      html += `
+        <div class="grid grid-cols-2 gap-4 text-center border-t border-b border-slate-200 py-3">
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Total Nilai Buku (Kapital)</span>
+            <strong class="text-sm text-slate-900 font-mono">Rp ${totalAssetValue.toLocaleString('id-ID')}</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Total Unit Aset Terdaftar</span>
+            <strong class="text-sm text-slate-900 font-mono">${assets.length} Perangkat</strong>
+          </div>
+        </div>
+
+        <div class="space-y-1 pt-2">
+          <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1">
+            Daftar Registrasi Detail Aset IT Aktif
+          </h4>
+          <table class="w-full text-left border-collapse text-[8px] text-slate-800">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase text-[7px]">
+                <th class="p-1.5">Tag Aset</th>
+                <th class="p-1.5">Nama Perangkat</th>
+                <th class="p-1.5">Kategori</th>
+                <th class="p-1.5">Lokasi / Dept</th>
+                <th class="p-1.5">Vendor / Garansi</th>
+                <th class="p-1.5 text-right">Nilai Kapital</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              ${assets.length === 0 ? '<tr><td colspan="6" class="p-4 text-center text-slate-400">Tidak ada aset terdaftar</td></tr>' : assets.map(a => `
+                <tr>
+                  <td class="p-1.5 font-mono font-bold text-slate-900">${a.tag}</td>
+                  <td class="p-1.5">${a.name}</td>
+                  <td class="p-1.5">${a.cat}</td>
+                  <td class="p-1.5">${a.location}</td>
+                  <td class="p-1.5">${a.vendor} (${a.warranty || 'N/A'})</td>
+                  <td class="p-1.5 text-right font-mono font-bold">Rp ${a.val.toLocaleString('id-ID')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      html += getSignaturesHTML();
+
+      document.getElementById('print-dynamic-content').innerHTML = html;
+      lucide.createIcons();
+      openModal('print-preview-modal');
+    }
+
+    // 3. Preventive Maintenance Report with photo attachments
+    function openChecklistPrintPreview() {
+      const tasks = checklists[currentChecklistPeriod] || [];
+      const completed = tasks.filter(t => t.done).length;
+      const complianceRate = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 100;
+
+      const titleMap = {
+        daily: 'Daily Routine Check Audit (Cek Backup, AC Server Room, Firewall Sensor)',
+        weekly: 'Weekly Maintenance Audit (Load-Test UPS Baterai, Kabel Switch)',
+        monthly: 'Monthly PM Audit (Rotasi Master Password, Firmware AP)',
+        yearly: 'Yearly Strategic Audit (Disaster Recovery Plan Test, Review Lisensi)'
+      };
+
+      let html = getLetterheadHTML(
+        "Laporan Audit Pemeliharaan Preventif IT (Preventive Maintenance)",
+        "REF: GPH/IT-PM/2026/06",
+        `Kategori Jadwal: ${titleMap[currentChecklistPeriod]}`
+      );
+
+      html += `
+        <div class="grid grid-cols-3 gap-4 text-center border-t border-b border-slate-200 py-3">
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Status Kepatuhan PM</span>
+            <strong class="text-sm ${complianceRate >= 90 ? 'text-emerald-600' : 'text-amber-500'} font-mono">${complianceRate}%</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Tugas Diselesaikan</span>
+            <strong class="text-sm text-slate-900 font-mono">${completed} dari ${tasks.length}</strong>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-500 uppercase block font-bold">Tanggal Penarikan Laporan</span>
+            <strong class="text-[9px] text-slate-900 font-mono font-bold">${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>
+          </div>
+        </div>
+
+        <div class="space-y-1 pt-2">
+          <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1">
+            Daftar Detail Eksekusi & Bukti Audit PM
+          </h4>
+          <table class="w-full text-left border-collapse text-[8px] text-slate-800">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase text-[7px]">
+                <th class="p-1.5 w-8">No</th>
+                <th class="p-1.5">Uraian Tugas Pemeliharaan</th>
+                <th class="p-1.5 w-24">Assignee</th>
+                <th class="p-1.5 w-20 text-center">Status</th>
+                <th class="p-1.5">Catatan Audit</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              ${tasks.length === 0 ? '<tr><td colspan="5" class="p-4 text-center text-slate-400">Tidak ada tugas PM terdaftar</td></tr>' : tasks.map((t, idx) => `
+                <tr>
+                  <td class="p-1.5 text-slate-500 text-center font-bold">${idx + 1}</td>
+                  <td class="p-1.5 font-semibold text-slate-900">${t.task}</td>
+                  <td class="p-1.5">${t.assigned}</td>
+                  <td class="p-1.5 text-center">
+                    <span class="px-1.5 py-0.5 rounded font-bold text-[7px] ${t.done ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                      ${t.done ? 'SELESAI' : 'PENDING'}
+                    </span>
+                  </td>
+                  <td class="p-1.5 text-slate-600 italic">${t.note || '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      // Visual Appendix for Photo Evidence
+      const evidenceTasks = tasks.filter(t => t.evidence);
+      if (evidenceTasks.length > 0) {
+        html += `
+          <div class="space-y-1 pt-4">
+            <h4 class="text-[10px] font-bold text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-1">
+              Lampiran Visual: Bukti Fisik Lapangan
+            </h4>
+            <div class="grid grid-cols-4 gap-4 pt-1">
+              ${evidenceTasks.map(t => `
+                <div class="border border-slate-200 p-1.5 bg-slate-50 rounded text-center">
+                  <img src="${t.evidence}" class="w-full h-16 object-cover rounded bg-white border border-slate-100">
+                  <p class="text-[7px] text-slate-700 font-semibold truncate mt-1">${t.task}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      html += getSignaturesHTML();
+
+      document.getElementById('print-dynamic-content').innerHTML = html;
+      lucide.createIcons();
+      openModal('print-preview-modal');
     }
   </script>
 </body>
